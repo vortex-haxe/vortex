@@ -3,26 +3,25 @@
 # Lunar Engine
 A 2D game engine made in Haxe & SDL, Made for simplicity and performance in mind.
 
-## Platforms
+## 🖥️ Platforms
 Lunar natively can run on Windows and Linux systems via `hxcpp`.
 
-> [!Important]
-> Getting Started
-> In order to start using the Lunar Game Engine, start by installing the haxelib:
+## 💡 Getting Started
+In order to start using the Lunar Game Engine, start by installing the haxelib:
 
-### Stable Installation
-This will install the most stable and updated of theengine possible.
+### 🐌 Stable Installation
+This will install the most stable and updated of the engine possible.
 ```sh
 haxelib install lunar-engine
 ```
 
-### Development Installation
+### ⚡ Development Installation
 This will install the latest, potentially unstable version of the engine.
 ```sh
 haxelib git lunar-engine https://github.com/lunarhaxe/lunar-engine
 ```
 
-## Libaries
+## 📔 Libraries
 We need some libraries to make Lunar work, And here they are if you
 wish to know what they are:
 
