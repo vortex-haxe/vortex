@@ -6,15 +6,11 @@ import sdl.Window.WindowPos;
 import sdl.Window as SDLWindow;
 import sdl.Window.WindowInitFlags;
 
+import lunar.core.Object;
 import lunar.debug.Debug;
 
 @:allow(lunar.core.Game)
-class Window {
-    /**
-     * The data for configuring this window.
-     */
-    public var config:WindowConfig;
-
+class Window extends Object {
     /**
      * Whether or not this window has been closed.
      */
@@ -25,46 +21,108 @@ class Window {
      */
     public var initialized:Bool = false;
 
-    public function new() {}
+    /**
+     * The X position of this window in pixels.
+     */
+    public var x(get, set):Int;
 
-    public function init() {
-        if(config == null) {
-            Debug.error('The window configuration has not been set yet!');
-            return false;
-        }
+    /**
+     * The Y position of this window in pixels.
+     */
+    public var y(get, set):Int;
+
+    /**
+     * The width of this window in pixels.
+     */
+    public var width(get, set):Int;
+
+    /**
+     * The height of this window in pixels.
+     */
+    public var height(get, set):Int;
+
+    /**
+     * The text that shows up in the window's title bar.
+     */
+    public var title(get, set):String;
+
+    public function new(title:String, x:Int = CENTERED, y:Int = CENTERED, width:Int = 1, height:Int = 1) {
+        super();
         if(initialized == (initialized = true))
-            return false;
+            return;
 
-        window = SDL.createWindow(config.title, config.x, config.y, config.width, config.height, WindowInitFlags.RESIZABLE);
+        window = SDL.createWindow(title, x, y, width, height, WindowInitFlags.RESIZABLE);
         if(window == null) {
             Debug.error('The window failed to initialize! - ${SDL.getError()}');
-            return false;
+            initialized = false;
+            return;
         }
-
+        
         renderer = SDL.createRenderer(window, -1, RenderFlags.ACCELERATED);
         if(renderer == null) {
             Debug.error('The renderer failed to initialize! - ${SDL.getError()}');
-            return false;
+            initialized = false;
+            return;
         }
-
-        Debug.log('Window successfully initialized!');
-        return true;
     }
 
-    public function update(delta:Float) {
-        
-    }
+    //##==-- Privates --==##//
 
     private var window:SDLWindow;
     private var renderer:Renderer;
-}
 
-@:structInit
-class WindowConfig {
-    public var title:String;
-    public var width:Int;
-    public var height:Int;
-    public var x:Int = WindowPos.CENTERED;
-    public var y:Int = WindowPos.CENTERED;
-    public var clearColor:lunar.utils.Color;
+    @:noCompletion
+    private inline function get_x():Int {
+        return SDL.getWindowPosition(window).x;
+    }
+    
+    @:noCompletion
+    private inline function set_x(value:Int):Int {
+        SDL.setWindowPosition(window, value, y);
+        return value;
+    }
+
+    @:noCompletion
+    private inline function get_y():Int {
+        return SDL.getWindowPosition(window).y;
+    }
+    
+    @:noCompletion
+    private inline function set_y(value:Int):Int {
+        SDL.setWindowPosition(window, x, value);
+        return value;
+    }
+
+    @:noCompletion
+    private inline function get_width():Int {
+        return SDL.getWindowSize(window).x;
+    }
+    
+    @:noCompletion
+    private inline function set_width(value:Int):Int {
+        SDL.setWindowSize(window, value, height);
+        return value;
+    }
+
+    @:noCompletion
+    private inline function get_height():Int {
+        return SDL.getWindowSize(window).y;
+    }
+    
+    @:noCompletion
+    private inline function set_height(value:Int):Int {
+        SDL.setWindowSize(window, width, value);
+        return value;
+    }
+
+    @:noCompletion
+    private inline function get_title():String {
+        return cast SDL.getWindowTitle(window);
+    }
+
+    @:noCompletion
+    private inline function set_title(value:String):String {
+        SDL.setWindowTitle(window, value);
+        return value;
+    }
 }

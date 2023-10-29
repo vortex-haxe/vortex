@@ -145,7 +145,7 @@ class Color {
     public static final TEAL = Color.create(0xFF008080);
     public static final THISTLE = Color.create(0xFFD8BFD8);
     public static final TOMATO = Color.create(0xFFFF6347);
-    public static final TRANSPARENT = Color.create(0xFFFFFFFF);
+    public static final TRANSPARENT = Color.create(0x00000000);
     public static final TURQUOISE = Color.create(0xFF40E0D0);
     public static final VIOLET = Color.create(0xFFEE82EE);
     public static final WEB_GRAY = Color.create(0xFF808080);

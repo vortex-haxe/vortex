@@ -14,21 +14,18 @@ class Debug {
 
     public static function log(contents:Dynamic, ?pos:PosInfos) {
         _coloredPrint(CYAN,   "[  TRACE  ]");
-        _printTime();
         _printPosInfos(pos);
         Sys.print('${Std.string(contents)}\r\n');
     }
     
     public static function warn(contents:Dynamic, ?pos:PosInfos) {
         _coloredPrint(YELLOW, "[ WARNING ]");
-        _printTime();
         _printPosInfos(pos);
         Sys.print('${Std.string(contents)}\r\n');
     }
 
     public static function error(contents:Dynamic, ?pos:PosInfos) {
         _coloredPrint(RED,    "[  ERROR  ]");
-        _printTime();
         _printPosInfos(pos);
         Sys.print('${Std.string(contents)}\r\n');
     }
@@ -41,19 +38,13 @@ class Debug {
         NativeAPI.setConsoleColors();
     }
     
-    
     private static inline function _addZeros(str:String, num:Int) {
 		while(str.length < num) str = '0${str}';
 		return str;
 	}
     
-    private static inline function _printTime() {
-        final time = Date.now();
-        _coloredPrint(GREEN, ' [ ${_addZeros(Std.string((time.getHours() % 12)), 2)}:${_addZeros(Std.string(time.getMinutes()), 2)}:${_addZeros(Std.string(time.getSeconds()), 2)} ${(time.getHours() > 11) ? "PM" : "AM"} ] ');
-    }
-    
     private static inline function _printPosInfos(pos:PosInfos) {
         if(pos == null) return;
-        _coloredPrint(MAGENTA, '[${pos.className}.${pos.methodName}:${pos.lineNumber}] ');
+        _coloredPrint(MAGENTA, ' [${pos.className}.${pos.methodName}:${pos.lineNumber}] ');
     }
 }

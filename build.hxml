@@ -1,6 +1,6 @@
+--library hxsdl
+
 --class-path src
 --define analyzer-optimize
-
---library hxsdl
 
 --cpp export/cpp
