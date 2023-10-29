@@ -1,23 +1,23 @@
 package lunar.core;
 
-class Object {
+class Basic {
 	/**
-	 * Whether or not this node can update.
+	 * Whether or not this object can update.
 	 */
 	public var active:Bool = true;
 
 	/**
-	 * Whether or not this node can draw onto the screen.
+	 * Whether or not this object can draw onto the screen.
 	 */
 	public var visible:Bool = true;
 
 	/**
-	 * Returns a new `Node`.
+	 * Returns a new `Basic`.
 	 */
 	public function new() {}
 
 	/**
-	 * Updates info about this node.
+	 * Updates info about this object.
 	 * Typically ran every frame.
 	 * 
 	 * @param delta  The time between the last and current frame in seconds.
@@ -25,7 +25,7 @@ class Object {
 	public function update(delta:Float) {}
 
 	/**
-	 * Draws this node onto the screen.
+	 * Draws this object onto the screen.
 	 * Typically ran every frame.
 	 */
 	public function draw() {}

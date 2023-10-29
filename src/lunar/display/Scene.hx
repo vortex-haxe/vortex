@@ -1,9 +1,9 @@
 package lunar.display;
 
-import lunar.core.Object;
+import lunar.core.Basic;
 import lunar.display.Group;
 
-class Scene extends Group<Object> {
+class Scene extends Group<Basic> {
 	/**
 	 * The function that gets called when this scene
 	 * is finished initializing internally.

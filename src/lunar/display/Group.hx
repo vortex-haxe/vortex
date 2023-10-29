@@ -1,8 +1,8 @@
 package lunar.display;
 
-import lunar.core.Object;
+import lunar.core.Basic;
 
-class Group<T:Object> extends Object {
+class Group<T:Basic> extends Basic {
 	/**
 	 * The objects within this group.
 	 */

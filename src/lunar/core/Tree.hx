@@ -2,7 +2,7 @@ package lunar.core;
 
 import lunar.display.Scene;
 
-class Tree extends Object {
+class Tree extends Basic {
 	/**
 	 * The window that belongs to the tree/game.
 	 */

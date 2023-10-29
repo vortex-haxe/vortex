@@ -6,11 +6,11 @@ import sdl.Window.WindowPos;
 import sdl.Window as SDLWindow;
 import sdl.Window.WindowInitFlags;
 
-import lunar.core.Object;
+import lunar.core.Basic;
 import lunar.debug.Debug;
 
 @:allow(lunar.core.Game)
-class Window extends Object {
+class Window extends Basic {
     /**
      * Whether or not this window has been closed.
      */

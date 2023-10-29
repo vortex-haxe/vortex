@@ -1,12 +1,12 @@
 package lunar.display;
 
 import lunar.math.Vector2;
-import lunar.core.Object;
+import lunar.core.Basic;
 
 /**
  * An object with basic 2D capabilities.
  */
-class Object2D extends Object {
+class Object extends Basic {
 	/**
 	 * The X and Y position of this object in pixels.
 	 */
