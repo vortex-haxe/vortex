@@ -1,6 +1,5 @@
 package vortex.core;
 
-import vortex.nodes.Node;
 import sdl.SDL;
 import sdl.Image;
 import sdl.ttf.TTF;
@@ -10,9 +9,11 @@ import vortex.core.Project.ProjectInfo;
 
 import vortex.macros.ProjectMacro;
 
+import vortex.nodes.Node;
 import vortex.nodes.Window;
 import vortex.nodes.SceneTree;
 
+import vortex.utils.MathUtil;
 import vortex.utils.CFGParser;
 
 class Engine {
@@ -76,11 +77,9 @@ class Engine {
         }
 		Window.event = SDL.createEventPtr();
 
-		var _updated:Bool = false;
 		while(Window._windows.length > 0) {
 			final curTime:Int = cast SDL.getPerformanceCounter();
-			if(_updated)
-				Engine.deltaTime = Math.min((curTime - lastTime) / (cast SDL.getPerformanceFrequency()), 0.1);
+			Engine.deltaTime = MathUtil.bound((curTime - lastTime) / (cast SDL.getPerformanceFrequency()), 0, 0.1);
 			
 			tree.root._update(Engine.deltaTime);
 			tree.root._draw();
@@ -102,9 +101,7 @@ class Engine {
 			while(Node._queuedToReady.length > 0)
 				Node._queuedToReady.shift().ready();
 
-			if(_updated)
-				lastTime = curTime;
-			_updated = true;
+			lastTime = curTime;
 		}
 		
 		TTF.quit();
