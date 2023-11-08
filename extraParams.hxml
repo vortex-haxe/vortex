@@ -2,4 +2,5 @@
 --define HXCPP_CHECK_POINTER
 --define HXCPP_STACK_LINE
 
+--macro vortex.macros.OSDefineMacro.build()
 --macro vortex.macros.ProjectMacro.build()

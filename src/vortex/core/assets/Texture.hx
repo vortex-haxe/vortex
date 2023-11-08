@@ -2,25 +2,34 @@ package vortex.core.assets;
 
 import sdl.SDL;
 import sdl.Texture as NativeTexture;
-
 import vortex.math.Vector2;
 import vortex.utils.RefCounted;
+import vortex.utils.typelimit.OneOfTwo;
+
+typedef TextureAsset = OneOfTwo<String, Texture>;
 
 /**
  * A simple class containing basic data for a texture.
  */
-@:allow(vortex.nodes.display.Sprite)
 @:allow(vortex.utils.Assets)
+@:allow(vortex.nodes.display.Sprite)
+@:allow(vortex.nodes.display.AnimatedSprite)
 class Texture extends RefCounted {
 	/**
 	 * The width and height of this texture in pixels.
 	 */
 	public var size:Vector2;
 
-	//##==-------------------------------------------------==##//
-	//##==----- Don't modify these parts below unless -----==##//
-	//##==-- you are here to fix a bug or add a feature. --==##//
-	//##==-------------------------------------------------==##//
+	/**
+	 * The name/key of this texture that can be
+	 * referred to later to get it from a cache or something.
+	 */
+	public var key:String;
+
+	// ##==-------------------------------------------------==## //
+	// ##==----- Don't modify these parts below unless -----==## //
+	// ##==-- you are here to fix a bug or add a feature. --==## //
+	// ##==-------------------------------------------------==## //
 
 	/**
 	 * Frees this textures's properties from memory immediately.

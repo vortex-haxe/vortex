@@ -1,18 +1,15 @@
 package vortex.core;
 
+import sys.thread.Thread;
 import sdl.SDL;
 import sdl.Image;
 import sdl.ttf.TTF;
 import sdl.Window.WindowPos;
-
 import vortex.core.Project.ProjectInfo;
-
 import vortex.macros.ProjectMacro;
-
 import vortex.nodes.Node;
 import vortex.nodes.Window;
 import vortex.nodes.SceneTree;
-
 import vortex.utils.MathUtil;
 import vortex.utils.CFGParser;
 
@@ -32,7 +29,7 @@ class Engine {
 	 * for the last frame to update.
 	 */
 	public static var deltaTime:Float = 0;
-	
+
 	/**
 	 * Initializes your Vortex game.
 	 * 
@@ -44,13 +41,10 @@ class Engine {
 	 */
 	public static function init(scene:Node) {
 		projectSettings = CFGParser.parse(ProjectMacro.getConfig());
-		
+
 		tree = new SceneTree();
-		tree.window = new Window(
-			projectSettings.window.title, 
-			WindowPos.CENTERED, WindowPos.CENTERED, 
-			Std.int(projectSettings.window.size.x), Std.int(projectSettings.window.size.y)
-		);
+		tree.window = new Window(projectSettings.window.title, WindowPos.CENTERED, WindowPos.CENTERED, Std.int(projectSettings.window.size.x),
+			Std.int(projectSettings.window.size.y));
 		tree.window.addChild(tree.currentScene = (scene ?? new Node()));
 
 		Node._queuedToReady = [];
@@ -59,33 +53,34 @@ class Engine {
 
 		Debug.init();
 
-		if(SDL.init(VIDEO) < 0) {
-            Debug.error('SDL failed to initialize video! - ${cast(SDL.getError(), String)}');
-            return;
-        }
-        if(SDL.init(EVENTS) < 0) {
-            Debug.error('SDL failed to initialize events! - ${cast(SDL.getError(), String)}');
-            return;
-        }
-        if(Image.init(EVERYTHING) == 0) {
-            Debug.error('SDL image failed to initialize! - ${cast(SDL.getError(), String)}');
-            return;
-        }
-        if(TTF.init() < 0) {
-            Debug.error('SDL ttf failed to initialize! - ${cast(SDL.getError(), String)}');
-            return;
-        }
+		if (SDL.init(VIDEO) < 0) {
+			Debug.error('SDL failed to initialize video! - ${cast (SDL.getError(), String)}');
+			return;
+		}
+		if (SDL.init(EVENTS) < 0) {
+			Debug.error('SDL failed to initialize events! - ${cast (SDL.getError(), String)}');
+			return;
+		}
+		if (Image.init(EVERYTHING) == 0) {
+			Debug.error('SDL image failed to initialize! - ${cast (SDL.getError(), String)}');
+			return;
+		}
+		if (TTF.init() < 0) {
+			Debug.error('SDL ttf failed to initialize! - ${cast (SDL.getError(), String)}');
+			return;
+		}
+		SDL.setHint("SDL_HINT_RENDER_BATCHING", "1");
 		Window.event = SDL.createEventPtr();
 
-		while(Window._windows.length > 0) {
+		while (Window._windows.length > 0) {
 			final curTime:Int = cast SDL.getPerformanceCounter();
 			Engine.deltaTime = MathUtil.bound((curTime - lastTime) / (cast SDL.getPerformanceFrequency()), 0, 0.1);
-			
+
 			tree.root._update(Engine.deltaTime);
 			tree.root._draw();
 
-			if(tree._pendingScene != null) {
-				if(tree.currentScene != null) {
+			if (tree._pendingScene != null) {
+				if (tree.currentScene != null) {
 					tree.window.removeChild(tree.currentScene);
 					tree.currentScene.free();
 				}
@@ -95,24 +90,25 @@ class Engine {
 				tree._pendingScene = null;
 			}
 
-			while(Node._queuedToFree.length > 0)
-				Node._queuedToFree.shift().free();
-
-			while(Node._queuedToReady.length > 0)
+			while (Node._queuedToFree.length > 0) {
+				final node = Node._queuedToFree.shift();
+				node.parent?.removeChild(node);
+				node.free();
+			}
+			while (Node._queuedToReady.length > 0)
 				Node._queuedToReady.shift().ready();
 
 			lastTime = curTime;
 		}
-		
+
 		TTF.quit();
 		Image.quit();
 		SDL.quit();
 	}
 
-	//##==-------------------------------------------------==##//
-	//##==----- Don't modify these parts below unless -----==##//
-	//##==-- you are here to fix a bug or add a feature. --==##//
-	//##==-------------------------------------------------==##//
-
+	// ##==-------------------------------------------------==## //
+	// ##==----- Don't modify these parts below unless -----==## //
+	// ##==-- you are here to fix a bug or add a feature. --==## //
+	// ##==-------------------------------------------------==## //
 	private static var lastTime:Int = 0;
 }

@@ -282,10 +282,10 @@ class Color {
 		return this;
 	}
 
-	//##==-------------------------------------------------==##//
-	//##==----- Don't modify these parts below unless -----==##//
-	//##==-- you are here to fix a bug or add a feature. --==##//
-	//##==-------------------------------------------------==##//
+	// ##==-------------------------------------------------==## //
+	// ##==----- Don't modify these parts below unless -----==## //
+	// ##==-- you are here to fix a bug or add a feature. --==## //
+	// ##==-------------------------------------------------==## //
 
 	@:noCompletion
 	private static inline function _parseInt(integer:Int) {

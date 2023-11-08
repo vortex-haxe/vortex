@@ -45,10 +45,9 @@ class SceneTree {
 		_pendingScene = scene;
 	}
 
-	//##==-------------------------------------------------==##//
-	//##==----- Don't modify these parts below unless -----==##//
-	//##==-- you are here to fix a bug or add a feature. --==##//
-	//##==-------------------------------------------------==##//
-
+	// ##==-------------------------------------------------==## //
+	// ##==----- Don't modify these parts below unless -----==## //
+	// ##==-- you are here to fix a bug or add a feature. --==## //
+	// ##==-------------------------------------------------==## //
 	private var _pendingScene:Node;
 }

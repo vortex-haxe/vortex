@@ -2,90 +2,69 @@ package vortex.math;
 
 #if !macro
 import sdl.SDL.Point;
+import sdl.SDL.FPoint;
 #end
 
 @:forward abstract Vector2(BaseVector2) to BaseVector2 from BaseVector2 {
-    public inline function new(x:Float = 0, y:Float = 0) {
-        this = new BaseVector2(x, y);
-    }
+	public inline function new(x:Float = 0, y:Float = 0) {
+		this = new BaseVector2(x, y);
+	}
 
-    @:noCompletion
-    @:op(A + B)
-    private static inline function addOp(a:Vector2, b:Vector2) {
-        return new Vector2(
-            a.x + b.x,
-            a.y + b.y
-        );
-    }
+	@:noCompletion
+	@:op(A + B)
+	private static inline function addOp(a:Vector2, b:Vector2) {
+		return new Vector2(a.x + b.x, a.y + b.y);
+	}
 
-    @:noCompletion
-    @:op(A += B)
-    private static inline function addEqualOp(a:Vector2, b:Vector2) {
-        return a.add(
-            b.x,
-            b.y
-        );
-    }
+	@:noCompletion
+	@:op(A += B)
+	private static inline function addEqualOp(a:Vector2, b:Vector2) {
+		return a.add(b.x, b.y);
+	}
 
-    @:noCompletion
-    @:op(A - B)
-    private static inline function subtractOp(a:Vector2, b:Vector2) {
-        return new Vector2(
-            a.x - b.x,
-            a.y - b.y
-        );
-    }
+	@:noCompletion
+	@:op(A - B)
+	private static inline function subtractOp(a:Vector2, b:Vector2) {
+		return new Vector2(a.x - b.x, a.y - b.y);
+	}
 
-    @:noCompletion
-    @:op(A -= B)
-    private static inline function subtractEqualOp(a:Vector2, b:Vector2) {
-        return a.subtract(
-            b.x,
-            b.y
-        );
-    }
+	@:noCompletion
+	@:op(A -= B)
+	private static inline function subtractEqualOp(a:Vector2, b:Vector2) {
+		return a.subtract(b.x, b.y);
+	}
 
-    @:noCompletion
-    @:op(A * B)
-    private static inline function multiplyOp(a:Vector2, b:Vector2) {
-        return new Vector2(
-            a.x * b.x,
-            a.y * b.y
-        );
-    }
+	@:noCompletion
+	@:op(A * B)
+	private static inline function multiplyOp(a:Vector2, b:Vector2) {
+		return new Vector2(a.x * b.x, a.y * b.y);
+	}
 
-    @:noCompletion
-    @:op(A *= B)
-    private static inline function multiplyEqualOp(a:Vector2, b:Vector2) {
-        return a.multiply(
-            b.x,
-            b.y
-        );
-    }
+	@:noCompletion
+	@:op(A *= B)
+	private static inline function multiplyEqualOp(a:Vector2, b:Vector2) {
+		return a.multiply(b.x, b.y);
+	}
 
-    @:noCompletion
-    @:op(A / B)
-    private static inline function divideOp(a:Vector2, b:Vector2) {
-        return new Vector2(
-            a.x / b.x,
-            a.y / b.y
-        );
-    }
+	@:noCompletion
+	@:op(A / B)
+	private static inline function divideOp(a:Vector2, b:Vector2) {
+		return new Vector2(a.x / b.x, a.y / b.y);
+	}
 
-    @:noCompletion
-    @:op(A /= B)
-    private static inline function divideEqualOp(a:Vector2, b:Vector2) {
-        return a.divide(
-            b.x,
-            b.y
-        );
-    }
+	@:noCompletion
+	@:op(A /= B)
+	private static inline function divideEqualOp(a:Vector2, b:Vector2) {
+		return a.divide(b.x, b.y);
+	}
 }
 
 /**
  * A simple class to store 2D X and Y values.
  */
+@:allow(vortex.nodes.Window)
 @:allow(vortex.nodes.display.Sprite)
+@:allow(vortex.nodes.display.AnimatedSprite)
 class BaseVector2 {
 	/**
 	 * The X value of this vector.
@@ -107,8 +86,10 @@ class BaseVector2 {
 		@:bypassAccessor this.x = x;
 		@:bypassAccessor this.y = y;
 		#if !macro
-		_point.x = Std.int(x);
-		_point.y = Std.int(y);
+		_point.x = x;
+		_point.y = y;
+		_pointi.x = Std.int(x);
+		_pointi.y = Std.int(y);
 		#end
 	}
 
@@ -171,20 +152,22 @@ class BaseVector2 {
 		this.y /= y;
 		return this;
 	}
-	
-	//##==-- Privates --==##//
-	private var _onChange:(x:Float, y:Float)->Void;
+
+	// ##==-- Privates --==## //
+	private var _onChange:(x:Float, y:Float) -> Void;
 
 	#if !macro
-	private var _point:Point = Point.create(0, 0);
+	private var _point:FPoint = FPoint.create(0, 0);
+	private var _pointi:Point = Point.create(0, 0);
 	#end
 
 	@:noCompletion
 	private function set_x(value:Float):Float {
 		#if !macro
-		_point.x = Std.int(value);
+		_point.x = value;
+		_pointi.x = Std.int(value);
 		#end
-		if(_onChange != null)
+		if (_onChange != null)
 			_onChange(value, y);
 		return x = value;
 	}
@@ -192,9 +175,10 @@ class BaseVector2 {
 	@:noCompletion
 	private function set_y(value:Float):Float {
 		#if !macro
-		_point.y = Std.int(value);
+		_point.y = value;
+		_pointi.y = Std.int(value);
 		#end
-		if(_onChange != null)
+		if (_onChange != null)
 			_onChange(x, value);
 		return y = value;
 	}

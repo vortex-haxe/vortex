@@ -1,7 +1,6 @@
 package vortex.utils;
 
 import sys.io.File;
-
 import vortex.math.Vector2;
 import vortex.math.Rectangle;
 
@@ -31,13 +30,13 @@ class CFGParser {
 					if (value.charAt(0) == '[' && value.charAt(value.length - 1) == ']') {
 						// Remove the brackets from the value and split it into an array
 						final arrayValue:Array<String> = value.substring(1, value.length - 1).split(",");
-						
+
 						// Go through each value and parse it into a number (if it is one)
 						final vals:Array<Dynamic> = [];
-						for(v in arrayValue) {
+						for (v in arrayValue) {
 							v = v.replace("\"", "").replace("'", "").trim();
 							final number:Float = Std.parseFloat(v);
-							if(!Math.isNaN(number))
+							if (!Math.isNaN(number))
 								vals.push(number == Math.ffloor(number) ? Std.int(number) : number);
 							else
 								vals.push(v);
@@ -56,61 +55,53 @@ class CFGParser {
 		return sections;
 	}
 
-	//##==-------------------------------------------------==##//
-	//##==----- Don't modify these parts below unless -----==##//
-	//##==-- you are here to fix a bug or add a feature. --==##//
-	//##==-------------------------------------------------==##//
+	// ##==-------------------------------------------------==## //
+	// ##==----- Don't modify these parts below unless -----==## //
+	// ##==-- you are here to fix a bug or add a feature. --==## //
+	// ##==-------------------------------------------------==## //
 
 	@:noCompletion
 	private static function _parseString(value:String):Dynamic {
 		// Parse numbers
 		final number:Float = Std.parseFloat(value);
-		if(!Math.isNaN(number)) {
-			if(number == Math.ffloor(number))
+		if (!Math.isNaN(number)) {
+			if (number == Math.ffloor(number))
 				return Std.int(number);
 			else
 				return number;
 		}
 
-		//## Parse class constructors
+		// ## Parse class constructors
 		// Color
 		var cl:String = "Color(";
-		if(value.startsWith(cl) && value.endsWith(")")) {
+		if (value.startsWith(cl) && value.endsWith(")")) {
 			final sub:String = value.substring(cl.length, value.length - 1);
 			final rgba:Array<String> = sub.split(",");
-			for(i in 0...rgba.length) rgba[i] = rgba[i].trim();
-			return new Color(
-				Std.parseFloat(rgba[0] ?? "0.0"), 
-				Std.parseFloat(rgba[1] ?? "0.0"), 
-				Std.parseFloat(rgba[2] ?? "0.0"), 
-				Std.parseFloat(rgba[3] ?? "1.0")
-			);
+			for (i in 0...rgba.length)
+				rgba[i] = rgba[i].trim();
+			return new Color(Std.parseFloat(rgba[0] ?? "0.0"), Std.parseFloat(rgba[1] ?? "0.0"), Std.parseFloat(rgba[2] ?? "0.0"),
+				Std.parseFloat(rgba[3] ?? "1.0"));
 		}
 
 		// Vector2
 		cl = "Vector2(";
-		if(value.startsWith(cl) && value.endsWith(")")) {
+		if (value.startsWith(cl) && value.endsWith(")")) {
 			final sub:String = value.substring(cl.length, value.length - 1);
 			final vals:Array<String> = sub.split(",");
-			for(i in 0...vals.length) vals[i] = vals[i].trim();
-			return new Vector2(
-				Std.parseFloat(vals[0] ?? "0.0"), 
-				Std.parseFloat(vals[1] ?? "0.0")
-			);
+			for (i in 0...vals.length)
+				vals[i] = vals[i].trim();
+			return new Vector2(Std.parseFloat(vals[0] ?? "0.0"), Std.parseFloat(vals[1] ?? "0.0"));
 		}
 
 		// Rectangle
 		cl = "Rectangle(";
-		if(value.startsWith(cl) && value.endsWith(")")) {
+		if (value.startsWith(cl) && value.endsWith(")")) {
 			final sub:String = value.substring(cl.length, value.length - 1);
 			final vals:Array<String> = sub.split(",");
-			for(i in 0...vals.length) vals[i] = vals[i].trim();
-			return new Rectangle(
-				Std.parseFloat(vals[0] ?? "0.0"), 
-				Std.parseFloat(vals[1] ?? "0.0"),
-				Std.parseFloat(vals[2] ?? "0.0"),
-				Std.parseFloat(vals[3] ?? "0.0")
-			);
+			for (i in 0...vals.length)
+				vals[i] = vals[i].trim();
+			return new Rectangle(Std.parseFloat(vals[0] ?? "0.0"), Std.parseFloat(vals[1] ?? "0.0"), Std.parseFloat(vals[2] ?? "0.0"),
+				Std.parseFloat(vals[3] ?? "0.0"));
 		}
 
 		return value;

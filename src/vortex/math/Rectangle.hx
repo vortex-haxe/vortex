@@ -1,107 +1,70 @@
 package vortex.math;
 
 #if !macro
-import sdl.SDL.Rectangle as NativeRectangle;
+import sdl.SDL.FRectangle as NativeRectangle;
+import sdl.SDL.Rectangle as NativeIntRectangle;
 #end
 
 @:forward abstract Rectangle(BaseRectangle) to BaseRectangle from BaseRectangle {
-    public function new(x:Float = 0, y:Float = 0, width:Float = 0, height:Float = 0, w:Float = 0, h:Float = 0) {
-        this = new BaseRectangle(x, y, w, h);
-    }
+	public function new(x:Float = 0, y:Float = 0, width:Float = 0, height:Float = 0, w:Float = 0, h:Float = 0) {
+		this = new BaseRectangle(x, y, w, h);
+	}
 
-    @:noCompletion
-    @:op(A + B)
-    private static inline function addOp(a:Rectangle, b:Rectangle) {
-        return new Rectangle(
-            a.x + b.x,
-            a.y + b.y,
-            a.width + b.width,
-            a.height + b.height
-        );
-    }
+	@:noCompletion
+	@:op(A + B)
+	private static inline function addOp(a:Rectangle, b:Rectangle) {
+		return new Rectangle(a.x + b.x, a.y + b.y, a.width + b.width, a.height + b.height);
+	}
 
-    @:noCompletion
-    @:op(A += B)
-    private static inline function addEqualOp(a:Rectangle, b:Rectangle) {
-        return a.add(
-            b.x,
-            b.y,
-            b.width,
-            b.height
-        );
-    }
+	@:noCompletion
+	@:op(A += B)
+	private static inline function addEqualOp(a:Rectangle, b:Rectangle) {
+		return a.add(b.x, b.y, b.width, b.height);
+	}
 
-    @:noCompletion
-    @:op(A - B)
-    private static inline function subtractOp(a:Rectangle, b:Rectangle) {
-        return new Rectangle(
-            a.x - b.x,
-            a.y - b.y,
-            a.width - b.width,
-            a.height - b.height
-        );
-    }
+	@:noCompletion
+	@:op(A - B)
+	private static inline function subtractOp(a:Rectangle, b:Rectangle) {
+		return new Rectangle(a.x - b.x, a.y - b.y, a.width - b.width, a.height - b.height);
+	}
 
-    @:noCompletion
-    @:op(A -= B)
-    private static inline function subtractEqualOp(a:Rectangle, b:Rectangle) {
-        return a.subtract(
-            b.x,
-            b.y,
-            b.width,
-            b.height
-        );
-    }
+	@:noCompletion
+	@:op(A -= B)
+	private static inline function subtractEqualOp(a:Rectangle, b:Rectangle) {
+		return a.subtract(b.x, b.y, b.width, b.height);
+	}
 
-    @:noCompletion
-    @:op(A * B)
-    private static inline function multiplyOp(a:Rectangle, b:Rectangle) {
-        return new Rectangle(
-            a.x * b.x,
-            a.y * b.y,
-            a.width * b.width,
-            a.height * b.height
-        );
-    }
+	@:noCompletion
+	@:op(A * B)
+	private static inline function multiplyOp(a:Rectangle, b:Rectangle) {
+		return new Rectangle(a.x * b.x, a.y * b.y, a.width * b.width, a.height * b.height);
+	}
 
-    @:noCompletion
-    @:op(A *= B)
-    private static inline function multiplyEqualOp(a:Rectangle, b:Rectangle) {
-        return a.multiply(
-            b.x,
-            b.y,
-            b.width,
-            b.height
-        );
-    }
+	@:noCompletion
+	@:op(A *= B)
+	private static inline function multiplyEqualOp(a:Rectangle, b:Rectangle) {
+		return a.multiply(b.x, b.y, b.width, b.height);
+	}
 
-    @:noCompletion
-    @:op(A / B)
-    private static inline function divideOp(a:Rectangle, b:Rectangle) {
-        return new Rectangle(
-            a.x / b.x,
-            a.y / b.y,
-            a.width / b.width,
-            a.height / b.height
-        );
-    }
+	@:noCompletion
+	@:op(A / B)
+	private static inline function divideOp(a:Rectangle, b:Rectangle) {
+		return new Rectangle(a.x / b.x, a.y / b.y, a.width / b.width, a.height / b.height);
+	}
 
-    @:noCompletion
-    @:op(A /= B)
-    private static inline function divideEqualOp(a:Rectangle, b:Rectangle) {
-        return a.divide(
-            b.x,
-            b.y,
-            b.width,
-            b.height
-        );
-    }
+	@:noCompletion
+	@:op(A /= B)
+	private static inline function divideEqualOp(a:Rectangle, b:Rectangle) {
+		return a.divide(b.x, b.y, b.width, b.height);
+	}
 }
 
 /**
  * A simple class to store 2D X, Y, width, and height values.
  */
+@:allow(vortex.nodes.Window)
 @:allow(vortex.nodes.display.Sprite)
+@:allow(vortex.nodes.display.AnimatedSprite)
 class BaseRectangle {
 	/**
 	 * The X value of this rectangle.
@@ -118,9 +81,9 @@ class BaseRectangle {
 	 */
 	public var width(default, set):Float;
 
-	 /**
-	  * The height of this rectangle.
-	  */
+	/**
+	 * The height of this rectangle.
+	 */
 	public var height(default, set):Float;
 
 	/**
@@ -137,10 +100,14 @@ class BaseRectangle {
 		@:bypassAccessor this.width = width;
 		@:bypassAccessor this.height = height;
 		#if !macro
-		_rect.x = Std.int(x);
-		_rect.y = Std.int(y);
-		_rect.w = Std.int(width);
-		_rect.h = Std.int(height);
+		_rect.x = x;
+		_rect.y = y;
+		_rect.w = width;
+		_rect.h = height;
+		_recti.x = Std.int(x);
+		_recti.y = Std.int(y);
+		_recti.w = Std.int(width);
+		_recti.h = Std.int(height);
 		#end
 	}
 
@@ -170,10 +137,10 @@ class BaseRectangle {
 	 */
 	public function add(x:Float = 0, y:Float = 0, width:Float = 0, height:Float = 0) {
 		this.x += x;
-        this.y += y;
-        this.width += width;
-        this.height += height;
-        return this;
+		this.y += y;
+		this.width += width;
+		this.height += height;
+		return this;
 	}
 
 	/**
@@ -188,7 +155,7 @@ class BaseRectangle {
 		this.x -= x;
 		this.y -= y;
 		this.width -= width;
-        this.height -= height;
+		this.height -= height;
 		return this;
 	}
 
@@ -204,7 +171,7 @@ class BaseRectangle {
 		this.x *= x;
 		this.y *= y;
 		this.width *= width;
-        this.height *= height;
+		this.height *= height;
 		return this;
 	}
 
@@ -220,23 +187,25 @@ class BaseRectangle {
 		this.x /= x;
 		this.y /= y;
 		this.width /= width;
-        this.height /= height;
+		this.height /= height;
 		return this;
 	}
-	
-	//##==-- Privates --==##//
-	private var _onChange:(x:Float, y:Float, width:Float, height:Float)->Void;
+
+	// ##==-- Privates --==## //
+	private var _onChange:(x:Float, y:Float, width:Float, height:Float) -> Void;
 
 	#if !macro
 	private var _rect:NativeRectangle = NativeRectangle.create(0, 0, 0, 0);
+	private var _recti:NativeIntRectangle = NativeIntRectangle.create(0, 0, 0, 0);
 	#end
 
 	@:noCompletion
 	private function set_x(value:Float):Float {
 		#if !macro
-		_rect.x = Std.int(value);
+		_rect.x = value;
+		_recti.x = Std.int(value);
 		#end
-		if(_onChange != null)
+		if (_onChange != null)
 			_onChange(value, y, width, height);
 		return x = value;
 	}
@@ -244,9 +213,10 @@ class BaseRectangle {
 	@:noCompletion
 	private function set_y(value:Float):Float {
 		#if !macro
-		_rect.y = Std.int(value);
+		_rect.y = value;
+		_recti.y = Std.int(value);
 		#end
-		if(_onChange != null)
+		if (_onChange != null)
 			_onChange(x, value, width, height);
 		return y = value;
 	}
@@ -254,9 +224,10 @@ class BaseRectangle {
 	@:noCompletion
 	private function set_width(value:Float):Float {
 		#if !macro
-		_rect.w = Std.int(value);
+		_rect.w = value;
+		_recti.w = Std.int(value);
 		#end
-		if(_onChange != null)
+		if (_onChange != null)
 			_onChange(x, y, value, height);
 		return width = value;
 	}
@@ -264,9 +235,10 @@ class BaseRectangle {
 	@:noCompletion
 	private function set_height(value:Float):Float {
 		#if !macro
-		_rect.h = Std.int(value);
+		_rect.h = value;
+		_recti.h = Std.int(value);
 		#end
-		if(_onChange != null)
+		if (_onChange != null)
 			_onChange(x, y, width, value);
 		return height = value;
 	}

@@ -33,7 +33,7 @@ class Node implements IFreeable {
 	 * @param node  The node to add.
 	 */
 	public function addChild(node:Node) {
-		if(node == null || children.contains(node))
+		if (node == null || children.contains(node))
 			return null;
 
 		node.parent = this;
@@ -50,7 +50,7 @@ class Node implements IFreeable {
 	 * @param node  The node to remove.
 	 */
 	public function removeChild(node:Node) {
-		if(node == null || !children.contains(node))
+		if (node == null || !children.contains(node))
 			return null;
 
 		node.parent = null;
@@ -102,7 +102,7 @@ class Node implements IFreeable {
 	 * because it won't be freed immediately.
 	 */
 	public inline function queueFree() {
-		if(!_queuedToFree.contains(this))
+		if (!_queuedToFree.contains(this))
 			_queuedToFree.push(this);
 	}
 
@@ -113,11 +113,10 @@ class Node implements IFreeable {
 	 */
 	public function free() {}
 
-	//##==-------------------------------------------------==##//
-	//##==----- Don't modify these parts below unless -----==##//
-	//##==-- you are here to fix a bug or add a feature. --==##//
-	//##==-------------------------------------------------==##//
-
+	// ##==-------------------------------------------------==## //
+	// ##==----- Don't modify these parts below unless -----==## //
+	// ##==-- you are here to fix a bug or add a feature. --==## //
+	// ##==-------------------------------------------------==## //
 	private static var _queuedToFree:Array<Node> = [];
 	private static var _queuedToReady:Array<Node> = [];
 
@@ -130,21 +129,21 @@ class Node implements IFreeable {
 	@:noCompletion
 	private function _update(delta:Float) {
 		update(delta);
-		for(child in children)
+		for (child in children)
 			child._update(delta);
 	}
 
 	@:noCompletion
 	private function _draw() {
 		draw();
-		for(child in children)
+		for (child in children)
 			child._draw();
 	}
 
 	@:noCompletion
 	private function _free() {
 		free();
-		for(child in children)
+		for (child in children)
 			child.free();
 	}
 }

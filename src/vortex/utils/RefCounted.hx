@@ -12,7 +12,8 @@ class RefCounted implements IFreeable {
 	 * Increases the reference counter.
 	 */
 	public function reference() {
-		if(refs < 1) return;
+		if (refs < 1)
+			return;
 		@:bypassAccessor refs++;
 	}
 
@@ -20,8 +21,10 @@ class RefCounted implements IFreeable {
 	 * Decreases the reference counter.
 	 */
 	public function unreference() {
-		if(refs > 0) @:bypassAccessor refs--;
-		if(refs == 0) free();
+		if (refs > 0)
+			@:bypassAccessor refs--;
+		if (refs == 0)
+			free();
 	}
 
 	/**
@@ -31,10 +34,10 @@ class RefCounted implements IFreeable {
 		@:bypassAccessor refs = -1;
 	}
 
-	//##==-------------------------------------------------==##//
-	//##==----- Don't modify these parts below unless -----==##//
-	//##==-- you are here to fix a bug or add a feature. --==##//
-	//##==-------------------------------------------------==##//
+	// ##==-------------------------------------------------==## //
+	// ##==----- Don't modify these parts below unless -----==## //
+	// ##==-- you are here to fix a bug or add a feature. --==## //
+	// ##==-------------------------------------------------==## //
 
 	@:noCompletion
 	private function set_refs(value:Int):Int {

@@ -24,7 +24,7 @@ class Node2D extends Node {
 	 * Use `rotationDegrees` to get/set the rotation
 	 * of this node using degrees instead.
 	 */
-	public var rotation:Float;
+	public var rotation(default, set):Float;
 
 	/**
 	 * The rotation of this node in degrees.
@@ -54,10 +54,15 @@ class Node2D extends Node {
 		scale = null;
 	}
 
-	//##==-------------------------------------------------==##//
-	//##==----- Don't modify these parts below unless -----==##//
-	//##==-- you are here to fix a bug or add a feature. --==##//
-	//##==-------------------------------------------------==##//
+	// ##==-------------------------------------------------==## //
+	// ##==----- Don't modify these parts below unless -----==## //
+	// ##==-- you are here to fix a bug or add a feature. --==## //
+	// ##==-------------------------------------------------==## //
+
+	@:noCompletion
+	private inline function set_rotation(value:Float):Float {
+		return rotation = (value % 180);
+	}
 
 	@:noCompletion
 	private inline function get_rotationDegrees():Float {
