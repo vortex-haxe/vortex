@@ -99,7 +99,7 @@ class Engine {
 				Node._queuedToReady.shift().ready();
 
 			lastTime = curTime;
-			SDL.delay(Std.int(1000.0 / projectSettings.engine.fps));
+			Sys.sleep(1.0 / projectSettings.engine.fps);
 		}
 
 		TTF.quit();
