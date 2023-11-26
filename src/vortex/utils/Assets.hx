@@ -25,7 +25,7 @@ class Assets {
 	 */
 	public static function getTexture(path:String):Texture {
 		final key:String = '#_TEXTURE_$path';
-		if (!_cache.exists(path)) {
+		if (!_cache.exists(key)) {
 			final renderer = Engine.tree.window._nativeRenderer;
 			final native = Image.loadTexture(renderer, path);
 			final tex = new Texture(native);

@@ -42,6 +42,8 @@ class Engine {
 	public static function init(scene:Node) {
 		projectSettings = CFGParser.parse(ProjectMacro.getConfig());
 
+		SDL.setHint("SDL_HINT_RENDER_BATCHING", "1");
+
 		tree = new SceneTree();
 		tree.window = new Window(projectSettings.window.title, WindowPos.CENTERED, WindowPos.CENTERED, Std.int(projectSettings.window.size.x),
 			Std.int(projectSettings.window.size.y));
@@ -69,7 +71,6 @@ class Engine {
 			Debug.error('SDL ttf failed to initialize! - ${cast (SDL.getError(), String)}');
 			return;
 		}
-		SDL.setHint("SDL_HINT_RENDER_BATCHING", "1");
 		Window.event = SDL.createEventPtr();
 
 		while (Window._windows.length > 0) {
@@ -99,7 +100,8 @@ class Engine {
 				Node._queuedToReady.shift().ready();
 
 			lastTime = curTime;
-			Sys.sleep(1.0 / projectSettings.engine.fps);
+			if(projectSettings.engine.fps != 0)
+				SDL.delay(Std.int(1000.0 / projectSettings.engine.fps));
 		}
 
 		TTF.quit();

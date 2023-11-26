@@ -71,6 +71,13 @@ class Window extends Node {
 					case RESIZED:
 						final _size = SDL.getWindowSize(_nativeWindow);
 						size.set(_size.x, _size.y);
+						// TODO: add signal
+
+					case MAXIMIZED:
+						// TODO: add signal
+						
+					case RESTORED:
+						// TODO: add signal
 
 					default:
 				}
