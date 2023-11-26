@@ -22,7 +22,7 @@ class Texture extends RefCounted {
 
 	/**
 	 * The name/key of this texture that can be
-	 * referred to later to get it from a cache or something.
+	 * referred to later to get it from a cache of sorts.
 	 */
 	public var key:String;
 

@@ -1,6 +1,7 @@
 package vortex.core;
 
-import sys.thread.Thread;
+import al.AL;
+import vortex.utils.AudioMixer;
 import sdl.SDL;
 import sdl.Image;
 import sdl.ttf.TTF;
@@ -45,8 +46,11 @@ class Engine {
 		SDL.setHint("SDL_HINT_RENDER_BATCHING", "1");
 
 		tree = new SceneTree();
-		tree.window = new Window(projectSettings.window.title, WindowPos.CENTERED, WindowPos.CENTERED, Std.int(projectSettings.window.size.x),
-			Std.int(projectSettings.window.size.y));
+		tree.window = new Window(
+			projectSettings.window.title, 
+			WindowPos.CENTERED, WindowPos.CENTERED, 
+			Std.int(projectSettings.window.size.x), Std.int(projectSettings.window.size.y)
+		);
 		tree.window.addChild(tree.currentScene = (scene ?? new Node()));
 
 		Node._queuedToReady = [];
@@ -55,6 +59,10 @@ class Engine {
 
 		Debug.init();
 
+		if (!AudioMixer.init()) {
+			Debug.error('OpenAL failed to initialize!');
+			return;
+		}
 		if (SDL.init(VIDEO) < 0) {
 			Debug.error('SDL failed to initialize video! - ${cast (SDL.getError(), String)}');
 			return;
@@ -104,6 +112,7 @@ class Engine {
 				SDL.delay(Std.int(1000.0 / projectSettings.engine.fps));
 		}
 
+		AudioMixer.quit();
 		TTF.quit();
 		Image.quit();
 		SDL.quit();

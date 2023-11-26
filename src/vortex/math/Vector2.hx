@@ -100,8 +100,10 @@ class BaseVector2 {
 	 * @param y  The Y value of this vector.
 	 */
 	public function set(x:Float = 0, y:Float = 0) {
-		this.x = x;
-		this.y = y;
+		@:bypassAccessor this.x = x;
+		@:bypassAccessor this.y = y;
+		if (_onChange != null)
+			_onChange(this.x, this.y);
 		return this;
 	}
 
@@ -112,8 +114,10 @@ class BaseVector2 {
 	 * @param y  The Y value to add.
 	 */
 	public function add(x:Float = 0, y:Float = 0) {
-		this.x += x;
-		this.y += y;
+		@:bypassAccessor this.x += x;
+		@:bypassAccessor this.y += y;
+		if (_onChange != null)
+			_onChange(this.x, this.y);
 		return this;
 	}
 
@@ -124,8 +128,10 @@ class BaseVector2 {
 	 * @param y  The Y value to subtract.
 	 */
 	public function subtract(x:Float = 0, y:Float = 0) {
-		this.x -= x;
-		this.y -= y;
+		@:bypassAccessor this.x -= x;
+		@:bypassAccessor this.y -= y;
+		if (_onChange != null)
+			_onChange(this.x, this.y);
 		return this;
 	}
 
@@ -136,8 +142,10 @@ class BaseVector2 {
 	 * @param y  The Y value to multiply.
 	 */
 	public function multiply(x:Float = 0, y:Float = 0) {
-		this.x *= x;
-		this.y *= y;
+		@:bypassAccessor this.x *= x;
+		@:bypassAccessor this.y *= y;
+		if (_onChange != null)
+			_onChange(this.x, this.y);
 		return this;
 	}
 
@@ -148,8 +156,10 @@ class BaseVector2 {
 	 * @param y  The Y value to divide.
 	 */
 	public function divide(x:Float = 0, y:Float = 0) {
-		this.x /= x;
-		this.y /= y;
+		@:bypassAccessor this.x /= x;
+		@:bypassAccessor this.y /= y;
+		if (_onChange != null)
+			_onChange(this.x, this.y);
 		return this;
 	}
 

@@ -106,6 +106,7 @@ class Sprite extends Node2D {
 		if (texture != null)
 			texture.unreference();
 
+		newTexture.reference();
 		return texture = newTexture;
 	}
 }

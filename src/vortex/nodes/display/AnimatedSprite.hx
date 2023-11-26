@@ -90,6 +90,8 @@ class AnimatedSprite extends Node2D {
 
 		if (frame == animation.frames.length - 1)
 			frame = 0;
+
+		_animTimer = 0.0;
 	}
 
 	/**
