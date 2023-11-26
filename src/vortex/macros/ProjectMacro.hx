@@ -63,6 +63,10 @@ class ProjectMacro {
 		return Context.getBuildFields();
 	}
 
+	public static macro function getConfigDir():Expr {
+		return macro $v{Path.normalize(Sys.getCwd())};
+	}
+
 	public static macro function getConfig():Expr {
 		final cwd:String = Path.normalize(Sys.getCwd());
 		final cfgPath:String = Path.normalize(Path.join([cwd, "project.cfg"]));

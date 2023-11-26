@@ -1,5 +1,8 @@
 package vortex.nodes;
 
+import sdl.Image;
+import haxe.io.Path;
+import sys.FileSystem;
 import sdl.SDL;
 import sdl.Event;
 import sdl.Window.WindowInitFlags;
@@ -12,6 +15,7 @@ import vortex.core.Engine;
 import vortex.math.Vector2;
 import vortex.math.Rectangle;
 import vortex.utils.Color;
+import vortex.macros.ProjectMacro;
 
 @:allow(vortex.core.Engine)
 @:allow(vortex.utils.Assets)
@@ -53,6 +57,14 @@ class Window extends Node {
 		_nativeWindow = SDL.createWindow(title, x, y, width, height, RESIZABLE);
 		_nativeRenderer = SDL.createRenderer(_nativeWindow, -1, ACCELERATED);
 		_renderTexture = SDL.createTexture(_nativeRenderer, RGBX8888, RENDER_TARGET, width, height);
+
+		final cfgDir:String = ProjectMacro.getConfigDir();
+		final iconPath:String = Path.normalize(Path.join([cfgDir, Engine.projectSettings.window.icon]));
+		
+		if(FileSystem.exists(iconPath))
+			SDL.setWindowIcon(_nativeWindow, Image.load(iconPath));
+		else
+			Debug.error('Window icon at ${iconPath} doesn\'t exist!');
 
 		Engine.tree.root.addChild(this);
 		_windows.push(this);
