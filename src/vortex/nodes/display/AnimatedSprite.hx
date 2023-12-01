@@ -189,6 +189,8 @@ class AnimatedSprite extends Node2D {
 	 */
 	override function free() {
 		super.free();
+		spriteFrames.unreference();
+		spriteFrames = null;
 		origin = null;
 	}
 
