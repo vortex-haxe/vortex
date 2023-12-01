@@ -42,15 +42,6 @@ class Engine {
 	public static function init(scene:Node) {
 		projectSettings = CFGParser.parse(ProjectMacro.getConfig());
 
-		tree = new SceneTree();
-		tree.window = new Window(projectSettings.window.title, WindowPos.CENTERED, WindowPos.CENTERED, Std.int(projectSettings.window.size.x),
-			Std.int(projectSettings.window.size.y));
-		tree.window.addChild(tree.currentScene = (scene ?? new Node()));
-
-		Node._queuedToReady = [];
-		tree.window.ready();
-		tree.currentScene.ready();
-
 		Debug.init();
 
 		if (SDL.init(VIDEO) < 0) {
@@ -71,6 +62,15 @@ class Engine {
 		}
 		SDL.setHint("SDL_HINT_RENDER_BATCHING", "1");
 		Window.event = SDL.createEventPtr();
+
+        tree = new SceneTree();
+		tree.window = new Window(projectSettings.window.title, WindowPos.CENTERED, WindowPos.CENTERED, Std.int(projectSettings.window.size.x),
+			Std.int(projectSettings.window.size.y));
+		tree.window.addChild(tree.currentScene = (scene ?? new Node()));
+
+		Node._queuedToReady = [];
+		tree.window.ready();
+		tree.currentScene.ready();
 
 		while (Window._windows.length > 0) {
 			final curTime:Int = cast SDL.getPerformanceCounter();
