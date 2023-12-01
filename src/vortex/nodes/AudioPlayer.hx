@@ -56,9 +56,9 @@ class AudioPlayer extends Node {
 
 		this.position = new Vector3(1, 0, 0);
 		this.velocity = new Vector3(0, 0, 0);
-		this.looping = looping;
-		this.volume = volume;
-		this.pitch = pitch;
+		this.looping = false;
+		this.volume = 1.0;
+		this.pitch = 1.0;
 	}
 
 	public function play(resetTime:Bool = false):AudioPlayer {
