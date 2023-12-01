@@ -90,6 +90,8 @@ class AnimatedSprite extends Node2D {
 
 		if (frame == animation.frames.length - 1)
 			frame = 0;
+
+		_animTimer = 0.0;
 	}
 
 	/**
@@ -187,6 +189,8 @@ class AnimatedSprite extends Node2D {
 	 */
 	override function free() {
 		super.free();
+		spriteFrames.unreference();
+		spriteFrames = null;
 		origin = null;
 	}
 

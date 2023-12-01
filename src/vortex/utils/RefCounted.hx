@@ -12,8 +12,6 @@ class RefCounted implements IFreeable {
 	 * Increases the reference counter.
 	 */
 	public function reference() {
-		if (refs < 1)
-			return;
 		@:bypassAccessor refs++;
 	}
 

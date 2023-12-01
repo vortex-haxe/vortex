@@ -28,6 +28,7 @@ class SpriteFrames extends RefCounted {
 	 */
 	public function new(texture:Texture) {
 		this.texture = texture;
+		texture.reference();
 	}
 
 	/**

@@ -16,6 +16,7 @@ typedef EngineInfo = {
 
 typedef WindowInfo = {
 	var title:String;
+	var icon:String;
 	var size:Vector2;
 }
 

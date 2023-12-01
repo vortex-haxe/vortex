@@ -1,6 +1,7 @@
 package vortex.core;
 
-import sys.thread.Thread;
+import al.AL;
+import vortex.utils.AudioMixer;
 import sdl.SDL;
 import sdl.Image;
 import sdl.ttf.TTF;
@@ -42,8 +43,14 @@ class Engine {
 	public static function init(scene:Node) {
 		projectSettings = CFGParser.parse(ProjectMacro.getConfig());
 
+		SDL.setHint("SDL_HINT_RENDER_BATCHING", "1");
+
 		Debug.init();
 
+		if (!AudioMixer.init()) {
+			Debug.error('OpenAL failed to initialize!');
+			return;
+		}
 		if (SDL.init(VIDEO) < 0) {
 			Debug.error('SDL failed to initialize video! - ${cast (SDL.getError(), String)}');
 			return;
@@ -60,12 +67,14 @@ class Engine {
 			Debug.error('SDL ttf failed to initialize! - ${cast (SDL.getError(), String)}');
 			return;
 		}
-		SDL.setHint("SDL_HINT_RENDER_BATCHING", "1");
 		Window.event = SDL.createEventPtr();
 
         tree = new SceneTree();
-		tree.window = new Window(projectSettings.window.title, WindowPos.CENTERED, WindowPos.CENTERED, Std.int(projectSettings.window.size.x),
-			Std.int(projectSettings.window.size.y));
+		tree.window = new Window(
+			projectSettings.window.title, 
+			WindowPos.CENTERED, WindowPos.CENTERED, 
+			Std.int(projectSettings.window.size.x), Std.int(projectSettings.window.size.y)
+		);
 		tree.window.addChild(tree.currentScene = (scene ?? new Node()));
 
 		Node._queuedToReady = [];
@@ -99,8 +108,11 @@ class Engine {
 				Node._queuedToReady.shift().ready();
 
 			lastTime = curTime;
+			if(projectSettings.engine.fps != 0)
+				SDL.delay(Std.int(1000.0 / projectSettings.engine.fps));
 		}
 
+		AudioMixer.quit();
 		TTF.quit();
 		Image.quit();
 		SDL.quit();
