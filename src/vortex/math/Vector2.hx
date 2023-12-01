@@ -102,6 +102,12 @@ class BaseVector2 {
 	public function set(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x = x;
 		@:bypassAccessor this.y = y;
+		#if !macro
+		_point.x = x;
+		_point.y = y;
+		_pointi.x = Std.int(x);
+		_pointi.y = Std.int(y);
+		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -116,6 +122,12 @@ class BaseVector2 {
 	public function add(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x += x;
 		@:bypassAccessor this.y += y;
+		#if !macro
+		_point.x = x;
+		_point.y = y;
+		_pointi.x = Std.int(x);
+		_pointi.y = Std.int(y);
+		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -130,6 +142,12 @@ class BaseVector2 {
 	public function subtract(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x -= x;
 		@:bypassAccessor this.y -= y;
+		#if !macro
+		_point.x = x;
+		_point.y = y;
+		_pointi.x = Std.int(x);
+		_pointi.y = Std.int(y);
+		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -144,6 +162,12 @@ class BaseVector2 {
 	public function multiply(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x *= x;
 		@:bypassAccessor this.y *= y;
+		#if !macro
+		_point.x = x;
+		_point.y = y;
+		_pointi.x = Std.int(x);
+		_pointi.y = Std.int(y);
+		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -158,6 +182,12 @@ class BaseVector2 {
 	public function divide(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x /= x;
 		@:bypassAccessor this.y /= y;
+		#if !macro
+		_point.x = x;
+		_point.y = y;
+		_pointi.x = Std.int(x);
+		_pointi.y = Std.int(y);
+		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;

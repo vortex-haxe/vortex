@@ -25,8 +25,10 @@ class FileUtil {
 
 			if (FileSystem.isDirectory(sourceFile))
 				copyDirectory(sourceFile, destinationFile);
-			else
-				File.copy(sourceFile, destinationFile);
+			else {
+				final bytes = File.getBytes(sourceFile);
+				File.saveBytes(destinationFile, bytes);
+			}
 		}
 	}
 }

@@ -34,25 +34,22 @@ class ProjectMacro {
 		if (!FileSystem.exists(cfgPath))
 			Context.fatalError('Couldn\'t find a valid "project.cfg" file!', pos);
 
-		var exportFolder:String = null;
 		final cfg:ProjectInfo = CFGParser.parse(File.getContent(cfgPath));
 
-		// Find the export folder
-		function findExportFolder(source:String) {
-			for (item in FileSystem.readDirectory(source)) {
-				final normalized:String = Path.normalize(Path.join([source, item]));
-				if (FileSystem.isDirectory(normalized))
-					findExportFolder(normalized);
-				else {
-					final ext:String = Path.extension(normalized);
-					if (ext == "exe" || ext == "" || ext == null) { // We check for blank extension for unix systems
-						exportFolder = Path.directory(normalized);
-						break;
-					}
-				}
+		// Find the export folder from build.hxml
+		// This is a hacky method and probably sucks, but
+		// i have no other ideas on how to do this within macro context
+
+		final hxmlPath:String = Path.normalize(Path.join([sourcePath, "build.hxml"]));
+		final lines:Array<String> = [for(l in File.getContent(hxmlPath).replace("\r", "").split("\n")) l.trim()];
+		
+		var exportFolder:String = "";
+		for (line in lines) {
+			for(prefix in ["-cpp ", "--cpp "]) {
+				if(line.startsWith(prefix))
+					exportFolder = line.substring(prefix.length, line.length);
 			}
 		}
-		findExportFolder(sourcePath);
 
 		// Copy specified asset folders to export folder
 		for (folder in cfg.assets.folders) {
