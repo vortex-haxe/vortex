@@ -4,7 +4,7 @@
 A 2D Game Framework made in Haxe & SDL, built for simplicity and performance.
 
 ## 🖥️ Platforms
-Vortex natively can run on Windows and Linux systems via `hxcpp`.
+Vortex natively can run on Windows, MacOS and Linux systems via `hxcpp`.
 MacOS support is currently untested.
 
 ## 💡 Getting Started
