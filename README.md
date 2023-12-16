@@ -11,15 +11,39 @@ MacOS support is currently untested.
 In order to start using Vortex, start by installing the haxelib:
 
 ### 🐌 Stable Installation
-This will install the most stable and updated version of the engine possible.
+This will install the most **stable** and up to date version of Vortex.
 ```sh
 haxelib install vortex
 ```
 
 ### ⚡ Development Installation
-This will install the very latest, potentially unstable version of the engine.
+This will install the very latest, potentially unstable version of Vortex.
 ```sh
 haxelib git vortex https://github.com/vortex-haxe/vortex
+```
+
+On Linux, you will need to run some commands for Vortex to run correctly.
+
+The commands depend on your distro, if it isn't on this list here, look it up and/or make a pull request to this README.
+
+Here is a list of each command needed:
+
+## 🐌 Debian/Ubuntu
+```
+sudo apt install g++
+sudo apt install libopenal-dev -y
+sudo apt install libsdl2-dev -y
+sudo apt install libsdl2-image-dev -y
+sudo apt install libsdl2-ttf-dev -y
+```
+
+## ⚡ Arch Linux
+```
+sudo pacman -S gcc
+sudo pacman -S openal
+sudo pacman -S sdl2
+sudo pacman -S sdl2_image
+sudo pacman -S sdl2_ttf
 ```
 
 ## 📔 Libraries
