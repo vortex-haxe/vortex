@@ -136,8 +136,8 @@ class Run {
 				Sys.command('"${exec}"');
 			} else { // Linux/MacOS (Maybe BSD too, I forgot how BSD works)
 				final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir]));
-				Sys.command('cd "${exec}"');
-				Sys.command('./${cfg.source.main}');
+				Sys.command('cd', [exec]);
+				Sys.command('"./${cfg.source.main}"');
 			}
 		}
 	}
