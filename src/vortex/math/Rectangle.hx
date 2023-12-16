@@ -1,6 +1,6 @@
 package vortex.math;
 
-#if !macro
+#if (!macro && !eval && cpp)
 import sdl.SDL.FRectangle as NativeRectangle;
 import sdl.SDL.Rectangle as NativeIntRectangle;
 #end
@@ -99,7 +99,7 @@ class BaseRectangle {
 		@:bypassAccessor this.y = y;
 		@:bypassAccessor this.width = width;
 		@:bypassAccessor this.height = height;
-		#if !macro
+		#if (!macro && !eval && cpp)
 		_rect.x = x;
 		_rect.y = y;
 		_rect.w = width;
@@ -194,14 +194,14 @@ class BaseRectangle {
 	// ##==-- Privates --==## //
 	private var _onChange:(x:Float, y:Float, width:Float, height:Float) -> Void;
 
-	#if !macro
+	#if (!macro && !eval && cpp)
 	private var _rect:NativeRectangle = NativeRectangle.create(0, 0, 0, 0);
 	private var _recti:NativeIntRectangle = NativeIntRectangle.create(0, 0, 0, 0);
 	#end
 
 	@:noCompletion
 	private function set_x(value:Float):Float {
-		#if !macro
+		#if (!macro && !eval && cpp)
 		_rect.x = value;
 		_recti.x = Std.int(value);
 		#end
@@ -212,7 +212,7 @@ class BaseRectangle {
 
 	@:noCompletion
 	private function set_y(value:Float):Float {
-		#if !macro
+		#if (!macro && !eval && cpp)
 		_rect.y = value;
 		_recti.y = Std.int(value);
 		#end
@@ -223,7 +223,7 @@ class BaseRectangle {
 
 	@:noCompletion
 	private function set_width(value:Float):Float {
-		#if !macro
+		#if (!macro && !eval && cpp)
 		_rect.w = value;
 		_recti.w = Std.int(value);
 		#end
@@ -234,7 +234,7 @@ class BaseRectangle {
 
 	@:noCompletion
 	private function set_height(value:Float):Float {
-		#if !macro
+		#if (!macro && !eval && cpp)
 		_rect.h = value;
 		_recti.h = Std.int(value);
 		#end

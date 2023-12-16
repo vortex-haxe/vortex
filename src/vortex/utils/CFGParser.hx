@@ -33,13 +33,15 @@ class CFGParser {
 
 						// Go through each value and parse it into a number (if it is one)
 						final vals:Array<Dynamic> = [];
-						for (v in arrayValue) {
-							v = v.replace("\"", "").replace("'", "").trim();
-							final number:Float = Std.parseFloat(v);
-							if (!Math.isNaN(number))
-								vals.push(number == Math.ffloor(number) ? Std.int(number) : number);
-							else
-								vals.push(v);
+						if(value.charAt(0) != "[" && value.charAt(1) != "]") {
+							for (v in arrayValue) {
+								v = v.replace("\"", "").replace("'", "").trim();
+								final number:Float = Std.parseFloat(v);
+								if (!Math.isNaN(number))
+									vals.push(number == Math.ffloor(number) ? Std.int(number) : number);
+								else
+									vals.push(v);
+							}
 						}
 
 						// Trim each value in the array and add it to the section
@@ -47,7 +49,7 @@ class CFGParser {
 					} else {
 						final key:String = parts[0].trim();
 						final value:String = parts[1].replace("\"", "").replace("'", "").trim();
-						Reflect.setField(Reflect.field(sections, curSection), key, _parseString(value));
+						Reflect.setField(Reflect.field(sections, curSection), key, _stringToVal(value));
 					}
 				}
 			}
@@ -61,7 +63,7 @@ class CFGParser {
 	// ##==-------------------------------------------------==## //
 
 	@:noCompletion
-	private static function _parseString(value:String):Dynamic {
+	private static function _stringToVal(value:String):Dynamic {
 		// Parse numbers
 		final number:Float = Std.parseFloat(value);
 		if (!Math.isNaN(number)) {
@@ -70,6 +72,13 @@ class CFGParser {
 			else
 				return number;
 		}
+
+		// Parse booleans
+		if(value.toLowerCase() == "true")
+			return true;
+
+		if(value.toLowerCase() == "false")
+			return false;
 
 		// ## Parse class constructors
 		// Color

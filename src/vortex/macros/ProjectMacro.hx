@@ -2,6 +2,7 @@ package vortex.macros;
 
 // Thanks Ne_Eo for this macro code
 // I'm not good at macros so you are helping a lot 🙏
+
 import sys.io.File;
 import sys.FileSystem;
 import haxe.io.Path;
@@ -9,9 +10,11 @@ import haxe.io.Path;
 import haxe.macro.Expr;
 import haxe.macro.Context;
 #end
+#if !eval
 import vortex.utils.FileUtil;
 import vortex.utils.CFGParser;
 import vortex.core.Project.ProjectInfo;
+#end
 
 #if macro
 using haxe.macro.PositionTools;
@@ -21,6 +24,7 @@ using StringTools;
 @:keep
 class ProjectMacro {
 	public static macro function build():Array<Field> {
+		#if !eval
 		final pos = Context.currentPos();
 		final posInfo = pos.getInfos();
 
@@ -36,28 +40,16 @@ class ProjectMacro {
 
 		final cfg:ProjectInfo = CFGParser.parse(File.getContent(cfgPath));
 
-		// Find the export folder from build.hxml
-		// This is a hacky method and probably sucks, but
-		// i have no other ideas on how to do this within macro context
-
-		final hxmlPath:String = Path.normalize(Path.join([sourcePath, "build.hxml"]));
-		final lines:Array<String> = [for(l in File.getContent(hxmlPath).replace("\r", "").split("\n")) l.trim()];
-		
-		var exportFolder:String = "";
-		for (line in lines) {
-			for(prefix in ["-cpp ", "--cpp "]) {
-				if(line.startsWith(prefix))
-					exportFolder = line.substring(prefix.length, line.length);
-			}
-		}
-
 		// Copy specified asset folders to export folder
 		for (folder in cfg.assets.folders) {
 			final dirToCopy:String = Path.normalize(Path.join([sourcePath, folder]));
-			final destDir:String = Path.normalize(Path.join([exportFolder, folder]));
+			final destDir:String = Path.normalize(Path.join([cfg.export.build_dir, folder]));
 			FileUtil.copyDirectory(dirToCopy, destDir);
 		}
 		return Context.getBuildFields();
+		#else
+		return null;
+		#end
 	}
 
 	public static macro function getConfigDir():Expr {

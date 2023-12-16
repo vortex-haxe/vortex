@@ -1,6 +1,6 @@
 package vortex.math;
 
-#if !macro
+#if (!macro && !eval && cpp)
 import sdl.SDL.Point;
 import sdl.SDL.FPoint;
 #end
@@ -85,7 +85,7 @@ class BaseVector2 {
 	public function new(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x = x;
 		@:bypassAccessor this.y = y;
-		#if !macro
+		#if (!macro && !eval && cpp)
 		_point.x = x;
 		_point.y = y;
 		_pointi.x = Std.int(x);
@@ -102,7 +102,7 @@ class BaseVector2 {
 	public function set(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x = x;
 		@:bypassAccessor this.y = y;
-		#if !macro
+		#if (!macro && !eval && cpp)
 		_point.x = x;
 		_point.y = y;
 		_pointi.x = Std.int(x);
@@ -122,7 +122,7 @@ class BaseVector2 {
 	public function add(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x += x;
 		@:bypassAccessor this.y += y;
-		#if !macro
+		#if (!macro && !eval && cpp)
 		_point.x = x;
 		_point.y = y;
 		_pointi.x = Std.int(x);
@@ -142,7 +142,7 @@ class BaseVector2 {
 	public function subtract(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x -= x;
 		@:bypassAccessor this.y -= y;
-		#if !macro
+		#if (!macro && !eval && cpp)
 		_point.x = x;
 		_point.y = y;
 		_pointi.x = Std.int(x);
@@ -162,7 +162,7 @@ class BaseVector2 {
 	public function multiply(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x *= x;
 		@:bypassAccessor this.y *= y;
-		#if !macro
+		#if (!macro && !eval && cpp)
 		_point.x = x;
 		_point.y = y;
 		_pointi.x = Std.int(x);
@@ -182,7 +182,7 @@ class BaseVector2 {
 	public function divide(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x /= x;
 		@:bypassAccessor this.y /= y;
-		#if !macro
+		#if (!macro && !eval && cpp)
 		_point.x = x;
 		_point.y = y;
 		_pointi.x = Std.int(x);
@@ -196,14 +196,14 @@ class BaseVector2 {
 	// ##==-- Privates --==## //
 	private var _onChange:(x:Float, y:Float) -> Void;
 
-	#if !macro
+	#if (!macro && !eval && cpp)
 	private var _point:FPoint = FPoint.create(0, 0);
 	private var _pointi:Point = Point.create(0, 0);
 	#end
 
 	@:noCompletion
 	private function set_x(value:Float):Float {
-		#if !macro
+		#if (!macro && !eval && cpp)
 		_point.x = value;
 		_pointi.x = Std.int(value);
 		#end
@@ -214,7 +214,7 @@ class BaseVector2 {
 
 	@:noCompletion
 	private function set_y(value:Float):Float {
-		#if !macro
+		#if (!macro && !eval && cpp)
 		_point.y = value;
 		_pointi.y = Std.int(value);
 		#end
