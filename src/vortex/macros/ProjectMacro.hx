@@ -10,7 +10,7 @@ import haxe.io.Path;
 import haxe.macro.Expr;
 import haxe.macro.Context;
 #end
-#if !eval
+#if (macro || !eval)
 import vortex.utils.FileUtil;
 import vortex.utils.CFGParser;
 import vortex.core.Project.ProjectInfo;
@@ -24,7 +24,7 @@ using StringTools;
 @:keep
 class ProjectMacro {
 	public static macro function build():Array<Field> {
-		#if !eval
+		#if (macro || !eval)
 		final pos = Context.currentPos();
 		final posInfo = pos.getInfos();
 
@@ -43,7 +43,7 @@ class ProjectMacro {
 		// Copy specified asset folders to export folder
 		for (folder in cfg.assets.folders) {
 			final dirToCopy:String = Path.normalize(Path.join([sourcePath, folder]));
-			final destDir:String = Path.normalize(Path.join([cfg.export.build_dir, folder]));
+			final destDir:String = Path.normalize(Path.join([sourcePath, cfg.export.build_dir, folder]));
 			FileUtil.copyDirectory(dirToCopy, destDir);
 		}
 		return Context.getBuildFields();

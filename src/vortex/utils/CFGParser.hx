@@ -33,7 +33,7 @@ class CFGParser {
 
 						// Go through each value and parse it into a number (if it is one)
 						final vals:Array<Dynamic> = [];
-						if(value.charAt(0) != "[" && value.charAt(1) != "]") {
+						if(value.charAt(0) == "[" && value.charAt(1) != "]") {
 							for (v in arrayValue) {
 								v = v.replace("\"", "").replace("'", "").trim();
 								final number:Float = Std.parseFloat(v);
