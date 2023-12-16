@@ -124,9 +124,7 @@ class Window extends Node {
 		_rect2.x = (size.x - _rect2.width) * 0.5;
 		_rect2.y = (size.y - _rect2.height) * 0.5;
 
-		SDL.setTextureScaleMode(_renderTexture, LINEAR);
 		SDL.renderCopyF(_nativeRenderer, _renderTexture, _rect._recti, _rect2._rect);
-
 		SDL.renderPresent(_nativeRenderer);
 	}
 
