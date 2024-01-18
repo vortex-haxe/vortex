@@ -7,8 +7,8 @@ import sys.io.File;
 import sys.FileSystem;
 import haxe.io.Path;
 #if macro
+import haxe.macro.*;
 import haxe.macro.Expr;
-import haxe.macro.Context;
 #end
 #if (macro || !eval)
 import vortex.utils.generic.FileUtil;

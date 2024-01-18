@@ -114,6 +114,8 @@ class Run {
 		final args:Array<String> = [];
 		final cfg:ProjectInfo = CFGParser.parse(File.getContent('${curDir}project.cfg'));
         
+		final mainCl:String = cfg.source.main.substring(cfg.source.main.lastIndexOf(".") + 1, cfg.source.main.length);
+
         args.push('--class-path ${cfg.source.name}');
 
         args.push('--library vortex');
@@ -134,12 +136,15 @@ class Run {
 
 		if(runAfterBuild) {
 			if(Sys.systemName() == "Windows") { // Windows
-				final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, '${cfg.source.main}.exe']));
-				Sys.command('"${exec}"');
+				final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, '${mainCl}.exe']));
+				if(FileSystem.exists(exec))
+					Sys.command('"${exec}"');
 			} else { // Linux/MacOS (Maybe BSD too, I forgot how BSD works)
 				final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir]));
-				Sys.command('cd', [exec]);
-				Sys.command('"./${cfg.source.main}"');
+				if(FileSystem.exists(exec)) {
+					Sys.setCwd(exec);
+					Sys.command('"./${mainCl}"');
+				}
 			}
 		}
 	}
