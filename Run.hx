@@ -1,14 +1,16 @@
 package;
 
+import haxe.io.Path;
 import haxe.io.Bytes;
-import vortex.utils.CFGParser;
-import vortex.core.Project.ProjectInfo;
-import vortex.utils.FileUtil;
-import vortex.macros.ProjectMacro;
+
 import sys.io.File;
 import sys.FileSystem;
-import haxe.io.Path;
+
 import vortex.debug.Debug;
+import vortex.macros.ProjectMacro;
+import vortex.utils.generic.CFGParser;
+import vortex.utils.engine.Project.ProjectInfo;
+import vortex.utils.generic.FileUtil;
 
 using StringTools;
 

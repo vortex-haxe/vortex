@@ -1,9 +1,9 @@
-package vortex.core.native;
+package vortex.utils.native;
 
 /**
  * @see https://github.com/FNF-CNE-Devs/CodenameEngine/blob/main/source/funkin/backend/utils/NativeAPI.hx
  */
-class NativeAPI {
+ class NativeAPI {
 	/**
 	 * Sets the console colors
 	 */

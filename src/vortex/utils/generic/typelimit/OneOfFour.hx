@@ -1,4 +1,4 @@
-package vortex.utils.typelimit;
+package vortex.utils.generic.typelimit;
 
 /**
  * Useful to limit a Dynamic function argument's type to the specified
@@ -6,4 +6,4 @@ package vortex.utils.typelimit;
  * any way (the underlying type is still Dynamic and Std.is() checks +
  * casts are necessary).
  */
-abstract OneOfThree<T1, T2, T3>(Dynamic) from T1 from T2 to T1 to T2 from T3 to T3 {}
+abstract OneOfFour<T1, T2, T3, T4>(Dynamic) from T1 from T2 to T1 to T2 from T3 to T3 from T4 to T4 {}

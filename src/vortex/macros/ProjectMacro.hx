@@ -11,9 +11,9 @@ import haxe.macro.Expr;
 import haxe.macro.Context;
 #end
 #if (macro || !eval)
-import vortex.utils.FileUtil;
-import vortex.utils.CFGParser;
-import vortex.core.Project.ProjectInfo;
+import vortex.utils.generic.FileUtil;
+import vortex.utils.generic.CFGParser;
+import vortex.utils.engine.Project.ProjectInfo;
 #end
 
 #if macro

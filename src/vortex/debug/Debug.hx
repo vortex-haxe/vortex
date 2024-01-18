@@ -2,7 +2,7 @@ package vortex.debug;
 
 import haxe.Log;
 import haxe.PosInfos;
-import vortex.core.native.NativeAPI;
+import vortex.utils.native.NativeAPI;
 
 class Debug {
 	public static function init() {

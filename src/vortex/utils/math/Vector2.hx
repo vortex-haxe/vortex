@@ -1,4 +1,4 @@
-package vortex.math;
+package vortex.utils.math;
 
 #if (!macro && !eval && cpp)
 import sdl.SDL.Point;
@@ -17,6 +17,12 @@ import sdl.SDL.FPoint;
 	}
 
 	@:noCompletion
+	@:op(A + B)
+	private static inline function addFloatOp(a:Vector2, b:Float) {
+		return new Vector2(a.x + b, a.y + b);
+	}
+
+	@:noCompletion
 	@:op(A += B)
 	private static inline function addEqualOp(a:Vector2, b:Vector2) {
 		return a.add(b.x, b.y);
@@ -26,6 +32,12 @@ import sdl.SDL.FPoint;
 	@:op(A - B)
 	private static inline function subtractOp(a:Vector2, b:Vector2) {
 		return new Vector2(a.x - b.x, a.y - b.y);
+	}
+
+	@:noCompletion
+	@:op(A - B)
+	private static inline function subtractFloatOp(a:Vector2, b:Float) {
+		return new Vector2(a.x - b, a.y - b);
 	}
 
 	@:noCompletion
@@ -41,6 +53,12 @@ import sdl.SDL.FPoint;
 	}
 
 	@:noCompletion
+	@:op(A * B)
+	private static inline function multiplyFloatOp(a:Vector2, b:Float) {
+		return new Vector2(a.x * b, a.y * b);
+	}
+
+	@:noCompletion
 	@:op(A *= B)
 	private static inline function multiplyEqualOp(a:Vector2, b:Vector2) {
 		return a.multiply(b.x, b.y);
@@ -51,20 +69,28 @@ import sdl.SDL.FPoint;
 	private static inline function divideOp(a:Vector2, b:Vector2) {
 		return new Vector2(a.x / b.x, a.y / b.y);
 	}
+	
+	@:noCompletion
+	@:op(A / B)
+	private static inline function divideFloatOp(a:Vector2, b:Float) {
+		return new Vector2(a.x / b, a.y / b);
+	}
 
 	@:noCompletion
 	@:op(A /= B)
 	private static inline function divideEqualOp(a:Vector2, b:Vector2) {
 		return a.divide(b.x, b.y);
 	}
+
+	@:to
+	private static inline function toIEquivalent(a:Vector2) {
+		return new Vector2i(Math.floor(a.x), Math.floor(a.y));
+	}
 }
 
 /**
  * A simple class to store 2D X and Y values.
  */
-@:allow(vortex.nodes.Window)
-@:allow(vortex.nodes.display.Sprite)
-@:allow(vortex.nodes.display.AnimatedSprite)
 class BaseVector2 {
 	/**
 	 * The X value of this vector.
@@ -88,8 +114,8 @@ class BaseVector2 {
 		#if (!macro && !eval && cpp)
 		_point.x = x;
 		_point.y = y;
-		_pointi.x = Std.int(x);
-		_pointi.y = Std.int(y);
+		_pointi.x = Math.floor(x);
+		_pointi.y = Math.floor(y);
 		#end
 	}
 
@@ -105,8 +131,8 @@ class BaseVector2 {
 		#if (!macro && !eval && cpp)
 		_point.x = x;
 		_point.y = y;
-		_pointi.x = Std.int(x);
-		_pointi.y = Std.int(y);
+		_pointi.x = Math.floor(x);
+		_pointi.y = Math.floor(y);
 		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
@@ -125,8 +151,8 @@ class BaseVector2 {
 		#if (!macro && !eval && cpp)
 		_point.x = x;
 		_point.y = y;
-		_pointi.x = Std.int(x);
-		_pointi.y = Std.int(y);
+		_pointi.x = Math.floor(x);
+		_pointi.y = Math.floor(y);
 		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
@@ -145,8 +171,8 @@ class BaseVector2 {
 		#if (!macro && !eval && cpp)
 		_point.x = x;
 		_point.y = y;
-		_pointi.x = Std.int(x);
-		_pointi.y = Std.int(y);
+		_pointi.x = Math.floor(x);
+		_pointi.y = Math.floor(y);
 		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
@@ -165,8 +191,8 @@ class BaseVector2 {
 		#if (!macro && !eval && cpp)
 		_point.x = x;
 		_point.y = y;
-		_pointi.x = Std.int(x);
-		_pointi.y = Std.int(y);
+		_pointi.x = Math.floor(x);
+		_pointi.y = Math.floor(y);
 		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
@@ -185,8 +211,8 @@ class BaseVector2 {
 		#if (!macro && !eval && cpp)
 		_point.x = x;
 		_point.y = y;
-		_pointi.x = Std.int(x);
-		_pointi.y = Std.int(y);
+		_pointi.x = Math.floor(x);
+		_pointi.y = Math.floor(y);
 		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
@@ -205,7 +231,7 @@ class BaseVector2 {
 	private function set_x(value:Float):Float {
 		#if (!macro && !eval && cpp)
 		_point.x = value;
-		_pointi.x = Std.int(value);
+		_pointi.x = Math.floor(value);
 		#end
 		if (_onChange != null)
 			_onChange(value, y);
@@ -216,7 +242,7 @@ class BaseVector2 {
 	private function set_y(value:Float):Float {
 		#if (!macro && !eval && cpp)
 		_point.y = value;
-		_pointi.y = Std.int(value);
+		_pointi.y = Math.floor(value);
 		#end
 		if (_onChange != null)
 			_onChange(x, value);

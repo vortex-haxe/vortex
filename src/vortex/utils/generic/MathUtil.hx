@@ -1,6 +1,6 @@
-package vortex.utils;
+package vortex.utils.generic;
 
-import vortex.math.Rectangle;
+import vortex.utils.math.Rectangle;
 
 /**
  * A class containing a set of math-related functions.

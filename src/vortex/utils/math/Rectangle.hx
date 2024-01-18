@@ -1,4 +1,4 @@
-package vortex.math;
+package vortex.utils.math;
 
 #if (!macro && !eval && cpp)
 import sdl.SDL.FRectangle as NativeRectangle;
@@ -6,14 +6,20 @@ import sdl.SDL.Rectangle as NativeIntRectangle;
 #end
 
 @:forward abstract Rectangle(BaseRectangle) to BaseRectangle from BaseRectangle {
-	public function new(x:Float = 0, y:Float = 0, width:Float = 0, height:Float = 0, w:Float = 0, h:Float = 0) {
-		this = new BaseRectangle(x, y, w, h);
+	public function new(x:Float = 0, y:Float = 0, width:Float = 0, height:Float = 0) {
+		this = new BaseRectangle(x, y, width, height);
 	}
 
 	@:noCompletion
 	@:op(A + B)
 	private static inline function addOp(a:Rectangle, b:Rectangle) {
 		return new Rectangle(a.x + b.x, a.y + b.y, a.width + b.width, a.height + b.height);
+	}
+
+	@:noCompletion
+	@:op(A + B)
+	private static inline function addFloatOp(a:Rectangle, b:Float) {
+		return new Rectangle(a.x + b, a.y + b, a.width + b, a.height + b);
 	}
 
 	@:noCompletion
@@ -29,6 +35,12 @@ import sdl.SDL.Rectangle as NativeIntRectangle;
 	}
 
 	@:noCompletion
+	@:op(A - B)
+	private static inline function subtractFloatOp(a:Rectangle, b:Float) {
+		return new Rectangle(a.x - b, a.y - b, a.width - b, a.height - b);
+	}
+
+	@:noCompletion
 	@:op(A -= B)
 	private static inline function subtractEqualOp(a:Rectangle, b:Rectangle) {
 		return a.subtract(b.x, b.y, b.width, b.height);
@@ -38,6 +50,12 @@ import sdl.SDL.Rectangle as NativeIntRectangle;
 	@:op(A * B)
 	private static inline function multiplyOp(a:Rectangle, b:Rectangle) {
 		return new Rectangle(a.x * b.x, a.y * b.y, a.width * b.width, a.height * b.height);
+	}
+
+	@:noCompletion
+	@:op(A * B)
+	private static inline function addMultiplyOp(a:Rectangle, b:Float) {
+		return new Rectangle(a.x * b, a.y * b, a.width * b, a.height * b);
 	}
 
 	@:noCompletion
@@ -53,18 +71,26 @@ import sdl.SDL.Rectangle as NativeIntRectangle;
 	}
 
 	@:noCompletion
+	@:op(A / B)
+	private static inline function addDivideOp(a:Rectangle, b:Float) {
+		return new Rectangle(a.x / b, a.y / b, a.width / b, a.height / b);
+	}
+
+	@:noCompletion
 	@:op(A /= B)
 	private static inline function divideEqualOp(a:Rectangle, b:Rectangle) {
 		return a.divide(b.x, b.y, b.width, b.height);
+	}
+
+	@:to
+	private static inline function toIEquivalent(a:Rectangle) {
+		return new Rectanglei(Math.floor(a.x), Math.floor(a.y), Math.floor(a.width), Math.floor(a.height));
 	}
 }
 
 /**
  * A simple class to store 2D X, Y, width, and height values.
  */
-@:allow(vortex.nodes.Window)
-@:allow(vortex.nodes.display.Sprite)
-@:allow(vortex.nodes.display.AnimatedSprite)
 class BaseRectangle {
 	/**
 	 * The X value of this rectangle.
@@ -104,10 +130,10 @@ class BaseRectangle {
 		_rect.y = y;
 		_rect.w = width;
 		_rect.h = height;
-		_recti.x = Std.int(x);
-		_recti.y = Std.int(y);
-		_recti.w = Std.int(width);
-		_recti.h = Std.int(height);
+		_recti.x = Math.floor(x);
+		_recti.y = Math.floor(y);
+		_recti.w = Math.floor(width);
+		_recti.h = Math.floor(height);
 		#end
 	}
 
@@ -203,7 +229,7 @@ class BaseRectangle {
 	private function set_x(value:Float):Float {
 		#if (!macro && !eval && cpp)
 		_rect.x = value;
-		_recti.x = Std.int(value);
+		_recti.x = Math.floor(value);
 		#end
 		if (_onChange != null)
 			_onChange(value, y, width, height);
@@ -214,7 +240,7 @@ class BaseRectangle {
 	private function set_y(value:Float):Float {
 		#if (!macro && !eval && cpp)
 		_rect.y = value;
-		_recti.y = Std.int(value);
+		_recti.y = Math.floor(value);
 		#end
 		if (_onChange != null)
 			_onChange(x, value, width, height);
@@ -225,7 +251,7 @@ class BaseRectangle {
 	private function set_width(value:Float):Float {
 		#if (!macro && !eval && cpp)
 		_rect.w = value;
-		_recti.w = Std.int(value);
+		_recti.w = Math.floor(value);
 		#end
 		if (_onChange != null)
 			_onChange(x, y, value, height);
@@ -236,7 +262,7 @@ class BaseRectangle {
 	private function set_height(value:Float):Float {
 		#if (!macro && !eval && cpp)
 		_rect.h = value;
-		_recti.h = Std.int(value);
+		_recti.h = Math.floor(value);
 		#end
 		if (_onChange != null)
 			_onChange(x, y, width, value);

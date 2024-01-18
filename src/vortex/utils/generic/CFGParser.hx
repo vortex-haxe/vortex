@@ -1,8 +1,9 @@
-package vortex.utils;
+package vortex.utils.generic;
 
 import sys.io.File;
-import vortex.math.Vector2;
-import vortex.math.Rectangle;
+import vortex.utils.engine.Color;
+import vortex.utils.math.Vector2;
+import vortex.utils.math.Rectangle;
 
 using StringTools;
 

@@ -1,4 +1,4 @@
-package vortex.utils;
+package vortex.utils.generic;
 
 import haxe.io.Path;
 import sys.io.File;

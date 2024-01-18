@@ -1,7 +1,6 @@
-package vortex.core;
+package vortex.utils.engine;
 
-import vortex.utils.Color;
-import vortex.math.Vector2;
+import vortex.utils.math.Vector2;
 
 typedef ProjectInfo = {
 	var engine:EngineInfo;
@@ -20,6 +19,8 @@ typedef WindowInfo = {
 	var title:String;
 	var icon:String;
 	var size:Vector2;
+    var resizable:Bool;
+    var borderless:Bool;
 }
 
 typedef AssetInfo = {

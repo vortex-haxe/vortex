@@ -1,7 +1,7 @@
-<img src="https://avatars.githubusercontent.com/u/146598504" alt="Lunar Engine Logo" align="right" width="200" height="200" />
+<img src="https://avatars.githubusercontent.com/u/146598504" alt="Vortex Engine Logo" align="right" width="200" height="200" />
 
 # Vortex
-A 2D Game Framework made in Haxe & SDL, built for simplicity and performance.
+A 2D Game Framework made in Haxe built for simplicity and performance.
 
 ## 🖥️ Platforms
 Vortex natively can run on Windows, MacOS and Linux systems via `hxcpp`.
@@ -31,37 +31,46 @@ Here is a list of each command needed:
 ## 🐌 Debian/Ubuntu
 ```
 sudo apt install g++
-sudo apt install libopenal-dev -y
 sudo apt install libsdl2-dev -y
-sudo apt install libsdl2-image-dev -y
-sudo apt install libsdl2-ttf-dev -y
+sudo apt install libopengl-dev -y
+sudo apt install libopenal-dev -y
 ```
 
 ## ⚡ Arch Linux
 ```
 sudo pacman -S gcc
-sudo pacman -S openal
 sudo pacman -S sdl2
-sudo pacman -S sdl2_image
-sudo pacman -S sdl2_ttf
+sudo pacman -S mesa
+sudo pacman -S openal
 ```
 
 ## 📔 Libraries
-Here are the puzzle pieces that are put together to make Vortex a lovely framework to use!
+Here are the puzzle pieces that are put together to make Vortex possible!
 
-<img src="https://camo.githubusercontent.com/4eaa1b433cf8474defdb9f0d13bc30e9f64d7b896d8163479b255cf08c4040e7/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f7468756d622f312f31362f53696d706c655f4469726563744d656469615f4c617965722532435f4c6f676f2e7376672f3132303070782d53696d706c655f4469726563744d656469615f4c617965722532435f4c6f676f2e7376672e706e67" alt="SDL Logo" align="left" width="62" height="32" />
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Simple_DirectMedia_Layer%2C_Logo.svg/1280px-Simple_DirectMedia_Layer%2C_Logo.svg.png" alt="SDL Logo" align="right" width="62" height="32" />
 
 ### [hxsdl](https://github.com/swordcube/hxsdl)
 
-SDL, SDL Image, and SDL TTF Bindings for Haxe, used for making a window and rendering things to it.
+SDL Bindings for Haxe, used for making a window and having window events.
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Ogg_Logo.svg/1200px-Ogg_Logo.svg.png" alt="OGG Logo" align="left" width="46" height="32" />
+### [hxstb_image](https://github.com/swordcube/hxstb_image)
+STB Image Bindings for Haxe, used for loading image files.
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Opengl-logo.svg" alt="OpenGL Logo" align="right" width="62" height="32" />
+
+### [hxglad](https://github.com/swordcube/hxglad)
+GLAD Bindings for Haxe, used for rendering to the window with OpenGL.
+
+### [hxdr_mp3](https://github.com/swordcube/hxdr_mp3)
+Dr MP3 Bindings for Haxe, used for loading MP3 files.
+
+### [hxdr_wav](https://github.com/swordcube/hxdr_wav)
+Dr WAV Bindings for Haxe, used for loading WAV files.
 
 ### [hxstb_vorbis](https://github.com/swordcube/hxstb_vorbis)
 STB Vorbis Bindings for Haxe, used for loading OGG files.
 
-### [hxdr_wav](https://github.com/swordcube/hxstb_vorbis)
-Dr Wav Bindings for Haxe, used for loading WAV files.
+<img src="https://upload.wikimedia.org/wikipedia/en/thumb/1/1f/OpenAL_logo.svg/1280px-OpenAL_logo.svg.png" alt="OpenAL Logo" align="right" width="70" height="32" />
 
 ### [hxal](https://github.com/swordcube/hxal)
 OpenAL Soft Bindings for Haxe, used for playing audio.

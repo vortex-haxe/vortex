@@ -1,4 +1,4 @@
-package vortex.math;
+package vortex.utils.math;
 
 @:forward abstract Vector3(BaseVector3) to BaseVector3 from BaseVector3 {
 	public inline function new(x:Float = 0, y:Float = 0, z:Float = 0) {
@@ -8,7 +8,13 @@ package vortex.math;
 	@:noCompletion
 	@:op(A + B)
 	private static inline function addOp(a:Vector3, b:Vector3) {
-		return new Vector3(a.x + b.x, a.y + b.y, a.z + b.y);
+		return new Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
+	}
+
+	@:noCompletion
+	@:op(A + B)
+	private static inline function addFloatOp(a:Vector3, b:Float) {
+		return new Vector3(a.x + b, a.y + b, a.z + b);
 	}
 
 	@:noCompletion
@@ -24,6 +30,12 @@ package vortex.math;
 	}
 
 	@:noCompletion
+	@:op(A - B)
+	private static inline function subtractFloatOp(a:Vector3, b:Float) {
+		return new Vector3(a.x - b, a.y - b, a.z - b);
+	}
+
+	@:noCompletion
 	@:op(A -= B)
 	private static inline function subtractEqualOp(a:Vector3, b:Vector3) {
 		return a.subtract(b.x, b.y, b.z);
@@ -33,6 +45,12 @@ package vortex.math;
 	@:op(A * B)
 	private static inline function multiplyOp(a:Vector3, b:Vector3) {
 		return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
+	}
+
+	@:noCompletion
+	@:op(A * B)
+	private static inline function multiplyFloatOp(a:Vector3, b:Float) {
+		return new Vector3(a.x * b, a.y * b, a.z * b);
 	}
 
 	@:noCompletion
@@ -48,18 +66,26 @@ package vortex.math;
 	}
 
 	@:noCompletion
+	@:op(A / B)
+	private static inline function divideFloatOp(a:Vector3, b:Float) {
+		return new Vector3(a.x / b, a.y / b, a.z / b);
+	}
+
+	@:noCompletion
 	@:op(A /= B)
 	private static inline function divideEqualOp(a:Vector3, b:Vector3) {
 		return a.divide(b.x, b.y, b.z);
+	}
+
+	@:to
+	private static inline function toIEquivalent(a:Vector3) {
+		return new Vector3i(Math.floor(a.x), Math.floor(a.y), Math.floor(a.z));
 	}
 }
 
 /**
  * A simple class to store 3D X, Y and Z values.
  */
-@:allow(vortex.nodes.Window)
-@:allow(vortex.nodes.display.Sprite)
-@:allow(vortex.nodes.display.AnimatedSprite)
 class BaseVector3 {
 	/**
 	 * The X value of this vector.
