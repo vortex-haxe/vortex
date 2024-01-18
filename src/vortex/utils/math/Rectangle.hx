@@ -217,6 +217,18 @@ class BaseRectangle {
 		return this;
 	}
 
+	/**
+	 * Copies the values from another rectangle
+	 * onto this one.
+	 */
+	public function copyFrom(rect:Rectangle) {
+		x = rect.x;
+		y = rect.y;
+		width = rect.width;
+		height = rect.height;
+		return this;
+	}
+
 	// ##==-- Privates --==## //
 	private var _onChange:(x:Float, y:Float, width:Float, height:Float) -> Void;
 

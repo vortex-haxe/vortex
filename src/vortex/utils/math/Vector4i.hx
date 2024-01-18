@@ -212,6 +212,18 @@ class BaseVector4i {
 		return this;
 	}
 
+	/**
+	 * Copies the values from another Vector4i
+	 * onto this one.
+	 */
+	public function copyFrom(vec:Vector4i) {
+		x = vec.x;
+		y = vec.y;
+		z = vec.z;
+		w = vec.w;
+		return this;
+	}
+
 	// ##==-- Privates --==## //
 	private var _onChange:(x:Int, y:Int, z:Int, w:Int) -> Void;
 

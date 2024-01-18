@@ -195,6 +195,17 @@ class BaseVector3 {
 		return this;
 	}
 
+	/**
+	 * Copies the values from another Vector3
+	 * onto this one.
+	 */
+	public function copyFrom(vec:Vector3) {
+		x = vec.x;
+		y = vec.y;
+		z = vec.z;
+		return this;
+	}
+
 	// ##==-- Privates --==## //
 	private var _onChange:(x:Float, y:Float, z:Float) -> Void;
 

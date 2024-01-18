@@ -212,6 +212,18 @@ class BaseRectanglei {
 		return this;
 	}
 
+	/**
+	 * Copies the values from another rectangle
+	 * onto this one.
+	 */
+	public function copyFrom(rect:Rectanglei) {
+		x = rect.x;
+		y = rect.y;
+		width = rect.width;
+		height = rect.height;
+		return this;
+	}
+
 	// ##==-- Privates --==## //
 	private var _onChange:(x:Int, y:Int, width:Int, height:Int) -> Void;
 

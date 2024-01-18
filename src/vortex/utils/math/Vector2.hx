@@ -219,6 +219,16 @@ class BaseVector2 {
 		return this;
 	}
 
+	/**
+	 * Copies the values from another Vector2
+	 * onto this one.
+	 */
+	public function copyFrom(vec:Vector2) {
+		x = vec.x;
+		y = vec.y;
+		return this;
+	}
+
 	// ##==-- Privates --==## //
 	private var _onChange:(x:Float, y:Float) -> Void;
 
