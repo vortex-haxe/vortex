@@ -1,5 +1,11 @@
 package vortex.utils;
 
+/**
+ * A class similar to Haxe's built in `Map` class,
+ * except the keys and values are ordered, and are stored in arrays.
+ * 
+ * These maps **CANNOT** be constructed with `[]`.
+ */
 @:forward
 @:transitive
 abstract OrderedMap<T1, T2>(OrderedMapImpl<T1, T2>) from OrderedMapImpl<T1, T2> to OrderedMapImpl<T1, T2> {

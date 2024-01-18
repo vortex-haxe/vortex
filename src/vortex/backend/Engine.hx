@@ -2,7 +2,7 @@ package vortex.backend;
 
 /**
  * A class full of globally accessable engine
- * properties.
+ * properties and helpers.
  */
 class Engine {
     

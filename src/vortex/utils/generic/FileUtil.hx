@@ -6,6 +6,10 @@ import sys.FileSystem;
 import vortex.debug.Debug;
 import haxe.zip.Reader as ZipReader;
 
+/**
+ * A class with some file utilities that Haxe doesn't
+ * already have or is more inconvenient.
+ */
 class FileUtil {
 	/**
 	 * Copies a directory with all of it's files/directories to another directory.

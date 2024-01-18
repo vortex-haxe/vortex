@@ -1,15 +1,24 @@
 package vortex.utils.generic;
 
 import sys.io.File;
+
 import vortex.utils.engine.Color;
 import vortex.utils.math.Vector2;
+import vortex.utils.math.Vector2i;
 import vortex.utils.math.Rectangle;
+import vortex.utils.math.Rectanglei;
 
 using StringTools;
 
 typedef CFGSection = Dynamic;
 typedef CFGData = Dynamic;
 
+/**
+ * A basic parser for `cfg` files.
+ * 
+ * Similarly to the Haxe `Json` class, it returns
+ * a structure filled with the data of the config file.
+ */
 class CFGParser {
 	public static function parse(contents:String):CFGData {
 		var curSection:String = "global";
@@ -103,6 +112,16 @@ class CFGParser {
 			return new Vector2(Std.parseFloat(vals[0] ?? "0.0"), Std.parseFloat(vals[1] ?? "0.0"));
 		}
 
+		// Vector2i
+		cl = "Vector2i(";
+		if (value.startsWith(cl) && value.endsWith(")")) {
+			final sub:String = value.substring(cl.length, value.length - 1);
+			final vals:Array<String> = sub.split(",");
+			for (i in 0...vals.length)
+				vals[i] = vals[i].trim();
+			return new Vector2i(Std.parseInt(vals[0] ?? "0.0"), Std.parseInt(vals[1] ?? "0.0"));
+		}
+
 		// Rectangle
 		cl = "Rectangle(";
 		if (value.startsWith(cl) && value.endsWith(")")) {
@@ -112,6 +131,17 @@ class CFGParser {
 				vals[i] = vals[i].trim();
 			return new Rectangle(Std.parseFloat(vals[0] ?? "0.0"), Std.parseFloat(vals[1] ?? "0.0"), Std.parseFloat(vals[2] ?? "0.0"),
 				Std.parseFloat(vals[3] ?? "0.0"));
+		}
+		
+		// Rectanglei
+		cl = "Rectanglei(";
+		if (value.startsWith(cl) && value.endsWith(")")) {
+			final sub:String = value.substring(cl.length, value.length - 1);
+			final vals:Array<String> = sub.split(",");
+			for (i in 0...vals.length)
+				vals[i] = vals[i].trim();
+			return new Rectanglei(Std.parseInt(vals[0] ?? "0.0"), Std.parseInt(vals[1] ?? "0.0"), Std.parseInt(vals[2] ?? "0.0"),
+				Std.parseInt(vals[3] ?? "0.0"));
 		}
 
 		return value;

@@ -1,7 +1,10 @@
 --library hxsdl
---library hxal
---library hxstb_vorbis
+--library hxstb_image
+--library hxglad
+--library hxdr_mp3
 --library hxdr_wav
+--library hxstb_vorbis
+--library hxal
 
 --class-path src
 --define analyzer-optimize

@@ -1,7 +1,7 @@
 package vortex.utils.math;
 
 #if (!macro && !eval && cpp)
-import sdl.SDL.Rectangle as NativeIntRectangle;
+import sdl.Types.Rectangle as NativeIntRectangle;
 #end
 
 @:forward abstract Rectanglei(BaseRectanglei) to BaseRectanglei from BaseRectanglei {

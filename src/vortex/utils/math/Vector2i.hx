@@ -1,7 +1,7 @@
 package vortex.utils.math;
 
 #if (!macro && !eval && cpp)
-import sdl.SDL.Point;
+import sdl.Types.Point;
 #end
 
 @:forward abstract Vector2i(BaseVector2i) to BaseVector2i from BaseVector2i {

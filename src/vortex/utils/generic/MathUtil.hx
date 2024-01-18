@@ -3,7 +3,9 @@ package vortex.utils.generic;
 import vortex.utils.math.Rectangle;
 
 /**
- * A class containing a set of math-related functions.
+ * A class containing a set of math-related functions
+ * that Haxe doesn't already have.
+ * 
  * @see https://github.com/HaxeFlixel/flixel/blob/master/flixel/math/FlxMath.hx
  */
 class MathUtil {
