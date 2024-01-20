@@ -33,6 +33,11 @@ class Application {
     public var window:Window;
 
     /**
+     * All of the windows attached to this application.
+     */
+    public var windows:Array<Window> = [];
+
+    /**
      * Makes a new `Application`.
      */
     public function new() {

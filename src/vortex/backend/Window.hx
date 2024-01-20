@@ -62,6 +62,7 @@ class Window implements IDisposable {
                 SDL.setWindowSize(_nativeWindow, x, y);
             };
         }
+        Application.self.windows.push(this);
         #end
     }
 
@@ -74,6 +75,7 @@ class Window implements IDisposable {
             return;
 
         #if (!macro && !eval && cpp)
+        Application.self.windows.remove(this);
         SDL.glDeleteContext(_glContext);
         SDL.destroyWindow(_nativeWindow);
         #end
