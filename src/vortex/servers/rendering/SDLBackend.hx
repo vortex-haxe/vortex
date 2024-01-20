@@ -8,32 +8,40 @@ import vortex.utils.math.Rectanglei;
  * 
  * TODO: implement me!
  */
-class SDLBackend implements IRenderingBackendImpl {
-    /**
-     * Initializes this rendering backend.
-     */
-    public static function init():Void {
-        
-    }
+class SDLBackend extends IRenderingBackendImpl {
+	/**
+	 * Initializes this rendering backend.
+	 */
+	public static function init():Void {
+		Debug.warn("SDL rendering backend is unimplemented!");
+	}
 
-    /**
-     * Sets the values of the current viewport rectangle.
-     */
-    public static function setViewportRect(rect:Rectanglei):Void {
-        
-    }
+	/**
+	 * Sets the values of the current viewport rectangle.
+	 */
+	public static function setViewportRect(rect:Rectanglei):Void {
+		
+	}
 
-    /**
-     * Clears whatever is on-screen currently.
-     */
-    public static function clear():Void {
+	/**
+	 * Clears whatever is on-screen currently.
+	 */
+	public static function clear():Void {
 
-    }
+	}
  
-    /**
-     * Presents/renders whatever is on-screen currently.
-     */
-    public static function present():Void {
+	/**
+	 * Presents/renders whatever is on-screen currently.
+	 */
+	public static function present():Void {
 
-    }
+	}
+
+	/**
+	 * Disposes of this rendering backend and removes it's
+	 * properties from memory.
+	 */
+	public static function dispose():Void {
+
+	}
 }

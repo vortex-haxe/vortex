@@ -11,8 +11,11 @@
     "dependencies": {
         "hxcpp": "",
         "hxsdl": "",
-        "hxstb_vorbis": "",
+        "hxstb_image": "",
+        "hxglad": "",
+        "hxdr_mp3": "",
         "hxdr_wav": "",
+        "hxstb_vorbis": "",
         "hxal": ""
     }
 }
