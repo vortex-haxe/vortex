@@ -24,6 +24,18 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(A += B)
+	private static inline function addEqualIntOp(a:Vector3i, b:Int) {
+		return a.add(b, b, b);
+	}
+
+	@:noCompletion
+	@:op(A += B)
+	private static inline function addEqualFloatOp(a:Vector3i, b:Float) {
+		return a.add(Math.floor(b), Math.floor(b), Math.floor(b));
+	}
+
+	@:noCompletion
 	@:op(A - B)
 	private static inline function subtractOp(a:Vector3i, b:Vector3i) {
 		return new Vector3i(a.x - b.x, a.y - b.y, a.z - b.z);
@@ -42,6 +54,18 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(A -= B)
+	private static inline function subtractEqualIntOp(a:Vector3i, b:Int) {
+		return a.subtract(b, b, b);
+	}
+
+	@:noCompletion
+	@:op(A -= B)
+	private static inline function subtractEqualFloatOp(a:Vector3i, b:Float) {
+		return a.subtract(Math.floor(b), Math.floor(b), Math.floor(b));
+	}
+
+	@:noCompletion
 	@:op(A * B)
 	private static inline function multiplyOp(a:Vector3i, b:Vector3i) {
 		return new Vector3i(a.x * b.x, a.y * b.y, a.z * b.z);
@@ -54,9 +78,27 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(A * B)
+	private static inline function multiplyFloatOp(a:Vector3i, b:Float) {
+		return new Vector3i(Math.floor(a.x * b), Math.floor(a.y * b), Math.floor(a.z * b));
+	}
+
+	@:noCompletion
 	@:op(A *= B)
 	private static inline function multiplyEqualOp(a:Vector3i, b:Vector3i) {
 		return a.multiply(b.x, b.y, b.z);
+	}
+
+	@:noCompletion
+	@:op(A *= B)
+	private static inline function multiplyEqualIntOp(a:Vector3i, b:Int) {
+		return a.multiply(b, b, b);
+	}
+
+	@:noCompletion
+	@:op(A *= B)
+	private static inline function multiplyEqualFloatOp(a:Vector3i, b:Float) {
+		return a.multiply(Math.floor(b), Math.floor(b), Math.floor(b));
 	}
 
 	@:noCompletion
@@ -75,6 +117,18 @@ package vortex.utils.math;
 	@:op(A /= B)
 	private static inline function divideEqualOp(a:Vector3i, b:Vector3i) {
 		return a.divide(b.x, b.y, b.z);
+	}
+
+	@:noCompletion
+	@:op(A /= B)
+	private static inline function divideEqualIntOp(a:Vector3i, b:Int) {
+		return a.divide(b, b, b);
+	}
+
+	@:noCompletion
+	@:op(A /= B)
+	private static inline function divideEqualFloatOp(a:Vector3i, b:Float) {
+		return a.divide(Math.floor(b), Math.floor(b), Math.floor(b));
 	}
 
 	@:from

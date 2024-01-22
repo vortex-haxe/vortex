@@ -58,6 +58,13 @@ class Node implements IDisposable {
 	public function new() {}
 
 	/**
+	 * Called when this node is finished initializing internally.
+	 * 
+	 * Initialize your own stuff here if you need to!
+	 */
+	public function ready() {}
+
+	/**
 	 * Returns an array with every child node in this parent node.
 	 */
 	public function getChildren():Array<Node> {
@@ -126,10 +133,12 @@ class Node implements IDisposable {
 		var i:Int = 0;
 		while(i < _children.length) {
 			final child:Node = _children[i++];
-			final canChildUpdate:Bool = child.tickMode != NEVER && (child.tickMode == ALWAYS || (child.tickMode == PAUSABLE && !Engine.paused));
-			final canParentUpdate:Bool = (child.tickMode == INHERIT && tickMode != NEVER && (tickMode == ALWAYS || (tickMode == PAUSABLE && !Engine.paused)));
-			if(child != null && (canChildUpdate || canParentUpdate))
-				child.tick(delta);
+			if(child != null) {
+				final canChildUpdate:Bool = child.tickMode != NEVER && (child.tickMode == ALWAYS || (child.tickMode == PAUSABLE && !Engine.paused));
+				final canParentUpdate:Bool = (child.tickMode == INHERIT && tickMode != NEVER && (tickMode == ALWAYS || (tickMode == PAUSABLE && !Engine.paused)));
+				if(canChildUpdate || canParentUpdate)
+					child.tick(delta);
+			}
 		}
 		tick(delta);
 	}
@@ -174,6 +183,14 @@ class Node implements IDisposable {
 	 * properties from memory.
 	 */
 	public function dispose():Void {
+		if(!disposed) {
+			var i:Int = 0;
+			while(i < _children.length) {
+				final child:Node = _children[i++];
+				if(child != null)
+					child.dispose();
+			}
+		}
 		disposed = true;
 	}
 

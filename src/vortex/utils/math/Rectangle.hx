@@ -24,6 +24,12 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(A += B)
+	private static inline function addEqualFloatOp(a:Rectangle, b:Float) {
+		return a.add(b, b, b, b);
+	}
+
+	@:noCompletion
 	@:op(A - B)
 	private static inline function subtractOp(a:Rectangle, b:Rectangle) {
 		return new Rectangle(a.x - b.x, a.y - b.y, a.width - b.width, a.height - b.height);
@@ -42,6 +48,12 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(A -= B)
+	private static inline function subtractEqualFloatOp(a:Rectangle, b:Float) {
+		return a.subtract(b, b, b, b);
+	}
+
+	@:noCompletion
 	@:op(A * B)
 	private static inline function multiplyOp(a:Rectangle, b:Rectangle) {
 		return new Rectangle(a.x * b.x, a.y * b.y, a.width * b.width, a.height * b.height);
@@ -49,7 +61,7 @@ package vortex.utils.math;
 
 	@:noCompletion
 	@:op(A * B)
-	private static inline function addMultiplyOp(a:Rectangle, b:Float) {
+	private static inline function multiplyFloatOp(a:Rectangle, b:Float) {
 		return new Rectangle(a.x * b, a.y * b, a.width * b, a.height * b);
 	}
 
@@ -57,6 +69,12 @@ package vortex.utils.math;
 	@:op(A *= B)
 	private static inline function multiplyEqualOp(a:Rectangle, b:Rectangle) {
 		return a.multiply(b.x, b.y, b.width, b.height);
+	}
+
+	@:noCompletion
+	@:op(A *= B)
+	private static inline function multiplyEqualFloatOp(a:Rectangle, b:Float) {
+		return a.multiply(b, b, b, b);
 	}
 
 	@:noCompletion
@@ -75,6 +93,17 @@ package vortex.utils.math;
 	@:op(A /= B)
 	private static inline function divideEqualOp(a:Rectangle, b:Rectangle) {
 		return a.divide(b.x, b.y, b.width, b.height);
+	}
+
+	@:noCompletion
+	@:op(A /= B)
+	private static inline function divideEqualFloatOp(a:Rectangle, b:Float) {
+		return a.divide(b, b, b, b);
+	}
+
+	@:from
+	private static inline function fromIEquivalent(a:Rectanglei) {
+		return new Rectangle(a.x, a.y, a.width, a.height);
 	}
 
 	@:to

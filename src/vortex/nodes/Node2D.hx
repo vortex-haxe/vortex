@@ -30,6 +30,12 @@ class Node2D extends Node {
 	public var angleDegrees(get, set):Float;
 
 	/**
+	 * The rotation origin of this node.
+	 * 0 is top/left, 1 is bottom/right.
+	 */
+	public var origin:Vector2 = new Vector2(0.5, 0.5);
+
+	/**
 	 * The X and Y scale multiplier of this node. 1 is default.
 	 */
 	public var scale:Vector2 = Vector2.ONE;
@@ -42,8 +48,9 @@ class Node2D extends Node {
 		if(!disposed) {
 			position = null;
 			scale = null;
+			origin = null;
 		}
-		disposed = true;
+		super.dispose();
 	}
 
 	// ----------------- //

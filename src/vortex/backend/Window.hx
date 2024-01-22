@@ -57,6 +57,9 @@ class Window extends Node {
 		if(Application.self.meta.window.resizable)
 			wFlags |= RESIZABLE;
 
+		if(Application.self.meta.window.borderless)
+			wFlags |= BORDERLESS;
+
 		_nativeWindow = SDL.createWindow(title, position.x, position.y, size.x, size.y, wFlags);
 		_glContext = SDL.glCreateContext(_nativeWindow);
 		
@@ -110,6 +113,8 @@ class Window extends Node {
 				SDL.setWindowSize(_nativeWindow, x, y);
 			};
 		}
+
+		_children.push(null); // forcefully make room for current scene
 		Application.self.windows.push(this);
 	}
 

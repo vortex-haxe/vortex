@@ -3,20 +3,24 @@ package vortex.backend;
 #if !macro
 import cpp.UInt64;
 
-import vortex.servers.RenderingServer;
-import vortex.utils.math.Vector2i;
 
 import sdl.SDL;
 import sdl.Types;
 
+import vortex.macros.ProjectMacro;
 import vortex.backend.Window;
+
+import vortex.servers.RenderingServer;
+
 import vortex.utils.generic.CFGParser;
 import vortex.utils.engine.Project.ProjectInfo;
-import vortex.macros.ProjectMacro;
+import vortex.utils.math.Vector2i;
 
 /**
  * The very base of your games!
  */
+@:access(vortex.nodes.Node)
+@:access(vortex.backend.Engine)
 @:access(vortex.backend.Window)
 @:autoBuild(vortex.macros.ApplicationMacro.build())
 class Application {
@@ -59,6 +63,10 @@ class Application {
 	}
 
 	public function startEventLoop() {
+		self.window._children[0] = Engine.currentScene;
+		if(Engine.currentScene != null)
+			Engine.currentScene.ready();
+
 		Window._ev = SDL.makeEvent();
 		
 		var curTime:UInt64 = SDL.getPerformanceCounter();
@@ -67,7 +75,9 @@ class Application {
 		while(windows.length != 0) {
 			oldTime = curTime;
 			curTime = SDL.getPerformanceCounter();
+
 			Engine.deltaTime = untyped __cpp__("(double)({0} - {1}) / (double){2}", curTime, oldTime, SDL.getPerformanceFrequency());
+			Engine.tick(Engine.deltaTime);
 
 			var i:Int = 0;
 			while(i < windows.length) {

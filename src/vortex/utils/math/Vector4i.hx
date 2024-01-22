@@ -24,6 +24,18 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(A += B)
+	private static inline function addEqualIntOp(a:Vector4i, b:Int) {
+		return a.add(b, b, b, b);
+	}
+
+	@:noCompletion
+	@:op(A += B)
+	private static inline function addEqualFloatOp(a:Vector4i, b:Float) {
+		return a.add(Math.floor(b), Math.floor(b), Math.floor(b), Math.floor(b));
+	}
+
+	@:noCompletion
 	@:op(A - B)
 	private static inline function subtractOp(a:Vector4i, b:Vector4i) {
 		return new Vector4i(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
@@ -42,6 +54,18 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(A -= B)
+	private static inline function subtractEqualIntOp(a:Vector4i, b:Int) {
+		return a.subtract(b, b, b, b);
+	}
+
+	@:noCompletion
+	@:op(A -= B)
+	private static inline function subtractEqualFloatOp(a:Vector4i, b:Float) {
+		return a.subtract(Math.floor(b), Math.floor(b), Math.floor(b), Math.floor(b));
+	}
+
+	@:noCompletion
 	@:op(A * B)
 	private static inline function multiplyOp(a:Vector4i, b:Vector4i) {
 		return new Vector4i(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
@@ -49,14 +73,32 @@ package vortex.utils.math;
 
 	@:noCompletion
 	@:op(A * B)
-	private static inline function addMultiplyOp(a:Vector4i, b:Int) {
+	private static inline function multiplyIntOp(a:Vector4i, b:Int) {
 		return new Vector4i(a.x * b, a.y * b, a.z * b, a.w * b);
+	}
+
+	@:noCompletion
+	@:op(A * B)
+	private static inline function multiplyFloatOp(a:Vector4i, b:Float) {
+		return new Vector4i(Math.floor(a.x * b), Math.floor(a.y * b), Math.floor(a.z * b));
 	}
 
 	@:noCompletion
 	@:op(A *= B)
 	private static inline function multiplyEqualOp(a:Vector4i, b:Vector4i) {
 		return a.multiply(b.x, b.y, b.z, b.w);
+	}
+
+	@:noCompletion
+	@:op(A *= B)
+	private static inline function multiplyEqualIntOp(a:Vector4i, b:Int) {
+		return a.multiply(b, b, b, b);
+	}
+
+	@:noCompletion
+	@:op(A *= B)
+	private static inline function multiplyEqualFloatOp(a:Vector4i, b:Float) {
+		return a.multiply(Math.floor(b), Math.floor(b), Math.floor(b), Math.floor(b));
 	}
 
 	@:noCompletion
@@ -67,7 +109,13 @@ package vortex.utils.math;
 
 	@:noCompletion
 	@:op(A / B)
-	private static inline function addDivideOp(a:Vector4i, b:Int) {
+	private static inline function divideIntOp(a:Vector4i, b:Int) {
+		return new Vector4i(Math.floor(a.x / b), Math.floor(a.y / b), Math.floor(a.z / b), Math.floor(a.w / b));
+	}
+
+	@:noCompletion
+	@:op(A / B)
+	private static inline function divideFloatOp(a:Vector4i, b:Float) {
 		return new Vector4i(Math.floor(a.x / b), Math.floor(a.y / b), Math.floor(a.z / b), Math.floor(a.w / b));
 	}
 
@@ -75,6 +123,18 @@ package vortex.utils.math;
 	@:op(A /= B)
 	private static inline function divideEqualOp(a:Vector4i, b:Vector4i) {
 		return a.divide(b.x, b.y, b.z, b.w);
+	}
+
+	@:noCompletion
+	@:op(A /= B)
+	private static inline function divideEqualIntOp(a:Vector4i, b:Int) {
+		return a.divide(b, b, b, b);
+	}
+
+	@:noCompletion
+	@:op(A /= B)
+	private static inline function divideEqualFloatOp(a:Vector4i, b:Float) {
+		return a.divide(Math.floor(b), Math.floor(b), Math.floor(b), Math.floor(b));
 	}
 
 	@:from

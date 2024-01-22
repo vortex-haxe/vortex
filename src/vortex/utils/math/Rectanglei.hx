@@ -24,6 +24,18 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(A += B)
+	private static inline function addEqualIntOp(a:Rectanglei, b:Int) {
+		return a.add(b, b, b, b);
+	}
+
+	@:noCompletion
+	@:op(A += B)
+	private static inline function addEqualFloatOp(a:Rectanglei, b:Float) {
+		return a.add(Math.floor(b), Math.floor(b), Math.floor(b), Math.floor(b));
+	}
+
+	@:noCompletion
 	@:op(A - B)
 	private static inline function subtractOp(a:Rectanglei, b:Rectanglei) {
 		return new Rectanglei(a.x - b.x, a.y - b.y, a.width - b.width, a.height - b.height);
@@ -42,6 +54,18 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(A -= B)
+	private static inline function subtractEqualIntOp(a:Rectanglei, b:Int) {
+		return a.subtract(b, b, b, b);
+	}
+
+	@:noCompletion
+	@:op(A -= B)
+	private static inline function subtractEqualFloatOp(a:Rectanglei, b:Float) {
+		return a.subtract(Math.floor(b), Math.floor(b), Math.floor(b), Math.floor(b));
+	}
+
+	@:noCompletion
 	@:op(A * B)
 	private static inline function multiplyOp(a:Rectanglei, b:Rectanglei) {
 		return new Rectanglei(a.x * b.x, a.y * b.y, a.width * b.width, a.height * b.height);
@@ -54,9 +78,27 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(A * B)
+	private static inline function multiplyFloatOp(a:Rectanglei, b:Float) {
+		return new Rectanglei(Math.floor(a.x * b), Math.floor(a.y * b), Math.floor(a.width * b), Math.floor(a.height * b));
+	}
+
+	@:noCompletion
 	@:op(A *= B)
 	private static inline function multiplyEqualOp(a:Rectanglei, b:Rectanglei) {
 		return a.multiply(b.x, b.y, b.width, b.height);
+	}
+
+	@:noCompletion
+	@:op(A *= B)
+	private static inline function multiplyEqualIntOp(a:Rectanglei, b:Int) {
+		return a.multiply(b, b, b, b);
+	}
+
+	@:noCompletion
+	@:op(A *= B)
+	private static inline function multiplyEqualFloatOp(a:Rectanglei, b:Float) {
+		return a.multiply(Math.floor(b), Math.floor(b), Math.floor(b), Math.floor(b));
 	}
 
 	@:noCompletion
@@ -72,9 +114,27 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(A / B)
+	private static inline function divideFloatOp(a:Rectanglei, b:Float) {
+		return new Rectanglei(Math.floor(a.x / b), Math.floor(a.y / b), Math.floor(a.width / b), Math.floor(a.height / b));
+	}
+
+	@:noCompletion
 	@:op(A /= B)
 	private static inline function divideEqualOp(a:Rectanglei, b:Rectanglei) {
 		return a.divide(b.x, b.y, b.width, b.height);
+	}
+
+	@:noCompletion
+	@:op(A /= B)
+	private static inline function divideEqualIntOp(a:Rectanglei, b:Int) {
+		return a.subtract(b, b, b, b);
+	}
+
+	@:noCompletion
+	@:op(A /= B)
+	private static inline function divideEqualFloatOp(a:Rectanglei, b:Float) {
+		return a.subtract(Math.floor(b), Math.floor(b), Math.floor(b), Math.floor(b));
 	}
 
 	@:from

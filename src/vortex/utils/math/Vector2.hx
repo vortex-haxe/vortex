@@ -31,6 +31,12 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(A += B)
+	private static inline function addEqualFloatOp(a:Vector2, b:Float) {
+		return a.add(b, b);
+	}
+
+	@:noCompletion
 	@:op(A - B)
 	private static inline function subtractOp(a:Vector2, b:Vector2) {
 		return new Vector2(a.x - b.x, a.y - b.y);
@@ -46,6 +52,12 @@ package vortex.utils.math;
 	@:op(A -= B)
 	private static inline function subtractEqualOp(a:Vector2, b:Vector2) {
 		return a.subtract(b.x, b.y);
+	}
+
+	@:noCompletion
+	@:op(A -= B)
+	private static inline function subtractEqualFloatOp(a:Vector2, b:Float) {
+		return a.subtract(b, b);
 	}
 
 	@:noCompletion
@@ -67,6 +79,12 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(A *= B)
+	private static inline function multiplyEqualFloatOp(a:Vector2, b:Float) {
+		return a.multiply(b, b);
+	}
+
+	@:noCompletion
 	@:op(A / B)
 	private static inline function divideOp(a:Vector2, b:Vector2) {
 		return new Vector2(a.x / b.x, a.y / b.y);
@@ -82,6 +100,17 @@ package vortex.utils.math;
 	@:op(A /= B)
 	private static inline function divideEqualOp(a:Vector2, b:Vector2) {
 		return a.divide(b.x, b.y);
+	}
+
+	@:noCompletion
+	@:op(A /= B)
+	private static inline function divideEqualFloatOp(a:Vector2, b:Float) {
+		return a.divide(b, b);
+	}
+
+	@:from
+	private static inline function fromIEquivalent(a:Vector2i) {
+		return new Vector2(a.x, a.y);
 	}
 
 	@:to
