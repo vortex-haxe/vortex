@@ -1,5 +1,6 @@
 package vortex.servers.rendering;
 
+import vortex.backend.Window;
 import vortex.servers.RenderingServer.IRenderingBackendImpl;
 import vortex.utils.math.Rectanglei;
 
@@ -26,14 +27,14 @@ class SDLBackend extends IRenderingBackendImpl {
 	/**
 	 * Clears whatever is on-screen currently.
 	 */
-	public static function clear():Void {
+	public static function clear(window:Window):Void {
 
 	}
  
 	/**
 	 * Presents/renders whatever is on-screen currently.
 	 */
-	public static function present():Void {
+	public static function present(window:Window):Void {
 
 	}
 

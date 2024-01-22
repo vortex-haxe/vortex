@@ -1,9 +1,5 @@
 package vortex.utils.math;
 
-#if (!macro && !eval && cpp)
-import sdl.Types.Rectangle as NativeIntRectangle;
-#end
-
 @:forward abstract Rectanglei(BaseRectanglei) to BaseRectanglei from BaseRectanglei {
 	public function new(x:Int = 0, y:Int = 0, width:Int = 0, height:Int = 0) {
 		this = new BaseRectanglei(x, y, width, height);
@@ -124,12 +120,6 @@ class BaseRectanglei {
 		@:bypassAccessor this.y = y;
 		@:bypassAccessor this.width = width;
 		@:bypassAccessor this.height = height;
-		#if (!macro && !eval && cpp)
-		_rect.x = x;
-		_rect.y = y;
-		_rect.w = width;
-		_rect.h = height;
-		#end
 	}
 
 	/**
@@ -227,15 +217,8 @@ class BaseRectanglei {
 	// ##==-- Privates --==## //
 	private var _onChange:(x:Int, y:Int, width:Int, height:Int) -> Void;
 
-	#if (!macro && !eval && cpp)
-	private var _rect:NativeIntRectangle = NativeIntRectangle.create(0, 0, 0, 0);
-	#end
-
 	@:noCompletion
 	private function set_x(value:Int):Int {
-		#if (!macro && !eval && cpp)
-		_rect.x = value;
-		#end
 		if (_onChange != null)
 			_onChange(value, y, width, height);
 		return x = value;
@@ -243,9 +226,6 @@ class BaseRectanglei {
 
 	@:noCompletion
 	private function set_y(value:Int):Int {
-		#if (!macro && !eval && cpp)
-		_rect.y = value;
-		#end
 		if (_onChange != null)
 			_onChange(x, value, width, height);
 		return y = value;
@@ -253,9 +233,6 @@ class BaseRectanglei {
 
 	@:noCompletion
 	private function set_width(value:Int):Int {
-		#if (!macro && !eval && cpp)
-		_rect.w = value;
-		#end
 		if (_onChange != null)
 			_onChange(x, y, value, height);
 		return width = value;
@@ -263,9 +240,6 @@ class BaseRectanglei {
 
 	@:noCompletion
 	private function set_height(value:Int):Int {
-		#if (!macro && !eval && cpp)
-		_rect.h = value;
-		#end
 		if (_onChange != null)
 			_onChange(x, y, width, value);
 		return height = value;

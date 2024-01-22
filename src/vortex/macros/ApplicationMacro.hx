@@ -36,7 +36,8 @@ class ApplicationMacro {
         
         // The actual macro
         var mainExpr = macro {
-            Type.createInstance(Type.resolveClass($v{cfg.source.main}), []);
+            final app:Application = Type.createInstance(Type.resolveClass($v{cfg.source.main}), []);
+            app.startEventLoop();
         };
 
         var func:Function = {

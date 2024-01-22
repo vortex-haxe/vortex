@@ -1,7 +1,11 @@
 package vortex.servers;
 
 import vortex.backend.Application;
+import vortex.backend.Window;
+import vortex.backend.interfaces.IServer;
+
 import vortex.servers.rendering.*;
+
 import vortex.utils.engine.Color;
 import vortex.utils.math.Rectanglei;
 
@@ -43,12 +47,12 @@ class IRenderingBackendImpl {
 	/**
 	 * Clears whatever is on-screen currently.
 	 */
-	public static function clear():Void {}
+	public static function clear(window:Window):Void {}
 
 	/**
 	 * Presents/renders whatever is on-screen currently.
 	 */
-	public static function present():Void {}
+	public static function present(window:Window):Void {}
 
 	/**
 	 * Disposes of this rendering backend and removes it's
@@ -57,7 +61,7 @@ class IRenderingBackendImpl {
 	public static function dispose():Void {}
 }
 
-class RenderingServer {
+class RenderingServer extends IServer {
 	/**
 	 * The current rendering backend for every window.
 	 * 
@@ -108,22 +112,22 @@ class RenderingServer {
 	/**
 	 * Clears whatever is on-screen currently.
 	 */
-	public static function clear():Void {
+	public static function clear(window:Window):Void {
 		switch(backend) {
-			case OPENGL_BACKEND: OpenGLBackend.clear();
-			case VULKAN_BACKEND: VulkanBackend.clear();
-			case SDL_BACKEND:    SDLBackend.clear();
+			case OPENGL_BACKEND: OpenGLBackend.clear(window);
+			case VULKAN_BACKEND: VulkanBackend.clear(window);
+			case SDL_BACKEND:    SDLBackend.clear(window);
 		}
 	}
  
 	/**
 	 * Presents/renders whatever is on-screen currently.
 	 */
-	public static function present():Void {
+	public static function present(window:Window):Void {
 		switch(backend) {
-			case OPENGL_BACKEND: OpenGLBackend.present();
-			case VULKAN_BACKEND: VulkanBackend.present();
-			case SDL_BACKEND:    SDLBackend.present();
+			case OPENGL_BACKEND: OpenGLBackend.present(window);
+			case VULKAN_BACKEND: VulkanBackend.present(window);
+			case SDL_BACKEND:    SDLBackend.present(window);
 		}
 	}
 

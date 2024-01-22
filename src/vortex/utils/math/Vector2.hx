@@ -1,11 +1,13 @@
 package vortex.utils.math;
 
-#if (!macro && !eval && cpp)
-import sdl.Types.Point;
-import sdl.Types.FPoint;
-#end
-
 @:forward abstract Vector2(BaseVector2) to BaseVector2 from BaseVector2 {
+	public static var ZERO(get, never):Vector2;
+	public static var ONE(get, never):Vector2;
+	public static var UP(get, never):Vector2;
+	public static var DOWN(get, never):Vector2;
+	public static var LEFT(get, never):Vector2;
+	public static var RIGHT(get, never):Vector2;
+	
 	public inline function new(x:Float = 0, y:Float = 0) {
 		this = new BaseVector2(x, y);
 	}
@@ -86,6 +88,36 @@ import sdl.Types.FPoint;
 	private static inline function toIEquivalent(a:Vector2) {
 		return new Vector2i(Math.floor(a.x), Math.floor(a.y));
 	}
+
+	@:noCompletion
+	private static inline function get_ZERO():Vector2 {
+		return new Vector2(0, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_ONE():Vector2 {
+		return new Vector2(1, 1);
+	}
+
+	@:noCompletion
+	private static inline function get_UP():Vector2 {
+		return new Vector2(0, -1);
+	}
+
+	@:noCompletion
+	private static inline function get_DOWN():Vector2 {
+		return new Vector2(0, 1);
+	}
+
+	@:noCompletion
+	private static inline function get_LEFT():Vector2 {
+		return new Vector2(-1, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_RIGHT():Vector2 {
+		return new Vector2(1, 0);
+	}
 }
 
 /**
@@ -111,12 +143,6 @@ class BaseVector2 {
 	public function new(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x = x;
 		@:bypassAccessor this.y = y;
-		#if (!macro && !eval && cpp)
-		_point.x = x;
-		_point.y = y;
-		_pointi.x = Math.floor(x);
-		_pointi.y = Math.floor(y);
-		#end
 	}
 
 	/**
@@ -128,12 +154,6 @@ class BaseVector2 {
 	public function set(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x = x;
 		@:bypassAccessor this.y = y;
-		#if (!macro && !eval && cpp)
-		_point.x = x;
-		_point.y = y;
-		_pointi.x = Math.floor(x);
-		_pointi.y = Math.floor(y);
-		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -148,12 +168,6 @@ class BaseVector2 {
 	public function add(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x += x;
 		@:bypassAccessor this.y += y;
-		#if (!macro && !eval && cpp)
-		_point.x = x;
-		_point.y = y;
-		_pointi.x = Math.floor(x);
-		_pointi.y = Math.floor(y);
-		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -168,12 +182,6 @@ class BaseVector2 {
 	public function subtract(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x -= x;
 		@:bypassAccessor this.y -= y;
-		#if (!macro && !eval && cpp)
-		_point.x = x;
-		_point.y = y;
-		_pointi.x = Math.floor(x);
-		_pointi.y = Math.floor(y);
-		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -188,12 +196,6 @@ class BaseVector2 {
 	public function multiply(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x *= x;
 		@:bypassAccessor this.y *= y;
-		#if (!macro && !eval && cpp)
-		_point.x = x;
-		_point.y = y;
-		_pointi.x = Math.floor(x);
-		_pointi.y = Math.floor(y);
-		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -208,12 +210,6 @@ class BaseVector2 {
 	public function divide(x:Float = 0, y:Float = 0) {
 		@:bypassAccessor this.x /= x;
 		@:bypassAccessor this.y /= y;
-		#if (!macro && !eval && cpp)
-		_point.x = x;
-		_point.y = y;
-		_pointi.x = Math.floor(x);
-		_pointi.y = Math.floor(y);
-		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -232,17 +228,8 @@ class BaseVector2 {
 	// ##==-- Privates --==## //
 	private var _onChange:(x:Float, y:Float) -> Void;
 
-	#if (!macro && !eval && cpp)
-	private var _point:FPoint = FPoint.create(0, 0);
-	private var _pointi:Point = Point.create(0, 0);
-	#end
-
 	@:noCompletion
 	private function set_x(value:Float):Float {
-		#if (!macro && !eval && cpp)
-		_point.x = value;
-		_pointi.x = Math.floor(value);
-		#end
 		if (_onChange != null)
 			_onChange(value, y);
 		return x = value;
@@ -250,10 +237,6 @@ class BaseVector2 {
 
 	@:noCompletion
 	private function set_y(value:Float):Float {
-		#if (!macro && !eval && cpp)
-		_point.y = value;
-		_pointi.y = Math.floor(value);
-		#end
 		if (_onChange != null)
 			_onChange(x, value);
 		return y = value;

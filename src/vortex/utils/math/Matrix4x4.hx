@@ -139,9 +139,9 @@ class BaseMatrix4x4 {
      * @param val The value for the diagonal elements.
      */
     public function reset(val:Float) {
-        vecs[0].set(val);
-        vecs[1].set(0.0, val);
-        vecs[2].set(0.0, 0.0, val);
+        vecs[0].set(val, 0.0, 0.0, 0.0);
+        vecs[1].set(0.0, val, 0.0, 0.0);
+        vecs[2].set(0.0, 0.0, val, 0.0);
         vecs[3].set(0.0, 0.0, 0.0, val);
     }
     
@@ -335,6 +335,18 @@ class BaseMatrix4x4 {
         vecs[2].w = vecs[2].w * mat.vecs[3].x + vecs[2].w * mat.vecs[3].y + vecs[2].w * mat.vecs[3].z + vecs[2].w * mat.vecs[3].w;
         vecs[3].w = vecs[3].w * mat.vecs[3].x + vecs[3].w * mat.vecs[3].y + vecs[3].w * mat.vecs[3].z + vecs[3].w * mat.vecs[3].w;
 
+		return this;
+	}
+
+    /**
+     * Adds a scalar value from a Vector3 to each element of the matrix.
+     *
+     * @param add The scalar vector to add.
+     */
+    public function scale(scalar:Vector3):Matrix4x4 {
+		vecs[0] *= scalar.x;
+		vecs[1] *= scalar.y;
+	    vecs[2] *= scalar.z;
 		return this;
 	}
 

@@ -1,10 +1,5 @@
 package vortex.utils.math;
 
-#if (!macro && !eval && cpp)
-import sdl.Types.FRectangle as NativeRectangle;
-import sdl.Types.Rectangle as NativeIntRectangle;
-#end
-
 @:forward abstract Rectangle(BaseRectangle) to BaseRectangle from BaseRectangle {
 	public function new(x:Float = 0, y:Float = 0, width:Float = 0, height:Float = 0) {
 		this = new BaseRectangle(x, y, width, height);
@@ -125,16 +120,6 @@ class BaseRectangle {
 		@:bypassAccessor this.y = y;
 		@:bypassAccessor this.width = width;
 		@:bypassAccessor this.height = height;
-		#if (!macro && !eval && cpp)
-		_rect.x = x;
-		_rect.y = y;
-		_rect.w = width;
-		_rect.h = height;
-		_recti.x = Math.floor(x);
-		_recti.y = Math.floor(y);
-		_recti.w = Math.floor(width);
-		_recti.h = Math.floor(height);
-		#end
 	}
 
 	/**
@@ -232,17 +217,8 @@ class BaseRectangle {
 	// ##==-- Privates --==## //
 	private var _onChange:(x:Float, y:Float, width:Float, height:Float) -> Void;
 
-	#if (!macro && !eval && cpp)
-	private var _rect:NativeRectangle = NativeRectangle.create(0, 0, 0, 0);
-	private var _recti:NativeIntRectangle = NativeIntRectangle.create(0, 0, 0, 0);
-	#end
-
 	@:noCompletion
 	private function set_x(value:Float):Float {
-		#if (!macro && !eval && cpp)
-		_rect.x = value;
-		_recti.x = Math.floor(value);
-		#end
 		if (_onChange != null)
 			_onChange(value, y, width, height);
 		return x = value;
@@ -250,10 +226,6 @@ class BaseRectangle {
 
 	@:noCompletion
 	private function set_y(value:Float):Float {
-		#if (!macro && !eval && cpp)
-		_rect.y = value;
-		_recti.y = Math.floor(value);
-		#end
 		if (_onChange != null)
 			_onChange(x, value, width, height);
 		return y = value;
@@ -261,10 +233,6 @@ class BaseRectangle {
 
 	@:noCompletion
 	private function set_width(value:Float):Float {
-		#if (!macro && !eval && cpp)
-		_rect.w = value;
-		_recti.w = Math.floor(value);
-		#end
 		if (_onChange != null)
 			_onChange(x, y, value, height);
 		return width = value;
@@ -272,10 +240,6 @@ class BaseRectangle {
 
 	@:noCompletion
 	private function set_height(value:Float):Float {
-		#if (!macro && !eval && cpp)
-		_rect.h = value;
-		_recti.h = Math.floor(value);
-		#end
 		if (_onChange != null)
 			_onChange(x, y, width, value);
 		return height = value;

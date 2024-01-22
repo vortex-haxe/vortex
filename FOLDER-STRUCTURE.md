@@ -5,7 +5,7 @@ This is how the source code will be organized.
    - 📂 **backend** - The backbones of the game, such as initializing the engine.
    - 📂 **debug** - Utilties for debugging your code.
    - 📂 **macros** - Utilities that run at compile time.
-   - 📂 **objects** - Game objects to base things like players and enemies off of.
+   - 📂 **nodes** - Game objects to base things like players and enemies off of. Nodes can be parent nodes and have children nodes within them.
    - 📂 **plugins** - Togglable code that runs in the background.
    - 📂 **resources** - Resources such as Textures, Sounds, Fonts, etc.
    - 📂 **servers** - Similar to plugins, without the toggability.

@@ -1,10 +1,13 @@
 package vortex.utils.math;
 
-#if (!macro && !eval && cpp)
-import sdl.Types.Point;
-#end
-
 @:forward abstract Vector2i(BaseVector2i) to BaseVector2i from BaseVector2i {
+	public static var ZERO(get, never):Vector2i;
+	public static var ONE(get, never):Vector2i;
+	public static var UP(get, never):Vector2i;
+	public static var DOWN(get, never):Vector2i;
+	public static var LEFT(get, never):Vector2i;
+	public static var RIGHT(get, never):Vector2i;
+
 	public inline function new(x:Int = 0, y:Int = 0) {
 		this = new BaseVector2i(x, y);
 	}
@@ -85,6 +88,36 @@ import sdl.Types.Point;
 	private static inline function fromFEquivalent(a:Vector2) {
 		return new Vector2i(Math.floor(a.x), Math.floor(a.y));
 	}
+
+	@:noCompletion
+	private static inline function get_ZERO():Vector2i {
+		return new Vector2i(0, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_ONE():Vector2i {
+		return new Vector2i(1, 1);
+	}
+
+	@:noCompletion
+	private static inline function get_UP():Vector2i {
+		return new Vector2i(0, -1);
+	}
+
+	@:noCompletion
+	private static inline function get_DOWN():Vector2i {
+		return new Vector2i(0, 1);
+	}
+
+	@:noCompletion
+	private static inline function get_LEFT():Vector2i {
+		return new Vector2i(-1, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_RIGHT():Vector2i {
+		return new Vector2i(1, 0);
+	}
 }
 
 /**
@@ -110,10 +143,6 @@ class BaseVector2i {
 	public function new(x:Int = 0, y:Int = 0) {
 		@:bypassAccessor this.x = x;
 		@:bypassAccessor this.y = y;
-		#if (!macro && !eval && cpp)
-		_point.x = x;
-		_point.y = y;
-		#end
 	}
 
 	/**
@@ -125,10 +154,6 @@ class BaseVector2i {
 	public function set(x:Int = 0, y:Int = 0) {
 		@:bypassAccessor this.x = x;
 		@:bypassAccessor this.y = y;
-		#if (!macro && !eval && cpp)
-		_point.x = x;
-		_point.y = y;
-		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -143,10 +168,6 @@ class BaseVector2i {
 	public function add(x:Int = 0, y:Int = 0) {
 		@:bypassAccessor this.x += x;
 		@:bypassAccessor this.y += y;
-		#if (!macro && !eval && cpp)
-		_point.x = x;
-		_point.y = y;
-		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -161,10 +182,6 @@ class BaseVector2i {
 	public function subtract(x:Int = 0, y:Int = 0) {
 		@:bypassAccessor this.x -= x;
 		@:bypassAccessor this.y -= y;
-		#if (!macro && !eval && cpp)
-		_point.x = x;
-		_point.y = y;
-		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -179,10 +196,6 @@ class BaseVector2i {
 	public function multiply(x:Int = 0, y:Int = 0) {
 		@:bypassAccessor this.x *= x;
 		@:bypassAccessor this.y *= y;
-		#if (!macro && !eval && cpp)
-		_point.x = x;
-		_point.y = y;
-		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -197,10 +210,6 @@ class BaseVector2i {
 	public function divide(x:Int = 0, y:Int = 0) {
 		@:bypassAccessor this.x = Math.floor(this.x / x);
 		@:bypassAccessor this.y = Math.floor(this.y / y);
-		#if (!macro && !eval && cpp)
-		_point.x = x;
-		_point.y = y;
-		#end
 		if (_onChange != null)
 			_onChange(this.x, this.y);
 		return this;
@@ -219,15 +228,8 @@ class BaseVector2i {
 	// ##==-- Privates --==## //
 	private var _onChange:(x:Int, y:Int) -> Void;
 
-	#if (!macro && !eval && cpp)
-	private var _point:Point = Point.create(0, 0);
-	#end
-
 	@:noCompletion
 	private function set_x(value:Int):Int {
-		#if (!macro && !eval && cpp)
-		_point.x = value;
-		#end
 		if (_onChange != null)
 			_onChange(value, y);
 		return x = value;
@@ -235,9 +237,6 @@ class BaseVector2i {
 
 	@:noCompletion
 	private function set_y(value:Int):Int {
-		#if (!macro && !eval && cpp)
-		_point.y = value;
-		#end
 		if (_onChange != null)
 			_onChange(x, value);
 		return y = value;
