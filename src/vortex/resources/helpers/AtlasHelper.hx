@@ -64,7 +64,7 @@ class AtlasHelper {
 					sub.has.frameWidth ? Std.parseFloat(sub.att.frameWidth) : sizeX,
 					sub.has.frameHeight ? Std.parseFloat(sub.att.frameHeight) : sizeY
 				),
-				angle: (sub.has.rotated && sub.att.rotated.toLowerCase() == "true") ? Math.PI * -0.5 : 0.0
+				angle: ro_tat_ay ? Math.PI * -0.5 : 0.0
 			});
 		}
 
