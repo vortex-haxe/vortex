@@ -110,28 +110,32 @@ class AnimatedSprite extends Node2D {
 	private var _clipRectUVCoords:Vector4 = new Vector4(0.0, 0.0, 1.0, 1.0);
 	
 	private static var _trans = new Matrix4x4();
-	private static var _vec2 = new Vector2();
-	private static var _vec3 = new Vector3();
-	
-	private function prepareShaderVars(shader:Shader, fram:AnimationFrame) {
-		_trans.reset(1.0);
-		
+    private static var _vec2 = new Vector2();
+    private static var _vec3 = new Vector3();
+    
+    private function prepareShaderVars(shader:Shader, fram:AnimationFrame) {
+        _trans.reset(1.0);
+        
         _vec2.set((_clipRectUVCoords.z - _clipRectUVCoords.x) * frames.texture.size.x * scale.x, (_clipRectUVCoords.w - _clipRectUVCoords.y) * frames.texture.size.y * scale.y);
         _trans.scale(_vec3.set(_vec2.x, _vec2.y, 1.0));
-		_trans.translate(_vec3.set(fram.offset.x, fram.offset.y, 0.0));
+        _trans.translate(_vec3.set(fram.offset.x, fram.offset.y, 0.0));
 
-		final realAngle:Float = angle + fram.angle;
+        final realAngle:Float = angle + fram.angle;
         if (realAngle != 0.0) {
-			_trans.translate(_vec3.set(-origin.x * fram.marginSize.x * scale.x, -origin.y * fram.marginSize.y * scale.y, 0.0));
-            _trans.radRotate(realAngle, _vec3.set(0.0, 0.0, 1.0)); 
-			_trans.translate(_vec3.set(origin.x * fram.marginSize.x * scale.x, origin.y * fram.marginSize.y * scale.y, 0.0));
+            _trans.translate(_vec3.set(-origin.x * fram.marginSize.x * scale.x, -origin.y * fram.marginSize.y * scale.y, 0.0));
+            _trans.radRotate(angle, _vec3.set(0.0, 0.0, 1.0));
+            _trans.translate(_vec3.set(origin.x * fram.marginSize.x * scale.x, origin.y * fram.marginSize.y * scale.y, 0.0));
+
+            _trans.translate(_vec3.set(-0.5 * fram.marginSize.x * scale.x, -0.5 * fram.marginSize.y * scale.y, 0.0));
+            _trans.radRotate(fram.angle, _vec3.set(0.0, 0.0, 1.0));
+            _trans.translate(_vec3.set(0.5 * fram.marginSize.x * scale.x, 0.5 * fram.marginSize.y * scale.y, 0.0));
         }
-		_trans.translate(_vec3.set(position.x + (-origin.x * fram.marginSize.x * scale.x), position.y + (-origin.y * fram.marginSize.y * scale.y), 0.0));
-		
-		shader.setUniformMat4x4("TRANSFORM", _trans);
-		shader.setUniformColor("MODULATE", modulate);
-		shader.setUniformVec4("SOURCE", _clipRectUVCoords);
-	}
+        _trans.translate(_vec3.set(position.x + (-origin.x * fram.marginSize.x * scale.x), position.y + (-origin.y * fram.marginSize.y * scale.y), 0.0));
+        
+        shader.setUniformMat4x4("TRANSFORM", _trans);
+        shader.setUniformColor("MODULATE", modulate);
+        shader.setUniformVec4("SOURCE", _clipRectUVCoords);
+    }
 
 	// ----------------- //
 	// Getters & Setters //
