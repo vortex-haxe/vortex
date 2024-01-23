@@ -5,6 +5,16 @@ package vortex.utils.math;
 		this = new BaseVector3(x, y, z);
 	}
 
+	// time to test this rq
+	// btw do you know if haxe has function overloading :3
+	// it does but it's stupid asf
+	// look in utils.engine.Color
+	@:noCompletion
+	@:op(-A)
+	private static inline function invert(a:Vector3) {
+		return new Vector3(-a.x, -a.y, -a.z);
+	}
+
 	@:noCompletion
 	@:op(A + B)
 	private static inline function addOp(a:Vector3, b:Vector3) {

@@ -6,6 +6,12 @@ package vortex.utils.math;
 	}
 
 	@:noCompletion
+	@:op(-A)
+	private static inline function invert(a:Vector4) {
+		return new Vector4(-a.x, -a.y, -a.z, -a.w);
+	}
+
+	@:noCompletion
 	@:op(A + B)
 	private static inline function addOp(a:Vector4, b:Vector4) {
 		return new Vector4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
