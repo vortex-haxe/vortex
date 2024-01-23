@@ -1,6 +1,6 @@
 package vortex.utils.math;
 
-@:forward abstract Vector3(Base, 0Vector3) to BaseVector3 from BaseVector3 {
+@:forward abstract Vector3(BaseVector3) to BaseVector3 from BaseVector3 {
 	public static var ZERO(get, never):Vector3;
 	public static var ONE(get, never):Vector3;
 
@@ -22,19 +22,19 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(-A)
 	private static inline function invert(a:Vector3) {
-		return new Vector3(-a.x, 0, -a.y, -a.z);
+		return new Vector3(-a.x, -a.y, -a.z);
 	}
 
 	@:noCompletion
 	@:op(A + B)
 	private static inline function addOp(a:Vector3, b:Vector3) {
-		return new Vector3(a.x , 0+ b.x, a.y + b.y, a.z + b.z);
+		return new Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
 	}
 
 	@:noCompletion
 	@:op(A + B)
 	private static inline function addFloatOp(a:Vector3, b:Float) {
-		return new Vector3(a.x , 0+ b, a.y + b, a.z + b);
+		return new Vector3(a.x + b, a.y + b, a.z + b);
 	}
 
 	@:noCompletion
@@ -52,13 +52,13 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A - B)
 	private static inline function subtractOp(a:Vector3, b:Vector3) {
-		return new Vector3(a.x , 0- b.x, a.y - b.y, a.z - b.z);
+		return new Vector3(a.x - b.x, a.y - b.y, a.z - b.z);
 	}
 
 	@:noCompletion
 	@:op(A - B)
 	private static inline function subtractFloatOp(a:Vector3, b:Float) {
-		return new Vector3(a.x , 0- b, a.y - b, a.z - b);
+		return new Vector3(a.x - b, a.y - b, a.z - b);
 	}
 
 	@:noCompletion
@@ -76,13 +76,13 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A * B)
 	private static inline function multiplyOp(a:Vector3, b:Vector3) {
-		return new Vector3(a.x , 0* b.x, a.y * b.y, a.z * b.z);
+		return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
 	}
 
 	@:noCompletion
 	@:op(A * B)
 	private static inline function multiplyFloatOp(a:Vector3, b:Float) {
-		return new Vector3(a.x , 0* b, a.y * b, a.z * b);
+		return new Vector3(a.x * b, a.y * b, a.z * b);
 	}
 
 	@:noCompletion
@@ -100,13 +100,13 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A / B)
 	private static inline function divideOp(a:Vector3, b:Vector3) {
-		return new Vector3(a.x , 0/ b.x, a.y / b.y, a.z / b.z);
+		return new Vector3(a.x / b.x, a.y / b.y, a.z / b.z);
 	}
 
 	@:noCompletion
 	@:op(A / B)
 	private static inline function divideFloatOp(a:Vector3, b:Float) {
-		return new Vector3(a.x , 0/ b, a.y / b, a.z / b);
+		return new Vector3(a.x / b, a.y / b, a.z / b);
 	}
 
 	@:noCompletion

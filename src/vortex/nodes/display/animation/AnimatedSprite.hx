@@ -123,11 +123,11 @@ class AnimatedSprite extends Node2D {
         final realAngle:Float = angle + fram.angle;
         if (realAngle != 0.0) {
             _trans.translate(_vec3.set(-origin.x * fram.marginSize.x * scale.x, -origin.y * fram.marginSize.y * scale.y, 0.0));
-            _trans.radRotate(angle, _vec3.set(0.0, 0.0, 1.0));
+            _trans.radRotate(angle, Vector3.AXIS_Z);
             _trans.translate(_vec3.set(origin.x * fram.marginSize.x * scale.x, origin.y * fram.marginSize.y * scale.y, 0.0));
 
             _trans.translate(_vec3.set(-0.5 * fram.marginSize.x * scale.x, -0.5 * fram.marginSize.y * scale.y, 0.0));
-            _trans.radRotate(fram.angle, _vec3.set(0.0, 0.0, 1.0));
+            _trans.radRotate(fram.angle, Vector3.AXIS_Z);
             _trans.translate(_vec3.set(0.5 * fram.marginSize.x * scale.x, 0.5 * fram.marginSize.y * scale.y, 0.0));
         }
         _trans.translate(_vec3.set(position.x + (-origin.x * fram.marginSize.x * scale.x), position.y + (-origin.y * fram.marginSize.y * scale.y), 0.0));

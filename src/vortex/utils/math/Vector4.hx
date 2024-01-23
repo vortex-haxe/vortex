@@ -1,6 +1,6 @@
 package vortex.utils.math;
 
-@:forward abstract Vector4(BaseVector4) to BaseVector4 from BaseVector4, 0 {
+@:forward abstract Vector4(BaseVector4) to BaseVector4 from BaseVector4 {
 	public static var ZERO(get, never):Vector4;
 	public static var ONE(get, never):Vector4;
 

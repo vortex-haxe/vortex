@@ -188,36 +188,6 @@ package vortex.utils.math;
 	private static inline function get_RIGHT():Vector2i {
 		return new Vector2i(1, 0);
 	}
-    
-	@:noCompletion
-	private static inline function get_ZERO():Vector2i {
-		return new Vector2i(0, 0);
-	}
-
-	@:noCompletion
-	private static inline function get_ONE():Vector2i {
-		return new Vector2i(1, 1);
-	}
-
-	@:noCompletion
-	private static inline function get_UP():Vector2i {
-		return new Vector2i(0, -1);
-	}
-
-	@:noCompletion
-	private static inline function get_DOWN():Vector2i {
-		return new Vector2i(0, 1);
-	}
-
-	@:noCompletion
-	private static inline function get_LEFT():Vector2i {
-		return new Vector2i(-1, 0);
-	}
-
-	@:noCompletion
-	private static inline function get_RIGHT():Vector2i {
-		return new Vector2i(1, 0);
-	}
 
 	@:noCompletion
 	private static inline function get_AXIS_X():Vector2i {
