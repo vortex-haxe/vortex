@@ -3,6 +3,8 @@ package vortex.nodes;
 import vortex.backend.interfaces.IDisposable;
 import vortex.backend.Engine;
 
+import vortex.utils.engine.Color;
+
 enum TickMode {
 	/**
 	 * Inherit the tick mode from the parent node.
@@ -51,6 +53,11 @@ class Node implements IDisposable {
 	 * Whether or not this node is visible on-screen.
 	 */
 	public var visible:Bool = true;
+
+	/**
+	 * The color tint multiplier for this node.
+	 */
+	public var modulate:Color = Color.WHITE;
 
 	/**
 	 * Makes a new `Node`.
@@ -137,7 +144,7 @@ class Node implements IDisposable {
 				final canChildUpdate:Bool = child.tickMode != NEVER && (child.tickMode == ALWAYS || (child.tickMode == PAUSABLE && !Engine.paused));
 				final canParentUpdate:Bool = (child.tickMode == INHERIT && tickMode != NEVER && (tickMode == ALWAYS || (tickMode == PAUSABLE && !Engine.paused)));
 				if(canChildUpdate || canParentUpdate)
-					child.tick(delta);
+					child.tickAll(delta);
 			}
 		}
 		tick(delta);
@@ -155,7 +162,7 @@ class Node implements IDisposable {
 		while(i < _children.length) {
 			final child:Node = _children[i++];
 			if(child != null && child.visible)
-				child.draw();
+				child.drawAll();
 		}
 		draw();
 	}
@@ -174,7 +181,7 @@ class Node implements IDisposable {
 	 * Called when this node is drawing internally.
 	 * 
 	 * Draw your own stuff in here if you need to,
-	 * just make sure to call `super.draw(delta)` before-hand!
+	 * just make sure to call `super.draw()` before-hand!
 	 */
 	public function draw():Void {}
 

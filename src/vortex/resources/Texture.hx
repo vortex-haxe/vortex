@@ -39,11 +39,6 @@ class Texture extends RefCounted {
 	public var numChannels:Int = 0;
 
 	/**
-	 * The pixels in this texture.
-	 */
-	public var pixels:Star<UInt8>;
-
-	/**
 	 * Makes a new `Texture`.
 	 */
 	public function new() {
@@ -64,12 +59,12 @@ class Texture extends RefCounted {
 		
 		var width:Int = 0;
 		var height:Int = 0;
-		tex.pixels = Image.load(filePath, Pointer.addressOf(width), Pointer.addressOf(height), Pointer.addressOf(tex.numChannels), 0);
+		var pixels:Star<UInt8> = Image.load(filePath, Pointer.addressOf(width), Pointer.addressOf(height), Pointer.addressOf(tex.numChannels), 0);
 		tex.size.set(width, height);
 		
-		if (tex.pixels != 0) {
+		if (pixels != 0) {
 			var imageFormat = (tex.numChannels == 4) ? Glad.RGBA : Glad.RGB;
-			Glad.texImage2D(Glad.TEXTURE_2D, 0, imageFormat, width, height, 0, imageFormat, Glad.UNSIGNED_BYTE, tex.pixels);
+			Glad.texImage2D(Glad.TEXTURE_2D, 0, imageFormat, width, height, 0, imageFormat, Glad.UNSIGNED_BYTE, pixels);
 			Glad.generateMipmap(Glad.TEXTURE_2D);
 
 			Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_WRAP_S, Glad.REPEAT);
@@ -80,12 +75,12 @@ class Texture extends RefCounted {
 			Debug.error('Image at ${filePath} failed to load: ${Image.failureReason()}');
 			return tex;
 		}
+		Image.freeImage(pixels);
 		return tex;
 	}
 	
 	override function dispose() {
 		if(!disposed) {
-			Image.freeImage(pixels);
 			Glad.deleteTextures(1, Pointer.addressOf(_glID));
 		}
 		super.dispose();
