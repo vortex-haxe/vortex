@@ -1,4 +1,4 @@
-package vortex.utils.generic;
+package vortex.utils.math;
 
 import vortex.utils.math.Rectangle;
 

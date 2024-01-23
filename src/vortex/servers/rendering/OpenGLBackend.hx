@@ -39,6 +39,7 @@ class OpenGLBackend extends IRenderingBackendImpl {
 
 	public static var defaultShader(default, null):Shader;
 	public static var colorRectShader(default, null):Shader;
+	public static var curWindow(default, null):Window;
 
 	/**
 	 * Initializes this rendering backend.
@@ -65,6 +66,7 @@ class OpenGLBackend extends IRenderingBackendImpl {
 		Glad.clear(Glad.COLOR_BUFFER_BIT);
 
 		defaultShader = window._defaultShader;
+		curWindow = window;
 
 		colorRectShader = window._colorRectShader;
 		colorRectShader.useProgram();

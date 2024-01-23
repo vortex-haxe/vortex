@@ -1,4 +1,4 @@
-package vortex.nodes;
+package vortex.nodes.display;
 
 import glad.Glad;
 
@@ -43,7 +43,7 @@ class Sprite extends Node2D {
 			shader.useProgram();
 			Glad.activeTexture(Glad.TEXTURE0);
 			Glad.bindTexture(Glad.TEXTURE_2D, texture._glID);
-			Glad.bindVertexArray(Application.self.window._VAO);
+			Glad.bindVertexArray(OpenGLBackend.curWindow._VAO);
 		}
 		prepareShaderVars(shader);
 		Glad.drawElements(Glad.TRIANGLES, 6, Glad.UNSIGNED_INT, 0);
@@ -73,7 +73,7 @@ class Sprite extends Node2D {
 	private function prepareShaderVars(shader:Shader) {
 		_trans.reset(1.0);
 		
-        _vec2.set(_clipRectUVCoords.z * texture.size.x * scale.x, _clipRectUVCoords.w * texture.size.y * scale.y);
+        _vec2.set((_clipRectUVCoords.z - _clipRectUVCoords.x) * texture.size.x * scale.x, (_clipRectUVCoords.w - _clipRectUVCoords.y) * texture.size.y * scale.y);
         _trans.scale(_vec3.set(_vec2.x, _vec2.y, 1.0));
 
         if (angle != 0.0) {
@@ -129,10 +129,10 @@ class Sprite extends Node2D {
 	@:noCompletion
 	private inline function _updateClipRectUV(x:Float, y:Float, width:Float, height:Float) {
 		_clipRectUVCoords.set(
-			Math.min(x / texture.size.x, 1),
-			Math.min(y / texture.size.y, 1),
-			Math.min((x + width) / texture.size.x, 1),
-			Math.min((y + height) / texture.size.y, 1)
+			x / texture.size.x,
+			y / texture.size.y,
+			(x + width) / texture.size.x,
+			(y + height) / texture.size.y
 		);
 	}
 }

@@ -4,9 +4,12 @@ import vortex.utils.engine.RefCounted;
 import vortex.utils.math.Vector2;
 
 typedef AnimationFrame = {
+	var name:String;
 	var position:Vector2;
 	var offset:Vector2;
 	var size:Vector2;
+	var marginSize:Vector2;
+	var angle:Float;
 }
 
 /**
@@ -20,9 +23,9 @@ class SpriteFrames extends RefCounted {
 	public var texture:Texture;
 
 	/**
-	 * A map of animations to play in an `AnimatedSprite`.
+	 * A list of animation frames to display in an `AnimatedSprite`.
 	 */
-	public var animations:Map<String, Array<AnimationFrame>> = [];
+	public var frames:Array<AnimationFrame> = [];
 
 	/**
 	 * Makes a new `SpriteFrames` and attaches
@@ -31,7 +34,28 @@ class SpriteFrames extends RefCounted {
 	public function new(texture:Texture) {
 		super();
 		this.texture = texture;
-		this.texture.reference();
+	}
+
+	/**
+	 * Increases the reference counter.
+	 * 
+	 * Do not use this unless you know what you're doing!!
+	 */
+	override function reference() {
+		if(texture != null)
+			texture.reference();
+		super.reference();
+	}
+
+	/**
+	 * Decreases the reference counter.
+	 * 
+	 * Do not use this unless you know what you're doing!!
+	 */
+	override function unreference() {
+		if(texture != null)
+			texture.unreference();
+		super.unreference();
 	}
 
 	/**
@@ -41,7 +65,7 @@ class SpriteFrames extends RefCounted {
 	override function dispose() {
 		if(!disposed) {
 			texture.unreference();
-			animations = null;
+			frames = null;
 		}
 		disposed = true;
 	}

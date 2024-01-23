@@ -16,7 +16,7 @@ class Node2D extends Node {
 	 * 
 	 * Starts from the top-left corner of the screen.
 	 */
-	public var position:Vector2 = Vector2.ZERO;
+	public var position(default, set):Vector2 = Vector2.ZERO;
 
 	/**
 	 * The angle/rotation of this node in radians.
@@ -74,6 +74,11 @@ class Node2D extends Node {
 	private inline function set_angleDegrees(newAngle:Float):Float {
 		angle = newAngle * AngleUtil.TO_RADIANS;
 		return newAngle;
+	}
+
+	@:noCompletion
+	private inline function set_position(newPosition:Vector2) {
+		return position.copyFrom(newPosition);
 	}
 
 	@:noCompletion
