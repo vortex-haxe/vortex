@@ -192,7 +192,7 @@ package vortex.utils.math;
 		return new Vector4(0, 0, 1, 0);
 	}
 	@:noCompletion
-	private static inline function get_AXIS_Z():Vector4 {
+	private static inline function get_AXIS_W():Vector4 {
 		return new Vector4(0, 0, 0, 1);
 	}
 }
