@@ -11,6 +11,8 @@ import vortex.resources.Texture;
 
 import vortex.utils.math.Vector2;
 import vortex.utils.math.Vector3;
+import vortex.utils.math.Vector4;
+import vortex.utils.math.Rectangle;
 import vortex.utils.math.Matrix4x4;
 
 /**
@@ -18,15 +20,17 @@ import vortex.utils.math.Matrix4x4;
  */
 class Sprite extends Node2D {
 	/**
-	 * The shader applied to this sprite when it draws.
-	 */
-	public var shader(default, set):Shader;
-
-	/**
 	 * The texture that this sprite draws.
 	 */
 	public var texture(default, set):Texture;
 
+	/**
+	 * The rendered portion of the texture.
+	 * 
+	 * Set to `null` to render the whole texture.
+	 */
+	public var clipRect(default, set):Rectangle;
+	
 	/**
 	 * Called when this sprite is drawing internally.
 	 * 
@@ -51,11 +55,10 @@ class Sprite extends Node2D {
 	 */
 	override function dispose() {
 		if(!disposed) {
-			if(shader != null)
-				shader.unreference();
-
 			if(texture != null)
 				texture.unreference();
+			
+			_clipRectUVCoords = null;
 		}
 		super.dispose();
 	}
@@ -70,7 +73,7 @@ class Sprite extends Node2D {
 	private function prepareShaderVars(shader:Shader) {
 		_trans.reset(1.0);
 		
-        _vec2.set(texture.size.x * scale.x, texture.size.y * scale.y);
+        _vec2.set(_clipRectUVCoords.z * texture.size.x * scale.x, _clipRectUVCoords.w * texture.size.y * scale.y);
         _trans.scale(_vec3.set(_vec2.x, _vec2.y, 1.0));
 
         if (angle != 0.0) {
@@ -82,22 +85,17 @@ class Sprite extends Node2D {
 		
 		shader.setUniformMat4x4("TRANSFORM", _trans);
 		shader.setUniformColor("MODULATE", modulate);
+		shader.setUniformVec4("SOURCE", _clipRectUVCoords);
 	}
+		
+	// -------- //
+	// Privates //
+	// -------- //
+	private var _clipRectUVCoords:Vector4 = new Vector4(0.0, 0.0, 1.0, 1.0);
 
 	// ----------------- //
 	// Getters & Setters //
 	// ----------------- //
-	@:noCompletion
-	private inline function set_shader(newShader:Shader):Shader {
-		if(shader != null)
-			shader.unreference();
-
-		if(newShader != null)
-			newShader.reference();
-
-		return shader = newShader;
-	}
-	
 	@:noCompletion
 	private inline function set_texture(newTexture:Texture):Texture {
 		if(texture != null)
@@ -106,6 +104,35 @@ class Sprite extends Node2D {
 		if(newTexture != null)
 			newTexture.reference();
 
-		return texture = newTexture;
+		texture = newTexture;
+
+		if(clipRect != null)
+			_updateClipRectUV(clipRect.x, clipRect.y, clipRect.width, clipRect.height);
+		else
+			_clipRectUVCoords.set(0.0, 0.0, 1.0, 1.0);
+
+		return newTexture;
+	}
+
+	@:noCompletion
+	private inline function set_clipRect(newRect:Rectangle):Rectangle {
+		if(newRect != null) {
+			@:privateAccess
+			newRect._onChange = _updateClipRectUV;
+			_updateClipRectUV(newRect.x, newRect.y, newRect.width, newRect.height);
+		} else
+			_clipRectUVCoords.set(0.0, 0.0, 1.0, 1.0);
+		
+		return clipRect = newRect;
+	}
+
+	@:noCompletion
+	private inline function _updateClipRectUV(x:Float, y:Float, width:Float, height:Float) {
+		_clipRectUVCoords.set(
+			Math.min(x / texture.size.x, 1),
+			Math.min(y / texture.size.y, 1),
+			Math.min((x + width) / texture.size.x, 1),
+			Math.min((y + height) / texture.size.y, 1)
+		);
 	}
 }

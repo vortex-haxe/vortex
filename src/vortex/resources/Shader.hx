@@ -27,13 +27,14 @@ class Shader extends RefCounted {
 		layout (location = 0) in vec4 data;
 		uniform mat4 PROJECTION;
 		uniform mat4 TRANSFORM;
+		uniform vec4 SOURCE;
 		out vec2 UV;
 	";
 
 	public static final VERTEX_DEFAULT:String = "
 		void main() {
 			gl_Position = PROJECTION * TRANSFORM * vec4(data.x, data.y, 0.0, 1.0);
-			UV = data.zw;
+			UV = mix(SOURCE.xy, SOURCE.zw, data.zw);
 		}
 	";
 

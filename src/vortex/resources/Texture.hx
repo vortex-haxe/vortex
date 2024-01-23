@@ -11,7 +11,7 @@ import stb.Image;
 import vortex.utils.engine.RefCounted;
 import vortex.utils.math.Vector2i;
 
-// ! stb_image is slow at loading images, replace with
+// ! TODO: stb_image is slow at loading images, replace with
 // ! other image loading libraries later!
 
 /**
@@ -51,6 +51,8 @@ class Texture extends RefCounted {
 	 * Makes a new `Texture` and loads data from an image
 	 * located at the specified file path.
 	 * 
+	 * TODO: put this in AssetServer
+	 * 
 	 * @param filePath  The path to the image to load.
 	 */
 	public static function loadFromFile(filePath:String) {
@@ -83,6 +85,6 @@ class Texture extends RefCounted {
 		if(!disposed) {
 			Glad.deleteTextures(1, Pointer.addressOf(_glID));
 		}
-		super.dispose();
+		disposed = true;
 	}
 }

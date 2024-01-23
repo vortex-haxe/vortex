@@ -1,8 +1,11 @@
 package vortex.nodes;
 
-import vortex.utils.math.AngleUtil;
 import vortex.nodes.Node;
+
+import vortex.resources.Shader;
+
 import vortex.utils.math.Vector2;
+import vortex.utils.math.AngleUtil;
 
 /**
  * A node with basic 2D properties such as position, angle, and scale.
@@ -41,11 +44,17 @@ class Node2D extends Node {
 	public var scale:Vector2 = Vector2.ONE;
 
 	/**
+	 * The shader applied to this sprite when it draws.
+	 */
+	public var shader(default, set):Shader;
+
+	/**
 	 * Disposes of this node and removes it's
 	 * properties from memory.
 	 */
 	override function dispose() {
 		if(!disposed) {
+			shader.unreference();
 			position = null;
 			scale = null;
 			origin = null;
@@ -65,5 +74,16 @@ class Node2D extends Node {
 	private inline function set_angleDegrees(newAngle:Float):Float {
 		angle = newAngle * AngleUtil.TO_RADIANS;
 		return newAngle;
+	}
+
+	@:noCompletion
+	private inline function set_shader(newShader:Shader):Shader {
+		if(shader != null)
+			shader.unreference();
+
+		if(newShader != null)
+			newShader.reference();
+
+		return shader = newShader;
 	}
 }
