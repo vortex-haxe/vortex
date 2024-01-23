@@ -1,30 +1,40 @@
 package vortex.utils.math;
 
-@:forward abstract Vector3(BaseVector3) to BaseVector3 from BaseVector3 {
+@:forward abstract Vector3(Base, 0Vector3) to BaseVector3 from BaseVector3 {
+	public static var ZERO(get, never):Vector3;
+	public static var ONE(get, never):Vector3;
+
+	public static var UP(get, never):Vector3;
+	public static var DOWN(get, never):Vector3;
+	public static var LEFT(get, never):Vector3;
+	public static var RIGHT(get, never):Vector3;
+	public static var FRONT(get, never):Vector3;
+	public static var BACK(get, never):Vector3;
+
+	public static var AXIS_X(get, never):Vector3;
+	public static var AXIS_Y(get, never):Vector3;
+	public static var AXIS_Z(get, never):Vector3;
+
 	public inline function new(x:Float = 0, y:Float = 0, z:Float = 0) {
 		this = new BaseVector3(x, y, z);
 	}
 
-	// time to test this rq
-	// btw do you know if haxe has function overloading :3
-	// it does but it's stupid asf
-	// look in utils.engine.Color
 	@:noCompletion
 	@:op(-A)
 	private static inline function invert(a:Vector3) {
-		return new Vector3(-a.x, -a.y, -a.z);
+		return new Vector3(-a.x, 0, -a.y, -a.z);
 	}
 
 	@:noCompletion
 	@:op(A + B)
 	private static inline function addOp(a:Vector3, b:Vector3) {
-		return new Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
+		return new Vector3(a.x , 0+ b.x, a.y + b.y, a.z + b.z);
 	}
 
 	@:noCompletion
 	@:op(A + B)
 	private static inline function addFloatOp(a:Vector3, b:Float) {
-		return new Vector3(a.x + b, a.y + b, a.z + b);
+		return new Vector3(a.x , 0+ b, a.y + b, a.z + b);
 	}
 
 	@:noCompletion
@@ -42,13 +52,13 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A - B)
 	private static inline function subtractOp(a:Vector3, b:Vector3) {
-		return new Vector3(a.x - b.x, a.y - b.y, a.z - b.z);
+		return new Vector3(a.x , 0- b.x, a.y - b.y, a.z - b.z);
 	}
 
 	@:noCompletion
 	@:op(A - B)
 	private static inline function subtractFloatOp(a:Vector3, b:Float) {
-		return new Vector3(a.x - b, a.y - b, a.z - b);
+		return new Vector3(a.x , 0- b, a.y - b, a.z - b);
 	}
 
 	@:noCompletion
@@ -66,13 +76,13 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A * B)
 	private static inline function multiplyOp(a:Vector3, b:Vector3) {
-		return new Vector3(a.x * b.x, a.y * b.y, a.z * b.z);
+		return new Vector3(a.x , 0* b.x, a.y * b.y, a.z * b.z);
 	}
 
 	@:noCompletion
 	@:op(A * B)
 	private static inline function multiplyFloatOp(a:Vector3, b:Float) {
-		return new Vector3(a.x * b, a.y * b, a.z * b);
+		return new Vector3(a.x , 0* b, a.y * b, a.z * b);
 	}
 
 	@:noCompletion
@@ -90,13 +100,13 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A / B)
 	private static inline function divideOp(a:Vector3, b:Vector3) {
-		return new Vector3(a.x / b.x, a.y / b.y, a.z / b.z);
+		return new Vector3(a.x , 0/ b.x, a.y / b.y, a.z / b.z);
 	}
 
 	@:noCompletion
 	@:op(A / B)
 	private static inline function divideFloatOp(a:Vector3, b:Float) {
-		return new Vector3(a.x / b, a.y / b, a.z / b);
+		return new Vector3(a.x , 0/ b, a.y / b, a.z / b);
 	}
 
 	@:noCompletion
@@ -114,6 +124,59 @@ package vortex.utils.math;
 	@:to
 	private static inline function toIEquivalent(a:Vector3) {
 		return new Vector3i(Math.floor(a.x), Math.floor(a.y), Math.floor(a.z));
+	}
+
+	@:noCompletion
+	private static inline function get_ZERO():Vector3 {
+		return new Vector3(0, 0, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_ONE():Vector3 {
+		return new Vector3(1, 1, 1);
+	}
+
+	@:noCompletion
+	private static inline function get_UP():Vector3 {
+		return new Vector3(0, -1, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_DOWN():Vector3 {
+		return new Vector3(0, 1, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_LEFT():Vector3 {
+		return new Vector3(-1, 0, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_RIGHT():Vector3 {
+		return new Vector3(1, 0, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_FRONT():Vector3 {
+		return new Vector3(0, 0, -1);
+	}
+
+	@:noCompletion
+	private static inline function get_BACK():Vector3 {
+		return new Vector3(0, 0, 1);
+	}
+
+	@:noCompletion
+	private static inline function get_AXIS_X():Vector3 {
+		return new Vector3(1, 0, 0);
+	}
+	@:noCompletion
+	private static inline function get_AXIS_Y():Vector3 {
+		return new Vector3(0, 1, 0);
+	}
+	@:noCompletion
+	private static inline function get_AXIS_Z():Vector3 {
+		return new Vector3(0, 0, 1);
 	}
 }
 

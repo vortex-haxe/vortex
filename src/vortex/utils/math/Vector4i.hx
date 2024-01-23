@@ -1,8 +1,25 @@
 package vortex.utils.math;
 
 @:forward abstract Vector4i(BaseVector4i) to BaseVector4i from BaseVector4i {
-	public function new(x:Int = 0, y:Int = 0, width:Int = 0, height:Int = 0) {
-		this = new BaseVector4i(x, y, width, height);
+	public static var ZERO(get, never):Vector4i;
+	public static var ONE(get, never):Vector4i;
+
+	public static var UP(get, never):Vector4i;
+	public static var DOWN(get, never):Vector4i;
+	public static var LEFT(get, never):Vector4i;
+	public static var RIGHT(get, never):Vector4i;
+	public static var FRONT(get, never):Vector4i;
+	public static var BACK(get, never):Vector4i;
+	public static var POSITIVE_W(get, never):Vector4i;
+	public static var NEGATIVE_W(get, never):Vector4i;
+
+	public static var AXIS_X(get, never):Vector4i;
+	public static var AXIS_Y(get, never):Vector4i;
+	public static var AXIS_Z(get, never):Vector4i;
+	public static var AXIS_W(get, never):Vector4i;
+
+	public function new(x:Int = 0, y:Int = 0, z:Int = 0, w:Int = 0) {
+		this = new BaseVector4i(x, y, z, w);
 	}
 
 	@:noCompletion
@@ -146,6 +163,73 @@ package vortex.utils.math;
 	@:from
 	private static inline function fromFEquivalent(a:Vector4) {
 		return new Vector4i(Math.floor(a.x), Math.floor(a.y), Math.floor(a.z), Math.floor(a.w));
+	}
+    
+	@:noCompletion
+	private static inline function get_ZERO():Vector4i {
+		return new Vector4i(0, 0, 0, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_ONE():Vector4i {
+		return new Vector4i(1, 1, 1, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_UP():Vector4i {
+		return new Vector4i(0, -1, 0, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_DOWN():Vector4i {
+		return new Vector4i(0, 1, 0, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_LEFT():Vector4i {
+		return new Vector4i(-1, 0, 0, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_RIGHT():Vector4i {
+		return new Vector4i(1, 0, 0, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_FRONT():Vector4i {
+		return new Vector4i(0, 0, -1, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_BACK():Vector4i {
+		return new Vector4i(0, 0, 1, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_POSITIVE_W():Vector4i {
+		return new Vector4i(0, 0, 0, 1);
+	}
+
+	@:noCompletion
+	private static inline function get_NEGATIVE_W():Vector4i {
+		return new Vector4i(0, 0, 0, -1);
+	}
+
+	@:noCompletion
+	private static inline function get_AXIS_X():Vector4i {
+		return new Vector4i(1, 0, 0, 0);
+	}
+	@:noCompletion
+	private static inline function get_AXIS_Y():Vector4i {
+		return new Vector4i(0, 1, 0, 0);
+	}
+	@:noCompletion
+	private static inline function get_AXIS_Z():Vector4i {
+		return new Vector4i(0, 0, 1, 0);
+	}
+	@:noCompletion
+	private static inline function get_AXIS_Z():Vector4i {
+		return new Vector4i(0, 0, 0, 1);
 	}
 }
 

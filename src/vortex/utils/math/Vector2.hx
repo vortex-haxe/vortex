@@ -3,10 +3,14 @@ package vortex.utils.math;
 @:forward abstract Vector2(BaseVector2) to BaseVector2 from BaseVector2 {
 	public static var ZERO(get, never):Vector2;
 	public static var ONE(get, never):Vector2;
+
 	public static var UP(get, never):Vector2;
 	public static var DOWN(get, never):Vector2;
 	public static var LEFT(get, never):Vector2;
 	public static var RIGHT(get, never):Vector2;
+
+	public static var AXIS_X(get, never):Vector2;
+	public static var AXIS_Y(get, never):Vector2;
 	
 	public inline function new(x:Float = 0, y:Float = 0) {
 		this = new BaseVector2(x, y);
@@ -152,6 +156,16 @@ package vortex.utils.math;
 	@:noCompletion
 	private static inline function get_RIGHT():Vector2 {
 		return new Vector2(1, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_AXIS_X():Vector2 {
+		return new Vector2(1, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_AXIS_Y():Vector2 {
+		return new Vector2(0, 1);
 	}
 }
 

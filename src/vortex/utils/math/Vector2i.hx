@@ -3,10 +3,14 @@ package vortex.utils.math;
 @:forward abstract Vector2i(BaseVector2i) to BaseVector2i from BaseVector2i {
 	public static var ZERO(get, never):Vector2i;
 	public static var ONE(get, never):Vector2i;
+
 	public static var UP(get, never):Vector2i;
 	public static var DOWN(get, never):Vector2i;
 	public static var LEFT(get, never):Vector2i;
 	public static var RIGHT(get, never):Vector2i;
+
+	public static var AXIS_X(get, never):Vector2i;
+	public static var AXIS_Y(get, never):Vector2i;
 
 	public inline function new(x:Int = 0, y:Int = 0) {
 		this = new BaseVector2i(x, y);
@@ -183,6 +187,46 @@ package vortex.utils.math;
 	@:noCompletion
 	private static inline function get_RIGHT():Vector2i {
 		return new Vector2i(1, 0);
+	}
+    
+	@:noCompletion
+	private static inline function get_ZERO():Vector2i {
+		return new Vector2i(0, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_ONE():Vector2i {
+		return new Vector2i(1, 1);
+	}
+
+	@:noCompletion
+	private static inline function get_UP():Vector2i {
+		return new Vector2i(0, -1);
+	}
+
+	@:noCompletion
+	private static inline function get_DOWN():Vector2i {
+		return new Vector2i(0, 1);
+	}
+
+	@:noCompletion
+	private static inline function get_LEFT():Vector2i {
+		return new Vector2i(-1, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_RIGHT():Vector2i {
+		return new Vector2i(1, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_AXIS_X():Vector2i {
+		return new Vector2i(1, 0);
+	}
+
+	@:noCompletion
+	private static inline function get_AXIS_Y():Vector2i {
+		return new Vector2i(0, 1);
 	}
 }
 
