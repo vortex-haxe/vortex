@@ -53,8 +53,8 @@ class AtlasHelper {
 					sub.has.y ? Std.parseFloat(sub.att.y) : 0
 				),
 				offset: new Vector2(
-					ro_tat_ay ? offsetY : offsetX,
-					ro_tat_ay ? offsetX : offsetY
+					offsetX,
+					offsetY
 				),
 				size: new Vector2(
 					sizeX,

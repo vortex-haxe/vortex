@@ -173,6 +173,11 @@ package vortex.utils.math;
  * A simple class to store 2D X and Y values.
  */
 class BaseVector2 {
+    /**
+     * Static matrix used for intermediate calculations.
+     */
+	private static var dummy = new BaseVector2(0.0, 0.0);
+
 	/**
 	 * The X value of this vector.
 	 */
@@ -290,4 +295,14 @@ class BaseVector2 {
 			_onChange(x, value);
 		return y = value;
 	}
+
+    public function toString():String {
+        return '(${x}, ${y})';
+    }
+
+    public function rotated(rads) {
+        dummy.x = x * Math.cos(rads) - y * Math.sin(rads); 
+        dummy.y = x * Math.sin(rads) + y * Math.cos(rads);
+        return copyFrom(dummy);
+    }
 }

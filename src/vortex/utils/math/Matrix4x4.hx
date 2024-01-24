@@ -157,6 +157,15 @@ class BaseMatrix4x4 {
 		return this;
 	}
 
+    public function rotate270Z():BaseMatrix4x4 {
+        extraMat.vecs[0].copyFrom(vecs[1]);
+        extraMat.vecs[1].copyFrom(-vecs[0]);
+		extraMat.vecs[2].copyFrom(vecs[2]);
+		extraMat.vecs[3].copyFrom(vecs[3]);
+		return copyFrom(extraMat);
+    }
+
+
     /**
      * Rotates the matrix by the specified angle around the given axis.
      *
@@ -424,4 +433,8 @@ class BaseMatrix4x4 {
         }
 		return this;
 	}
+
+    public function toString():String {
+        return '(${vecs[0]}, ${vecs[1]}, ${vecs[2]}, ${vecs[3]})';
+    }
 }

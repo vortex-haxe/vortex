@@ -22,6 +22,11 @@ package vortex.utils.math;
 		this = new BaseVector4(x, y, z, w);
 	}
 
+    @:op([]) public function get(idx:Int = 0) {
+        @:privateAccess
+        return [this.x,this.y,this.z,this.w][idx];
+    }
+
 	@:noCompletion
 	@:op(-A)
 	private static inline function invert(a:Vector4) {
@@ -368,4 +373,8 @@ class BaseVector4 {
 			_onChange(x, y, z, value);
 		return w = value;
 	}
+
+    public function toString():String {
+        return '(${x}, ${y}, ${z}, ${w})';
+    }
 }
