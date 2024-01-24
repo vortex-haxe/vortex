@@ -158,6 +158,8 @@ class AnimationPlayer {
 			}
 			_data.set(name, null);
 			_data.remove(name);
+
+			_firedFsCb = false;
 		} else
 			Debug.error('Cannot remove non-existent animation: ${name}!');
 	}
@@ -184,6 +186,7 @@ class AnimationPlayer {
 
 			curAnim = _data.get(name);
 			_frameDelay = 1 / curAnim.fps;
+			_firedFsCb = false;
 			finished = false;
 		}
 	}
