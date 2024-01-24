@@ -10,6 +10,7 @@ import vortex.resources.Shader;
 import vortex.resources.Texture;
 
 import vortex.utils.math.Vector2;
+import vortex.utils.math.Vector2i;
 import vortex.utils.math.Vector3;
 import vortex.utils.math.Vector4;
 import vortex.utils.math.Rectangle;
@@ -30,6 +31,11 @@ class Sprite extends Node2D {
 	 * Set to `null` to render the whole texture.
 	 */
 	public var clipRect(default, set):Rectangle;
+
+	/**
+	 * The width and height of this sprite's texture.
+	 */
+	public var size(get, never):Vector2i;
 	
 	/**
 	 * Called when this sprite is drawing internally.
@@ -38,6 +44,9 @@ class Sprite extends Node2D {
 	 * just make sure to call `super.draw()` before-hand!
 	 */
 	override function draw() {
+		if(texture == null || texture.disposed)
+			return;
+
 		final shader:Shader = this.shader ?? OpenGLBackend.defaultShader;
 		@:privateAccess {
 			shader.useProgram();
@@ -96,6 +105,14 @@ class Sprite extends Node2D {
 	// ----------------- //
 	// Getters & Setters //
 	// ----------------- //
+	@:noCompletion
+	private inline function get_size():Vector2i {
+		if(texture != null && !texture.disposed)
+			return texture.size;
+
+		return Vector2i.ZERO;
+	}
+
 	@:noCompletion
 	private inline function set_texture(newTexture:Texture):Texture {
 		if(texture != null)

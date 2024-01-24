@@ -60,6 +60,11 @@ class HaxeUtil {
 		return null;
 	}
 
+	/**
+	 * Returns a copy of a given map.
+	 * 
+	 * @param inMap  The map to copy.
+	 */
 	public static function copyMap<K:Dynamic, T:Dynamic>(inMap:Map<K, T>):Map<K, T> {
 		var map:Map<K, T> = [];
 		untyped {
@@ -67,5 +72,20 @@ class HaxeUtil {
 				map.set(key, copy(inMap.get(key)));
 		}
 		return map;
+	}
+
+	/**
+	 * Converts a boolean value into an integer value.
+	 * 
+	 * - `0` = false
+	 * - `1` = true
+	 * 
+	 * @param bool  The boolean value to convert.
+	 */
+	public static function boolToInt(bool:Bool):Int {
+		// i could do bool ? 1 : 0
+		// but i figured since this would only compile to cpp anyways
+		// we just use cpp stuff for slightly more efficent function
+		return untyped __cpp__("{0}", bool);
 	}
 }

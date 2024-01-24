@@ -40,6 +40,12 @@ class AnimatedSprite extends Node2D {
 	public var clipRect:Rectangle;
 
 	/**
+	 * The width and height from the first frame
+	 * of the currently playing animation.
+	 */
+	public var size(get, never):Vector2;
+
+	/**
 	 * Makes a new `AnimatedSprite`.
 	 */
 	public function new() {
@@ -143,6 +149,14 @@ class AnimatedSprite extends Node2D {
 	// ----------------- //
 	// Getters & Setters //
 	// ----------------- //
+	@:noCompletion
+	private inline function get_size():Vector2 {
+		if(animation.curAnim != null)
+			return animation.curAnim.frames[0].size;
+
+		return Vector2.ZERO;
+	}
+
 	@:noCompletion
 	private inline function set_frames(newFrames:SpriteFrames):SpriteFrames {
 		if(frames != null)

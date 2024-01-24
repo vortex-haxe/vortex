@@ -131,10 +131,10 @@ class Run {
 		if(args[1] == "-debug" || args[1] == "--debug")
 			args.push("--debug");
 
-		Sys.command('cd ${curDir}');
-		Sys.command('haxe ${args.join(" ")}');
+		Sys.setCwd(curDir);
+		final compileError:Int = Sys.command('haxe ${args.join(" ")}');
 
-		if(runAfterBuild) {
+		if(runAfterBuild && compileError == 0) {
 			if(Sys.systemName() == "Windows") { // Windows
 				final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, '${mainCl}.exe']));
 				if(FileSystem.exists(exec))
