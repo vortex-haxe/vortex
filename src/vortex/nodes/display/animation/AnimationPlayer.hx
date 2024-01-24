@@ -12,8 +12,6 @@ typedef AnimationData = {
 	var offset:Vector2;
 }
 
-// TODO: add onFinish signal
-
 /**
  * A basic animation player that can play
  * animation data attached to an `AnimatedSprite`.
@@ -47,6 +45,11 @@ class AnimationPlayer {
 	 * The current frame index of the animation.
 	 */
 	public var frame(default, set):Int = 0;
+
+	/**
+         * Called when the current animation finishes.
+         */
+	public var onFinish:String->Void = null;
 
 	/**
 	 * Makes a new `AnimationPlayer`.
@@ -197,6 +200,8 @@ class AnimationPlayer {
 		_frameTimer += delta;
 		if(_frameTimer >= _frameDelay) {
 			final boundFunc = (curAnim.loop) ? MathUtil.wrap : MathUtil.boundInt;
+			final oldFrame = frame;
+			
 			if(reversed) {
 				frame = boundFunc(frame - 1, 0, curAnim.frames.length - 1);
 				finished = (frame == 0);
@@ -205,6 +210,14 @@ class AnimationPlayer {
 				finished = (frame > curAnim.frames.length - 1);
 			}
 			_frameTimer = 0;
+
+			if (oldFrame != frame)
+				_firedFsCb = false;
+			
+			if (onFinish != null && finished && !_firedFsCb) {
+				onFinish();
+				_firedFsCb = true;
+			}
 		}
 	}
 
@@ -213,9 +226,10 @@ class AnimationPlayer {
 	// -------- //
 	private var parent:AnimatedSprite;
 	private var _data:Map<String, AnimationData> = [];
+	private var _firedFsCb:Bool = false;
 	private var _frameTimer:Float = 0;
 	private var _frameDelay:Float = 0;
-
+	
 	// ----------------- //
 	// Getters & Setters //
 	// ----------------- //
