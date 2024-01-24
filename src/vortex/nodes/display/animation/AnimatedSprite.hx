@@ -118,28 +118,22 @@ class AnimatedSprite extends Node2D {
         
         _vec2.set((_clipRectUVCoords.z - _clipRectUVCoords.x) * frames.texture.size.x * scale.x, (_clipRectUVCoords.w - _clipRectUVCoords.y) * frames.texture.size.y * scale.y);
         _trans.scale(_vec3.set(_vec2.x, _vec2.y, 1.0));
+		_vec2.set(fram.marginSize.x * scale.x, fram.marginSize.y * scale.y);
         
         if (fram.angle != 0.0) {
-            _trans.rotate270Z();
-            _trans.translate(_vec3.set(0, fram.size.x, 0));
+            _trans.rotate270Z(); // TODO: work on all angles
+            _trans.translate(_vec3.set(0, fram.size.x * scale.y, 0));
         }
         
+		_trans.translate(_vec3.set(fram.offset.x * scale.x, fram.offset.y * scale.y, 0.0));
         if (angle != 0.0) {
-            _trans.translate(_vec3.set(-origin.x * fram.size.x * scale.x, -origin.y * fram.size.y * scale.y, 0.0));
+            _trans.translate(_vec3.set(-origin.x * _vec2.x, -origin.y * _vec2.y, 0.0));
             _trans.radRotate(angle, Vector3.AXIS_Z);
-            _trans.translate(_vec3.set(origin.x * fram.size.x * scale.x, origin.y * fram.size.y * scale.y, 0.0));
+            _trans.translate(_vec3.set(origin.x * _vec2.x, origin.y * _vec2.y, 0.0));
         }
-
-        _vec2 = _vec2.copyFrom(fram.offset).rotated(angle);
-        trace(fram.offset);
-        trace(angle);
-        trace(_vec2);
-        trace('---');
-        _trans.translate(_vec3.set(_vec2.x, _vec2.y, 0.0));
-        
+		
         _trans.translate(_vec3.set(position.x, position.y, 0.0));
-
-        _trans.translate(_vec3.set(-origin.x * fram.size.x * scale.x, -origin.y * fram.size.y * scale.y, 0.0));
+        _trans.translate(_vec3.set(-origin.x * _vec2.x, -origin.y * _vec2.y, 0.0));
 
         shader.setUniformMat4x4("TRANSFORM", _trans);
         shader.setUniformColor("MODULATE", modulate);
