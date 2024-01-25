@@ -3,10 +3,10 @@ package vortex.resources.helpers;
 import sys.io.File;
 import sys.FileSystem;
 
-import haxe.io.Path;
 import haxe.xml.Access;
 
 import vortex.resources.helpers.TypeDefs;
+import vortex.servers.ResourceServer;
 import vortex.utils.math.Vector2;
 
 /**
@@ -26,7 +26,7 @@ class AtlasHelper {
 
 		// Load the texture
 		if(texture is String)
-			frames.texture = Texture.loadFromFile(cast texture);
+			frames.texture = ResourceServer.loadImage(cast texture);
 		else
 			frames.texture = cast texture;
 
