@@ -197,11 +197,11 @@ class AnimationPlayer {
 	 * @param delta  The time between the last frame in seconds.
 	 */
 	public function tick(delta:Float) {
-		if(curAnim == null || !playing)
+		if(curAnim == null)
 			return;
 		
 		_frameTimer += delta;
-		if(_frameTimer >= _frameDelay && playing) {
+		if(_frameTimer >= _frameDelay && (playing || curAnim.loop)) {
 			final boundFunc = (curAnim.loop) ? MathUtil.wrap : MathUtil.boundInt;
 			if(reversed) {
 				frame = boundFunc(frame - 1, 0, curAnim.frames.length - 1);
