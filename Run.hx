@@ -182,6 +182,8 @@ class Run {
 					Path.normalize(Path.join([Sys.getCwd(), '${cfg.source.main}'])),
 					Path.normalize(Path.join([binFolder, '${cfg.export.executable_name}']))
 				);
+				Sys.setCwd(binFolder);
+				Sys.command('chmod +x "${cfg.export.executable_name}"');
 			}
 			if(runAfterBuild)
 				runProj();
@@ -205,7 +207,7 @@ class Run {
 			final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, platform, "bin"]));
 			if(FileSystem.exists(exec)) {
 				Sys.setCwd(exec);
-				Sys.command('${cfg.export.executable_name}.exe');
+				Sys.command('"${cfg.export.executable_name}.exe"');
 			}
 		} else { // Linux/MacOS (Maybe BSD too, I forgot how BSD works)
 			final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, platform, "bin"]));
