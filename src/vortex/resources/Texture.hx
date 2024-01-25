@@ -1,12 +1,9 @@
 package vortex.resources;
 
-import cpp.Star;
-import cpp.UInt8;
 import cpp.UInt32;
 import cpp.Pointer;
 
 import glad.Glad;
-import stb.Image;
 
 import vortex.utils.engine.RefCounted;
 import vortex.utils.math.Vector2i;
@@ -47,40 +44,6 @@ class Texture extends RefCounted {
 		Glad.bindTexture(Glad.TEXTURE_2D, _glID);
 	}
 
-	/**
-	 * Makes a new `Texture` and loads data from an image
-	 * located at the specified file path.
-	 * 
-	 * TODO: put this in AssetServer
-	 * 
-	 * @param filePath  The path to the image to load.
-	 */
-	public static function loadFromFile(filePath:String) {
-		final tex = new Texture();
-		tex.filePath = filePath;
-		
-		var width:Int = 0;
-		var height:Int = 0;
-		var pixels:Star<UInt8> = Image.load(filePath, Pointer.addressOf(width), Pointer.addressOf(height), Pointer.addressOf(tex.numChannels), 0);
-		tex.size.set(width, height);
-		
-		if (pixels != 0) {
-			var imageFormat = (tex.numChannels == 4) ? Glad.RGBA : Glad.RGB;
-			Glad.texImage2D(Glad.TEXTURE_2D, 0, imageFormat, width, height, 0, imageFormat, Glad.UNSIGNED_BYTE, pixels);
-			Glad.generateMipmap(Glad.TEXTURE_2D);
-
-			Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_WRAP_S, Glad.REPEAT);
-			Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_WRAP_T, Glad.REPEAT);
-			Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_MIN_FILTER, Glad.LINEAR);
-			Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_MAG_FILTER, Glad.LINEAR);
-		} else {
-			Debug.error('Image at ${filePath} failed to load: ${Image.failureReason()}');
-			return tex;
-		}
-		Image.freeImage(pixels);
-		return tex;
-	}
-	
 	override function dispose() {
 		if(!disposed) {
 			Glad.deleteTextures(1, Pointer.addressOf(_glID));
