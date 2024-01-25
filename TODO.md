@@ -1,2 +1,3 @@
 # 📄 Todo List
-- Executable Icons
+- Executable Icons [X]
+- Audio Streams & Players
