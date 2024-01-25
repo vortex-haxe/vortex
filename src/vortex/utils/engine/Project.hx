@@ -35,6 +35,7 @@ typedef SourceInfo = {
 
 typedef ExportInfo = {
 	var build_dir:String;
+	var executable_name:String;
 	var x32_build:Bool;
 	var debug_build:Bool;
 }

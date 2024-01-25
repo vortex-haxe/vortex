@@ -108,6 +108,8 @@ class Run {
 	}
 
 	static function buildProj(?runAfterBuild:Bool = false) {
+		final libDir:String = Sys.getCwd();
+
         final sysArgs:Array<String> = Sys.args();
         final curDir:String = sysArgs[sysArgs.length - 1];
 
@@ -118,8 +120,6 @@ class Run {
 		}
 		final args:Array<String> = [];
 		final cfg:ProjectInfo = CFGParser.parse(File.getContent('${curDir}project.cfg'));
-        
-		final mainCl:String = cfg.source.main.substring(cfg.source.main.lastIndexOf(".") + 1, cfg.source.main.length);
 
         args.push('--class-path ${cfg.source.name}');
 
@@ -131,16 +131,61 @@ class Run {
             args.push('--define HXCPP_M32');
 
 		args.push('--main ${cfg.source.main}');
-		args.push('--cpp ${cfg.export.build_dir}');
 
+		final platform:String = Sys.systemName().toLowerCase();
+		args.push('--cpp ${cfg.export.build_dir}/${platform}/obj');
+		
 		if(args[1] == "-debug" || args[1] == "--debug")
 			args.push("--debug");
-
+		
 		Sys.setCwd(curDir);
-		final compileError:Int = Sys.command('haxe ${args.join(" ")}');
 
-		if(runAfterBuild && compileError == 0)
-			runProj();
+		final binFolder:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, platform, "bin"]));
+		if(!FileSystem.exists(binFolder))
+			FileSystem.createDirectory(binFolder);
+			
+		final compileError:Int = Sys.command('haxe ${args.join(" ")}');
+		if(compileError == 0) {
+			Sys.setCwd(Path.normalize(Path.join([curDir, cfg.export.build_dir, platform, "obj"])));
+			
+			if(Sys.systemName() == "Windows") { // Windows
+				final exePath:String = Path.normalize(Path.join([binFolder, '${cfg.export.executable_name}.exe']));
+				File.copy(
+					Path.normalize(Path.join([Sys.getCwd(), '${cfg.source.main}.exe'])),
+					exePath
+				);
+				for(file in FileSystem.readDirectory(Sys.getCwd())) {
+					if(Path.extension(file) == "dll") {
+						File.copy(
+							Path.normalize(Path.join([Sys.getCwd(), file])),
+							Path.normalize(Path.join([binFolder, file]))
+						);
+					}
+				}
+				final projIconDir:String = Path.normalize(Path.join([curDir, cfg.window.icon]));
+				final outputIconDir:String = Path.normalize(Path.join([binFolder, "icon.ico"]));
+				
+				if(FileSystem.exists(projIconDir)) {
+					// Generate ico file
+					Sys.setCwd(Path.normalize(Path.join([libDir, "helpers", "windows", "magick"])));
+					Sys.command("convert.exe", ["-resize", "256x256", projIconDir, outputIconDir]);
+					
+					// Apply icon to exe file
+					Sys.setCwd(Path.normalize(Path.join([libDir, "helpers", "windows"])));
+					Sys.command("ReplaceVistaIcon.exe", [exePath, outputIconDir]);
+				} else {
+					Debug._coloredPrint(RED, "[ WARNING ]");
+					Sys.print(' Icon file "${cfg.window.icon}" doesn\'t exist in the project directory!.\r\n');
+				}
+			} else { // Linux/MacOS (Maybe BSD too, I forgot how BSD works)
+				File.copy(
+					Path.normalize(Path.join([Sys.getCwd(), '${cfg.source.main}'])),
+					Path.normalize(Path.join([binFolder, '${cfg.export.executable_name}']))
+				);
+			}
+			if(runAfterBuild)
+				runProj();
+		}
 	}
 
 	static function runProj() {
@@ -153,18 +198,20 @@ class Run {
 			return;
 		}
 		final cfg:ProjectInfo = CFGParser.parse(File.getContent('${curDir}project.cfg'));
-		final mainCl:String = cfg.source.main.substring(cfg.source.main.lastIndexOf(".") + 1, cfg.source.main.length);
+		final platform:String = Sys.systemName().toLowerCase();
 
 		Sys.setCwd(curDir);
 		if(Sys.systemName() == "Windows") { // Windows
-			final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, '${mainCl}.exe']));
-			if(FileSystem.exists(exec))
-				Sys.command('"${exec}"');
-		} else { // Linux/MacOS (Maybe BSD too, I forgot how BSD works)
-			final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir]));
+			final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, platform, "bin"]));
 			if(FileSystem.exists(exec)) {
 				Sys.setCwd(exec);
-				Sys.command('"./${mainCl}"');
+				Sys.command('${cfg.export.executable_name}.exe');
+			}
+		} else { // Linux/MacOS (Maybe BSD too, I forgot how BSD works)
+			final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, platform, "bin"]));
+			if(FileSystem.exists(exec)) {
+				Sys.setCwd(exec);
+				Sys.command('"./${cfg.export.executable_name}"');
 			}
 		}
 	}

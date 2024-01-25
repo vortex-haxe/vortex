@@ -39,11 +39,12 @@ class ProjectMacro {
 			Context.fatalError('Couldn\'t find a valid "project.cfg" file!', pos);
 
 		final cfg:ProjectInfo = CFGParser.parse(File.getContent(cfgPath));
+		final platform:String = Sys.systemName().toLowerCase();
 
 		// Copy specified asset folders to export folder
 		for (folder in cfg.assets.folders) {
 			final dirToCopy:String = Path.normalize(Path.join([sourcePath, folder]));
-			final destDir:String = Path.normalize(Path.join([sourcePath, cfg.export.build_dir, folder]));
+			final destDir:String = Path.normalize(Path.join([sourcePath, cfg.export.build_dir, platform, "bin", folder]));
 			FileUtil.copyDirectory(dirToCopy, destDir);
 		}
 		return Context.getBuildFields();

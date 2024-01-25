@@ -1,14 +1,36 @@
 package vortex.utils.native;
 
+import sys.io.Process;
+
 /**
  * @see https://github.com/FNF-CNE-Devs/CodenameEngine/blob/main/source/funkin/backend/utils/NativeAPI.hx
  */
  class NativeAPI {
+	private static var colorSupported:Null<Bool> = null;
+
 	/**
 	 * Sets the console colors
 	 */
 	public static function setConsoleColors(foregroundColor:ConsoleColor = NONE, ?backgroundColor:ConsoleColor = NONE) {
 		#if sys
+		if(colorSupported == null) {
+			if(Sys.systemName() == "Windows") {
+				if (Sys.getEnv("TERM") == "xterm" || Sys.getEnv("ANSICON") != null)
+					colorSupported = true;
+			} else {
+				var result = -1;
+				try {
+					var process = new Process("tput", ["colors"]);
+					result = process.exitCode();
+					process.close();
+				}
+				catch (e:Dynamic) {}
+				colorSupported = (result == 0);
+			}
+		}
+		if(!colorSupported)
+			return;
+
 		Sys.print("\x1b[0m");
 		if (foregroundColor != NONE)
 			Sys.print("\x1b[" + Std.int(consoleColorToANSI(foregroundColor)) + "m");
