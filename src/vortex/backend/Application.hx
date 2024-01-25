@@ -4,12 +4,10 @@ package vortex.backend;
 import cpp.UInt64;
 import cpp.vm.Gc;
 
-import sdl.SDL;
-import sdl.Types;
-
 import vortex.macros.ProjectMacro;
 import vortex.backend.Window;
 
+import vortex.servers.DisplayServer;
 import vortex.servers.RenderingServer;
 
 import vortex.utils.generic.CFGParser;
@@ -53,10 +51,7 @@ class Application {
 		
 		meta = CFGParser.parse(ProjectMacro.getConfig());
 
-		if(SDL.init(VIDEO | EVENTS) < 0) {
-			Debug.error(SDL.getError());
-			return;
-		}
+		DisplayServer.init();
 
 		window = new Window(meta.window.title, new Vector2i(WindowPos.CENTERED, WindowPos.CENTERED), new Vector2i().copyFrom(meta.window.size));
 		
@@ -106,7 +101,7 @@ class Application {
 		RenderingServer.dispose();
 		window.dispose();
 
-		SDL.quit();
+		DisplayServer.dispose();
 	}
 }
 #else
