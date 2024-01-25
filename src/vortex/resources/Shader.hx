@@ -39,6 +39,7 @@ class Shader extends RefCounted {
 	";
 
 	public static final FRAGMENT_PREFIX:String = "
+		#version 330 core
 		uniform sampler2D TEXTURE;
 		uniform vec4 MODULATE;
 		in vec2 UV;
