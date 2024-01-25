@@ -1,5 +1,6 @@
 package vortex.backend;
 
+import vortex.utils.generic.Signal;
 import cpp.Pointer;
 import cpp.UInt32;
 
@@ -43,6 +44,41 @@ class Window extends Node {
 	 * in pixels.
 	 */
 	public var initialSize(default, null):Vector2i;
+
+	/**
+	 * The signal that gets emitted when the window is closed.
+	 */
+	public var onClose:Signal<Void->Void> = new Signal();
+
+	/**
+	 * The signal that gets emitted when the window is minimized.
+	 */
+	public var onMinimize:Signal<Void->Void> = new Signal();
+
+	/**
+	 * The signal that gets emitted when the window is maximized.
+	 */
+	public var onMaximize:Signal<Void->Void> = new Signal();
+
+	/**
+	 * The signal that gets emitted when the window is restored.
+	 */
+	public var onRestore:Signal<Void->Void> = new Signal();
+
+	/**
+	 * The signal that gets emitted when the window is refocused.
+	 */
+	public var onFocusGain:Signal<Void->Void> = new Signal();
+
+	/**
+	 * The signal that gets emitted when the window is unfocused.
+	 */
+	public var onFocusLost:Signal<Void->Void> = new Signal();
+
+	/**
+	 * The signal that gets emitted when the window is resized.
+	 */
+	public var onResize:Signal<Int->Int->Void> = new Signal();
 
 	/**
 	 * Makes a new `Window`.
@@ -124,24 +160,23 @@ class Window extends Node {
 			case WINDOWEVENT:
 				switch(_ev.ref.window.event) {
 					case CLOSE:
-						// TODO: add pre signal for this
+						onClose.emit();
 						dispose();
-						// TODO: add post signal for this
 					
 					case MINIMIZED:
-						// TODO: add signal for this
+						onMinimize.emit();
 						
 					case MAXIMIZED:
-						// TODO: add signal for this
+						onMaximize.emit();
 
 					case RESTORED:
-						// TODO: add signal for this
+						onRestore.emit();
 
 					case FOCUS_GAINED:
-						// TODO: add signal for this
+						onFocusGain.emit();
 
 					case FOCUS_LOST:
-						// TODO: add signal for this
+						onFocusLost.emit();
 
 					case RESIZED:
 						@:privateAccess {
@@ -159,7 +194,7 @@ class Window extends Node {
 						_recti.y = Math.floor((size.y - _recti.height) * 0.5);
 						
 						RenderingServer.setViewportRect(_recti);
-						// TODO: add signal for this
+						onResize.emit(_ev.ref.window.data1, _ev.ref.window.data2);
 
 					default:
 				}

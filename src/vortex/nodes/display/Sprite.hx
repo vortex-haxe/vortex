@@ -87,7 +87,7 @@ class Sprite extends Node2D {
 
         if (angle != 0.0) {
 			_trans.translate(_vec3.set(-origin.x * _vec2.x, -origin.y * _vec2.y, 0.0));
-            _trans.radRotate(angle, Vector3.AXIS_Z); 
+            _trans.radRotate(angle, _vec3.set(0, 0, 1)); // preventing memory from exploding 
 			_trans.translate(_vec3.set(origin.x * _vec2.x, origin.y * _vec2.y, 0.0));
         }
 		_trans.translate(_vec3.set(position.x + (-origin.x * _vec2.x), position.y + (-origin.y * _vec2.y), 0.0));

@@ -1,8 +1,11 @@
 package vortex.backend;
 
-import vortex.utils.math.Vector2i;
 import cpp.vm.Gc;
+
+import vortex.extensions.*;
+
 import vortex.nodes.Node;
+import vortex.utils.math.Vector2i;
 
 /**
  * A class full of globally accessable engine
@@ -41,6 +44,14 @@ class Engine {
 	public static var currentFPS:Int = 0;
 
 	/**
+	 * A helper object to manage extensions.
+	 * 
+	 * Allows you to add or remove them, making them
+	 * start or stop ticking/updating automatically.
+	 */
+	public static var extensions:ExtensionManager;
+
+	/**
 	 * Changes the current scene to a new specified one.
 	 * 
 	 * @param newScene  The scene to change to.
@@ -55,6 +66,15 @@ class Engine {
 	private static var _queuedScene:Node = null;
 	private static var _fpsTimer:Float = 0;
 	private static var _queuedFPS:Int = 0;
+
+	private static function init() {
+		// Initialize internal managers
+		extensions = new ExtensionManager();
+
+		// Initialize internal extensions
+		extensions.add(TweenManager);
+		extensions.add(TimerManager);
+	}
 
 	private static function _changeToQueuedScene() {
 		// dispose old scene
@@ -83,6 +103,7 @@ class Engine {
 			currentFPS = _queuedFPS;
 			_fpsTimer = _queuedFPS = 0;
 		}
+		extensions.tick(delta);
 	}
 
 	// ----------------- //

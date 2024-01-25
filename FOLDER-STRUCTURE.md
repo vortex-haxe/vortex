@@ -6,7 +6,7 @@ This is how the source code will be organized.
    - 📂 **debug** - Utilties for debugging your code.
    - 📂 **macros** - Utilities that run at compile time.
    - 📂 **nodes** - Game objects to base things like players and enemies off of. Nodes can be parent nodes and have children nodes within them.
-   - 📂 **plugins** - Togglable code that runs in the background.
+   - 📂 **extensions** - Togglable code that runs in the background.
    - 📂 **resources** - Resources such as Textures, Sounds, Fonts, etc.
    - 📂 **servers** - Similar to plugins, without the toggability.
    - 📂 **utils** - Utilities for the engine AND your own development.

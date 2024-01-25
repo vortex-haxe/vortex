@@ -1,9 +1,11 @@
 package vortex.nodes.display.animation;
 
-import vortex.utils.math.MathUtil;
-import vortex.utils.generic.SortUtil;
 import vortex.resources.SpriteFrames.AnimationFrame;
+
+import vortex.utils.generic.Signal;
+import vortex.utils.generic.SortUtil;
 import vortex.utils.math.Vector2;
+import vortex.utils.math.MathUtil;
 
 typedef AnimationData = {
 	var frames:Array<AnimationFrame>;
@@ -11,8 +13,6 @@ typedef AnimationData = {
 	var loop:Bool;
 	var offset:Vector2;
 }
-
-// TODO: add onFinish signal
 
 /**
  * A basic animation player that can play
@@ -34,9 +34,15 @@ class AnimationPlayer {
 	public var name:String;
 
 	/**
-	 * Whether or not the current animation is finished playing.
+	 * Whether or not the current animation is playing.
 	 */
-	public var finished:Bool = false;
+	public var playing:Bool = false;
+
+	/**
+	 * The signal that gets emitted when the current animation
+	 * has finished playing.
+	 */
+	public var finished:Signal<Void->Void> = new Signal();
 
 	/**
 	 * Whether or not the current animation is reversed.
@@ -172,16 +178,16 @@ class AnimationPlayer {
 			Debug.warn('Animation called "${name}" doesn\'t exist!');
 			return;
 		}
-		if(this.name != name || finished || restart) {
+		if(this.name != name || !playing || restart) {
 			this.name = name;
 			this.reversed = reverse;
 
-			if(finished || restart)
+			if(!playing || restart)
 				this.frame = frame;
 
 			curAnim = _data.get(name);
 			_frameDelay = 1 / curAnim.fps;
-			finished = false;
+			playing = true;
 		}
 	}
 
@@ -191,19 +197,22 @@ class AnimationPlayer {
 	 * @param delta  The time between the last frame in seconds.
 	 */
 	public function tick(delta:Float) {
-		if(curAnim == null || finished)
+		if(curAnim == null || !playing)
 			return;
 		
 		_frameTimer += delta;
-		if(_frameTimer >= _frameDelay) {
+		if(_frameTimer >= _frameDelay && playing) {
 			final boundFunc = (curAnim.loop) ? MathUtil.wrap : MathUtil.boundInt;
 			if(reversed) {
 				frame = boundFunc(frame - 1, 0, curAnim.frames.length - 1);
-				finished = (frame == 0);
+				playing = (frame != 0);
 			} else {
 				frame = boundFunc(frame + 1, 0, curAnim.frames.length - 1);
-				finished = (frame > curAnim.frames.length - 1);
+				playing = (frame < curAnim.frames.length - 1);
 			}
+			if(!playing)
+				finished.emit();
+
 			_frameTimer = 0;
 		}
 	}

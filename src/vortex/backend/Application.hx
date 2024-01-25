@@ -2,7 +2,7 @@ package vortex.backend;
 
 #if !macro
 import cpp.UInt64;
-
+import cpp.vm.Gc;
 
 import sdl.SDL;
 import sdl.Types;
@@ -59,7 +59,9 @@ class Application {
 		}
 
 		window = new Window(meta.window.title, new Vector2i(WindowPos.CENTERED, WindowPos.CENTERED), new Vector2i().copyFrom(meta.window.size));
+		
 		RenderingServer.init();
+		Engine.init();
 	}
 
 	public function startEventLoop() {
@@ -91,6 +93,14 @@ class Application {
 					RenderingServer.present(window);
 				}
 			}
+
+			// past cube: hxcpp is coded weirdly enough to where
+			// this might prevent gc blowups while keeping decent fps
+			// future cube: yeah the memory usage stays good while
+			// fps stays at like over 1000 on my pc i think we good
+			// this is stupid but it works for some reason
+			Gc.run(true);
+			Gc.run(false);
 		}
 		
 		RenderingServer.dispose();

@@ -65,6 +65,11 @@ class Run {
 			name: "test",
 			description: "Build and run a Vortex project.",
 			method: buildProj.bind(true)
+		},
+		{
+			name: "run",
+			description: "Run a Vortex project.",
+			method: runProj
 		}
 	];
 
@@ -108,7 +113,7 @@ class Run {
 
 		if (!FileSystem.exists('${curDir}project.cfg')) {
 			Debug._coloredPrint(RED, "[ ERROR ]");
-			Sys.print(" A project.cfg file couldn't be found in the current directory.");
+			Sys.print(" A project.cfg file couldn't be found in the current directory.\r\n");
 			return;
 		}
 		final args:Array<String> = [];
@@ -134,17 +139,32 @@ class Run {
 		Sys.setCwd(curDir);
 		final compileError:Int = Sys.command('haxe ${args.join(" ")}');
 
-		if(runAfterBuild && compileError == 0) {
-			if(Sys.systemName() == "Windows") { // Windows
-				final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, '${mainCl}.exe']));
-				if(FileSystem.exists(exec))
-					Sys.command('"${exec}"');
-			} else { // Linux/MacOS (Maybe BSD too, I forgot how BSD works)
-				final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir]));
-				if(FileSystem.exists(exec)) {
-					Sys.setCwd(exec);
-					Sys.command('"./${mainCl}"');
-				}
+		if(runAfterBuild && compileError == 0)
+			runProj();
+	}
+
+	static function runProj() {
+        final sysArgs:Array<String> = Sys.args();
+        final curDir:String = sysArgs[sysArgs.length - 1];
+
+		if (!FileSystem.exists('${curDir}project.cfg')) {
+			Debug._coloredPrint(RED, "[ ERROR ]");
+			Sys.print(" A project.cfg file couldn't be found in the current directory.\r\n");
+			return;
+		}
+		final cfg:ProjectInfo = CFGParser.parse(File.getContent('${curDir}project.cfg'));
+		final mainCl:String = cfg.source.main.substring(cfg.source.main.lastIndexOf(".") + 1, cfg.source.main.length);
+
+		Sys.setCwd(curDir);
+		if(Sys.systemName() == "Windows") { // Windows
+			final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, '${mainCl}.exe']));
+			if(FileSystem.exists(exec))
+				Sys.command('"${exec}"');
+		} else { // Linux/MacOS (Maybe BSD too, I forgot how BSD works)
+			final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir]));
+			if(FileSystem.exists(exec)) {
+				Sys.setCwd(exec);
+				Sys.command('"./${mainCl}"');
 			}
 		}
 	}

@@ -182,10 +182,24 @@ class Color {
 	 * Returns a new `Color`.
 	 */
 	public function new(r:Float = 0, g:Float = 0, b:Float = 0, a:Float = 1) {
+		set(r, g, b, a);
+	}
+
+	/**
+	 * Sets the RGBA components of this color to any
+	 * values specified.
+	 * 
+	 * @param r  The new value for the red component.
+	 * @param g  The new value for the green component.
+	 * @param b  The new value for the blue component.
+	 * @param a  The new value for the alpha component.
+	 */
+	public function set(r:Float = 0, g:Float = 0, b:Float = 0, a:Float = 1) {
 		this.r = r;
 		this.g = g;
 		this.b = b;
 		this.a = a;
+		return this;
 	}
 
 	/**
@@ -280,6 +294,10 @@ class Color {
 		b = color.b;
 		a = color.a;
 		return this;
+	}
+
+	public function toString():String {
+		return '[ Color | R: ${r}, G: ${g}, B: ${b}, A: ${a} ]';
 	}
 
 	// ##==-------------------------------------------------==## //

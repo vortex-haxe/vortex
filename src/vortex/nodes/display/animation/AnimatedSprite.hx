@@ -17,8 +17,6 @@ import vortex.utils.math.Matrix4x4;
 
 /**
  * A basic sprite class that can render animations.
- * 
- * TODO: cliprect
  */
 class AnimatedSprite extends Node2D {
 	/**
@@ -122,19 +120,20 @@ class AnimatedSprite extends Node2D {
     private function prepareShaderVars(shader:Shader, fram:AnimationFrame) {
         _trans.reset(1.0);
         
-        _vec2.set((_clipRectUVCoords.z - _clipRectUVCoords.x) * frames.texture.size.x * scale.x, (_clipRectUVCoords.w - _clipRectUVCoords.y) * frames.texture.size.y * scale.y);
+        _vec2.set((_clipRectUVCoords.z - _clipRectUVCoords.x) * frames.texture.size.x, (_clipRectUVCoords.w - _clipRectUVCoords.y) * frames.texture.size.y);
         _trans.scale(_vec3.set(_vec2.x, _vec2.y, 1.0));
-		_vec2.set(fram.marginSize.x * scale.x, fram.marginSize.y * scale.y);
         
         if (fram.angle != 0.0) {
-            _trans.rotate270Z(); // TODO: work on all angles
-            _trans.translate(_vec3.set(0, fram.size.x * scale.y, 0));
+			_trans.rotate270Z(); // TODO: work on all angles
+            _trans.translate(_vec3.set(0, fram.size.x, 0));
         }
+		_trans.scale(_vec3.set(scale.x, scale.y, 1.0));
         
+		_vec2.set(fram.marginSize.x * scale.x, fram.marginSize.y * scale.y);
 		_trans.translate(_vec3.set(fram.offset.x * scale.x, fram.offset.y * scale.y, 0.0));
         if (angle != 0.0) {
             _trans.translate(_vec3.set(-origin.x * _vec2.x, -origin.y * _vec2.y, 0.0));
-            _trans.radRotate(angle, Vector3.AXIS_Z);
+            _trans.radRotate(angle, _vec3.set(0, 0, 1)); // preventing memory from exploding
             _trans.translate(_vec3.set(origin.x * _vec2.x, origin.y * _vec2.y, 0.0));
         }
 		

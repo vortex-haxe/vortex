@@ -28,17 +28,11 @@ enum TickMode {
 }
 
 /**
- * A basic game object to base things such as Players, Enemies, etc off of.
+ * A simple game object to base things such as Players, Enemies, etc off of.
  * 
  * Nodes can have children nodes within them.
  */
-class Node implements IDisposable {
-    /**
-     * Whether or not this object has been
-     * disposed.
-     */
-	public var disposed:Bool = false;
-
+class Node extends Object {
 	/**
 	 * The parent node this node belongs to.
 	 */
@@ -62,7 +56,9 @@ class Node implements IDisposable {
 	/**
 	 * Makes a new `Node`.
 	 */
-	public function new() {}
+	public function new() {
+		super();
+	}
 
 	/**
 	 * Called when this node is finished initializing internally.
@@ -93,6 +89,7 @@ class Node implements IDisposable {
 			return;
 		}
 		node.parent = this;
+		node.ready();
 		_children.push(node);
 	}
 
@@ -113,6 +110,7 @@ class Node implements IDisposable {
 			return;
 		}
 		node.parent = this;
+		node.ready();
 		_children.insert(index, node);
 	}
 
@@ -140,7 +138,7 @@ class Node implements IDisposable {
 		var i:Int = 0;
 		while(i < _children.length) {
 			final child:Node = _children[i++];
-			if(child != null) {
+			if(child != null && !child.disposed) {
 				final canChildUpdate:Bool = child.tickMode != NEVER && (child.tickMode == ALWAYS || (child.tickMode == PAUSABLE && !Engine.paused));
 				final canParentUpdate:Bool = (child.tickMode == INHERIT && tickMode != NEVER && (tickMode == ALWAYS || (tickMode == PAUSABLE && !Engine.paused)));
 				if(canChildUpdate || canParentUpdate)
@@ -161,7 +159,7 @@ class Node implements IDisposable {
 		var i:Int = 0;
 		while(i < _children.length) {
 			final child:Node = _children[i++];
-			if(child != null && child.visible)
+			if(child != null && child.visible && !child.disposed)
 				child.drawAll();
 		}
 		draw();
@@ -175,7 +173,7 @@ class Node implements IDisposable {
 	 * 
 	 * @param delta  The time between the last frame in seconds.
 	 */
-	public function tick(delta:Float):Void {}
+	override function tick(delta:Float):Void {}
 
 	/**
 	 * Called when this node is drawing internally.
@@ -183,13 +181,13 @@ class Node implements IDisposable {
 	 * Draw your own stuff in here if you need to,
 	 * just make sure to call `super.draw()` before-hand!
 	 */
-	public function draw():Void {}
+	override function draw():Void {}
 
 	/**
 	 * Disposes of this node and removes it's
 	 * properties from memory.
 	 */
-	public function dispose():Void {
+	override function dispose():Void {
 		if(!disposed) {
 			var i:Int = 0;
 			while(i < _children.length) {
@@ -198,7 +196,7 @@ class Node implements IDisposable {
 					child.dispose();
 			}
 		}
-		disposed = true;
+		super.dispose();
 	}
 
 	// -------- //
