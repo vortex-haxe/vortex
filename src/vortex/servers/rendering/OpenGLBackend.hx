@@ -62,7 +62,7 @@ class OpenGLBackend extends IRenderingBackendImpl {
 	 * Clears whatever is on-screen currently.
 	 */
 	public static function clear(window:Window):Void {
-		SDL.glMakeCurrent(window._nativeWindow, window._glContext);
+		DisplayServer.useWindowContext(window._nativeWindow);
 		Glad.clear(Glad.COLOR_BUFFER_BIT);
 
 		defaultShader = window._defaultShader;
@@ -86,7 +86,7 @@ class OpenGLBackend extends IRenderingBackendImpl {
 	 * Presents/renders whatever is on-screen currently.
 	 */
 	public static function present(window:Window):Void {
-		SDL.glSwapWindow(window._nativeWindow);
+		DisplayServer.present(window._nativeWindow);
 	}
 
 	/**

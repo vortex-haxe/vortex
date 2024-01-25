@@ -1,5 +1,8 @@
 package vortex.servers.display;
 
+import vortex.servers.DisplayServer.IWindowData;
+import glad.Glad;
+import vortex.backend.Application;
 import vortex.utils.math.Vector2i;
 import vortex.servers.DisplayServer.IDisplayBackendImpl;
 
@@ -12,12 +15,18 @@ import sdl.Types.WindowInitFlags;
 import sdl.Types.Window;
 import sdl.Types.GlContext;
 
-typedef WindowData = {
-	var nativeWindow:Window;
-	var glContext:GlContext;
+// this was going to be a typedef but you can't do that cuz weird hxcpp stuff :(
+class SDLGLWindowData implements IWindowData {
+	public var window:Any;
+	public var context:Any;
+
+	public function new(nativeWindow:Window, glContext:GlContext) {
+		this.window = nativeWindow;
+		this.context = glContext;
+	}
 }
 
-class SDLGLBackend extends IDisplayBackendImpl<WindowData> {
+class SDLGLBackend extends IDisplayBackendImpl {
     /**
 	 * Initializes this display backend.
 	 */
@@ -31,7 +40,7 @@ class SDLGLBackend extends IDisplayBackendImpl<WindowData> {
     /**
      * Creates a window with SDL and initializes an OpenGL Core 3.3 context with it.
      */
-    public static function createWindow(title:String, position:Vector2i, size:Vector2i):WindowData {
+    public static function createWindow(title:String, position:Vector2i, size:Vector2i):SDLGLWindowData {
 		var wFlags:WindowInitFlags = OPENGL;
 		if (Application.self.meta.window.resizable)
 			wFlags |= RESIZABLE;
@@ -41,10 +50,7 @@ class SDLGLBackend extends IDisplayBackendImpl<WindowData> {
 
 		var nativeWindow:Window = SDL.createWindow(title, position.x, position.y, size.x, size.y, wFlags);
 		var glContext:GlContext = SDL.glCreateContext(nativeWindow);
-		var returnData:WindowData = {
-			nativeWindow: nativeWindow,
-			glContext: glContext
-		};
+		var returnData:SDLGLWindowData = new SDLGLWindowData(nativeWindow, glContext);
 		
 		SDL.glMakeCurrent(nativeWindow, glContext);
 		SDL.glSetSwapInterval(0);
@@ -55,32 +61,39 @@ class SDLGLBackend extends IDisplayBackendImpl<WindowData> {
 	}
 
 	/**
+     * TODO: Add this description lol.
+     */
+	public static function useWindowContext(window:SDLGLWindowData):Void {
+		SDL.glMakeCurrent(window.window, window.context);
+	}
+
+	/**
 	 * Presents/renders whatever is on-screen currently.
 	 */
-	public static function present(window:WindowData):Void {
-		SDL.glSwapWindow(window.nativeWindow);
+	public static function present(window:SDLGLWindowData):Void {
+		SDL.glSwapWindow(window.window);
 	}
 
 	/**
 	 * TODO: Add this description lol.
 	 */
-	public static function setWindowPosition(window:WindowData, position:Vector2i):Void {
-		SDL.setWindowPosition(window.nativeWindow, position.x, position.y);
+	public static function setWindowPosition(window:SDLGLWindowData, position:Vector2i):Void {
+		SDL.setWindowPosition(window.window, position.x, position.y);
 	}
 
 	/**
 	 * TODO: Add this description lol.
 	 */
-	public static function setWindowSize(window:WindowData, size:Vector2i):Void {
-		SDL.setWindowSize(window.nativeWindow, size.x, size.y);
+	public static function setWindowSize(window:SDLGLWindowData, size:Vector2i):Void {
+		SDL.setWindowSize(window.window, size.x, size.y);
 	}
 
 	/**
 	 * TODO: Add this description lol.
 	 */
-	public static function disposeWindow(window:WindowData):Void {
-		SDL.glDeleteContext(window.glContext);
-		SDL.destroyWindow(window.nativeWindow);
+	public static function disposeWindow(window:SDLGLWindowData):Void {
+		SDL.glDeleteContext(window.context);
+		SDL.destroyWindow(window.window);
 	}
 
 	/**

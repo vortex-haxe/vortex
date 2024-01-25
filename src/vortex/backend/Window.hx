@@ -1,5 +1,7 @@
 package vortex.backend;
 
+import vortex.servers.DisplayServer;
+import vortex.servers.DisplayServer.IWindowData;
 import vortex.utils.generic.Signal;
 import cpp.Pointer;
 import cpp.UInt32;
@@ -89,21 +91,14 @@ class Window extends Node {
 		@:bypassAccessor this.size = size;
 		initialSize = new Vector2i().copyFrom(size);
 
-		var wFlags:WindowInitFlags = OPENGL;
-		if(Application.self.meta.window.resizable)
-			wFlags |= RESIZABLE;
+		_nativeWindow = DisplayServer.createWindow(title, position, size);
 
-		if(Application.self.meta.window.borderless)
-			wFlags |= BORDERLESS;
+		// TODO: replace this stuff with an abstraction of quad rendering basically
+		// that's what we're gonna do for renderingserver for now i think
 
-		_nativeWindow = SDL.createWindow(title, position.x, position.y, size.x, size.y, wFlags);
-		_glContext = SDL.glCreateContext(_nativeWindow);
+		// also need to do shaders and stuff but yeah, we're gonna have a lot of
+		// abstracted and generalized types in the rendering and display servers :)
 		
-		SDL.glMakeCurrent(_nativeWindow, _glContext);
-		SDL.glSetSwapInterval(0);
-
-		Glad.loadGLLoader(untyped __cpp__("SDL_GL_GetProcAddress"));
-
 		Glad.genVertexArrays(1, Pointer.addressOf(_VAO));
         Glad.bindVertexArray(_VAO);
 
@@ -143,10 +138,10 @@ class Window extends Node {
 
 		@:privateAccess {
 			this.position._onChange = (x:Int, y:Int) -> {
-				SDL.setWindowPosition(_nativeWindow, x, y);
+				DisplayServer.setWindowPosition(_nativeWindow, new Vector2i(x, y));
 			};
 			this.size._onChange = (x:Int, y:Int) -> {
-				SDL.setWindowSize(_nativeWindow, x, y);
+				DisplayServer.setWindowSize(_nativeWindow, new Vector2i(x, y));
 			};
 		}
 
@@ -210,11 +205,12 @@ class Window extends Node {
 	override function dispose():Void {
 		if(!disposed) {
 			Application.self.windows.remove(this);
+
 			Glad.deleteVertexArrays(1, Pointer.addressOf(_VAO));
 			Glad.deleteBuffers(1, Pointer.addressOf(_VBO));
-			Glad.genBuffers(1, Pointer.addressOf(_EBO));
-			SDL.glDeleteContext(_glContext);
-			SDL.destroyWindow(_nativeWindow);
+			Glad.deleteBuffers(1, Pointer.addressOf(_EBO));
+
+			DisplayServer.disposeWindow(_nativeWindow);
 		}
 		disposed = true;
 	}
@@ -231,10 +227,9 @@ class Window extends Node {
 	// ------------------ //
 	// SDL
 	private static var _ev:Event;
-	private var _nativeWindow:NativeWindow;
+	private var _nativeWindow:IWindowData;
 
 	// GL
-	private var _glContext:GlContext;
 	private var _VAO:UInt32;
 	private var _VBO:UInt32;
 	private var _EBO:UInt32;

@@ -14,6 +14,9 @@ import vortex.utils.generic.CFGParser;
 import vortex.utils.engine.Project.ProjectInfo;
 import vortex.utils.math.Vector2i;
 
+import sdl.SDL;
+import sdl.Types.WindowPos;
+
 /**
  * The very base of your games!
  */
