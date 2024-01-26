@@ -103,7 +103,6 @@ class Application {
 		
 		RenderingServer.dispose();
 		window.dispose();
-
 		DisplayServer.dispose();
 	}
 }

@@ -1,5 +1,14 @@
 package vortex.servers;
 
+import cpp.ConstCharStar;
+import vortex.resources.SpriteFrames.AnimationFrame;
+import vortex.resources.Shader;
+import vortex.utils.math.Matrix4x4;
+import vortex.utils.math.Vector4;
+import vortex.utils.math.Vector3;
+import vortex.utils.math.Vector2;
+import vortex.utils.math.Rectangle;
+import vortex.utils.math.Vector2i;
 import vortex.backend.Application;
 import vortex.backend.Window;
 import vortex.backend.interfaces.IServer;
@@ -9,56 +18,105 @@ import vortex.servers.rendering.*;
 import vortex.utils.engine.Color;
 import vortex.utils.math.Rectanglei;
 
-enum RenderingBackend {
-	/**
-	 * The OpenGL rendering backend.
-	 * Supports shaders and older GPUs and may run better than the SDL backend.
-	 */
-	OPENGL_BACKEND;
-
-	/**
-	 * The Vulkan rendering backend.
-	 * Supports new GPUs better and may run better than SDL and OpenGL.
-	 * 
-	 * TODO: implement me after 1.0.0!
-	 */
-	VULKAN_BACKEND;
-
-	/**
-	 * The SDL rendering backend.
-	 * This is a fallback renderer and lacks shader support.
-	 * 
-	 * TODO: implement me!
-	 */
-	SDL_BACKEND;
+interface IShaderData {
+	public var shader:Any;
 }
 
-class IRenderingBackendImpl {
+interface IQuadRenderer {
+	public var texture:Any;
+	public var shader:IShaderData;
+	public var projection:Matrix4x4;
+
+	public function drawColor(position:Vector2, size:Vector2, color:Color):Void;
+	public function drawTexture(position:Vector2, size:Vector2, modulate:Color, sourceRect:Vector4, origin:Vector2, angle:Float):Void;
+	public function drawFrame(position:Vector2, frame:AnimationFrame, size:Vector2, scale:Vector2, modulate:Color, sourceRect:Vector4, origin:Vector2, angle:Float):Void;
+
+	public function dispose():Void;
+}
+
+class RenderingBackend {
+	public var quadRenderer:IQuadRenderer;
+	public var defaultShader:Shader;
+
+	public function new() {}
+
 	/**
 	 * Initializes this rendering backend.
 	 */
-	public static function init():Void {}
+	public function init():Void {}
 
 	/**
 	 * Sets the values of the current viewport rectangle.
 	 */
-	public static function setViewportRect():Void {}
+	public function setViewportRect(rect:Rectanglei):Void {}
 
 	/**
 	 * Clears whatever is on-screen currently.
 	 */
-	public static function clear(window:Window):Void {}
+	public function clear(window:Window):Void {}
 
 	/**
 	 * Presents/renders whatever is on-screen currently.
 	 */
-	public static function present(window:Window):Void {}
+	public function present(window:Window):Void {}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public function createShader(fragmentSource:ConstCharStar, vertexSource:ConstCharStar):IShaderData {
+		return null;
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public function useShader(shader:IShaderData):Void {}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public function disposeShader(shader:IShaderData):Void {}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public function setUniformInt(shader:IShaderData, name:ConstCharStar, value:Int):Void {}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public function setUniformFloat(shader:IShaderData, name:ConstCharStar, value:Float):Void {}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public function setUniformVec2(shader:IShaderData, name:ConstCharStar, value:Vector2):Void {}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public function setUniformVec3(shader:IShaderData, name:ConstCharStar, value:Vector3):Void {}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public function setUniformVec4(shader:IShaderData, name:ConstCharStar, value:Vector4):Void {}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public function setUniformColor(shader:IShaderData, name:ConstCharStar, value:Color):Void {}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public function setUniformMat4x4(shader:IShaderData, name:ConstCharStar, value:Matrix4x4):Void {}
 
 	/**
 	 * Disposes of this rendering backend and removes it's
 	 * properties from memory.
 	 */
-	public static function dispose():Void {}
+	public function dispose():Void {}
 }
 
 class RenderingServer extends IServer {
@@ -74,7 +132,7 @@ class RenderingServer extends IServer {
 	 * - `VULKAN` - The modern backend, supports shaders and runs better, but doesn't work on older GPUs.
 	 * - `SDL` - The limited backend, doesn't support shaders but works on basically any GPU. 
 	 */
-	public static var backend:RenderingBackend = OPENGL_BACKEND;
+	public static var backend:RenderingBackend = new OpenGLBackend();
 
 	/**
 	 * The default color displayed on an empty window.
@@ -91,44 +149,98 @@ class RenderingServer extends IServer {
 		clearColor = new Color().copyFrom(Application.self.meta.engine.clear_color);
 		
 		// Initialize the actual backend
-		switch(backend) {
-			case OPENGL_BACKEND: OpenGLBackend.init();
-			case VULKAN_BACKEND: VulkanBackend.init();
-			case SDL_BACKEND:    SDLBackend.init();
-		}
+		backend.init();
 	}
 
 	/**
 	 * Sets the values of the current viewport rectangle.
 	 */
 	public static function setViewportRect(rect:Rectanglei):Void {
-		switch(backend) {
-			case OPENGL_BACKEND: OpenGLBackend.setViewportRect(rect);
-			case VULKAN_BACKEND: VulkanBackend.setViewportRect(rect);
-			case SDL_BACKEND:    SDLBackend.setViewportRect(rect);
-		}
+		backend.setViewportRect(rect);
 	}
 
 	/**
 	 * Clears whatever is on-screen currently.
 	 */
 	public static function clear(window:Window):Void {
-		switch(backend) {
-			case OPENGL_BACKEND: OpenGLBackend.clear(window);
-			case VULKAN_BACKEND: VulkanBackend.clear(window);
-			case SDL_BACKEND:    SDLBackend.clear(window);
-		}
+		backend.clear(window);
 	}
  
 	/**
 	 * Presents/renders whatever is on-screen currently.
 	 */
 	public static function present(window:Window):Void {
-		switch(backend) {
-			case OPENGL_BACKEND: OpenGLBackend.present(window);
-			case VULKAN_BACKEND: VulkanBackend.present(window);
-			case SDL_BACKEND:    SDLBackend.present(window);
-		}
+		backend.present(window);
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public static function createShader(fragmentSource:String, vertexSource:String):IShaderData {
+		return backend.createShader(fragmentSource, vertexSource);
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public static function useShader(shader:IShaderData):Void {
+		backend.useShader(shader);
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public static function disposeShader(shader:IShaderData):Void {
+		backend.disposeShader(shader);
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public static function setUniformInt(shader:IShaderData, name:String, value:Int):Void {
+		backend.setUniformInt(shader, name, value);
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public static function setUniformFloat(shader:IShaderData, name:String, value:Float):Void {
+		backend.setUniformFloat(shader, name, value);
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public static function setUniformVec2(shader:IShaderData, name:String, value:Vector2):Void {
+		backend.setUniformVec2(shader, name, value);
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public static function setUniformVec3(shader:IShaderData, name:String, value:Vector3):Void {
+		backend.setUniformVec3(shader, name, value);
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public static function setUniformVec4(shader:IShaderData, name:String, value:Vector4):Void {
+		backend.setUniformVec4(shader, name, value);
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public static function setUniformColor(shader:IShaderData, name:String, value:Color):Void {
+		backend.setUniformColor(shader, name, value);
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public static function setUniformMat4x4(shader:IShaderData, name:String, value:Matrix4x4):Void {
+		backend.setUniformMat4x4(shader, name, value);
 	}
 
 	/**
@@ -136,10 +248,6 @@ class RenderingServer extends IServer {
 	 * properties from memory.
 	 */
 	public static function dispose():Void {
-		switch(backend) {
-			case OPENGL_BACKEND: OpenGLBackend.dispose();
-			case VULKAN_BACKEND: VulkanBackend.dispose();
-			case SDL_BACKEND:    SDLBackend.dispose();
-		}
+		backend.dispose();
 	}
 }

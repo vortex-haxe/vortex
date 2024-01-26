@@ -1,5 +1,7 @@
 package vortex.resources;
 
+import vortex.servers.RenderingServer;
+import vortex.servers.RenderingServer.IShaderData;
 import sys.io.File;
 import sys.FileSystem;
 
@@ -52,7 +54,7 @@ class Shader extends RefCounted {
 		}
 	";
 
-	private var programID:UInt32;
+	private var shaderData:IShaderData;
 
 	/**
 	 * Makes a new `Shader` based on the
@@ -60,87 +62,44 @@ class Shader extends RefCounted {
 	 */
 	public function new(?frag:String, ?vert:String) {
 		super();
+		
 		var fragContent = ConstCharStar.fromString(FRAGMENT_PREFIX + ((frag != null && FileSystem.exists(frag)) ? File.getContent(frag) : (frag != null && frag.trim().length > 0) ? frag : FRAGMENT_DEFAULT));
 		var vertContent = ConstCharStar.fromString(VERTEX_PREFIX + ((vert != null && FileSystem.exists(vert)) ? File.getContent(vert) : (vert != null && vert.trim().length > 0) ? vert : VERTEX_DEFAULT));
-		var success:Int = 0;
-
-		var vertID:UInt32 = Glad.createShader(Glad.VERTEX_SHADER);
-		Glad.shaderSource(vertID, 1, Helpers.tempPointer(vertContent), null);
-		Glad.compileShader(vertID);
-		Glad.getShaderiv(vertID, Glad.COMPILE_STATUS, Pointer.addressOf(success));
-
-		if (success == 0) {
-			var infoLog:cpp.Star<cpp.Char> = Helpers.malloc(1024, cpp.Char);
-			Glad.getShaderInfoLog(vertID, 1024, null, infoLog);
-			Helpers.nativeTrace("Failed to load Vertex Shader.\n%s\n", infoLog);
-			Helpers.free(infoLog);
-		}
-
-		var fragID:UInt32 = Glad.createShader(Glad.FRAGMENT_SHADER);
-		Glad.shaderSource(fragID, 1, Helpers.tempPointer(fragContent), null);
-		Glad.compileShader(fragID);
-		Glad.getShaderiv(fragID, Glad.COMPILE_STATUS, Pointer.addressOf(success));
-
-		if (success == 0) {
-			var infoLog:cpp.Star<cpp.Char> = Helpers.malloc(1024, cpp.Char);
-			Glad.getShaderInfoLog(fragID, 1024, null, infoLog);
-			Helpers.nativeTrace("Failed to load Fragment Shader.\n%s\n", infoLog);
-			Helpers.free(infoLog);
-		}
-
-		programID = Glad.createProgram();
-		Glad.attachShader(programID, vertID);
-		Glad.attachShader(programID, fragID);
-		Glad.linkProgram(programID);
-		Glad.getProgramiv(programID, Glad.LINK_STATUS, Pointer.addressOf(success));
-
-		if (success == 0) {
-			var infoLog:cpp.Star<cpp.Char> = Helpers.malloc(1024, cpp.Char);
-			Glad.getProgramInfoLog(programID, 1024, null, infoLog);
-			Helpers.nativeTrace("Failed to link Shader Program.\n%s\n", infoLog);
-			Helpers.free(infoLog);
-		}
-
-		Glad.deleteShader(vertID);
-		Glad.deleteShader(fragID);
-
-		Glad.useProgram(programID);
-		setUniformMat4x4("PROJECTION", Application.self.window._projection);
+		
+		shaderData = RenderingServer.createShader(fragContent, vertContent);
+		useProgram();
 	}
 
-	private function useProgram() {
-		Glad.useProgram(programID);
+	private function useProgram():Void {
+		RenderingServer.useShader(shaderData);
 	}
 
-	public inline function setUniformInt(name:ConstCharStar, value:Int) {
-		untyped __cpp__("glUniform1i(glGetUniformLocation({0}, {1}), {2})", programID, name, value);
+	public function setUniformInt(name:ConstCharStar, value:Int):Void {
+		RenderingServer.setUniformInt(shaderData, name, value);
 	}
 
-	public inline function setUniformFloat(name:ConstCharStar, value:Float) {
-		untyped __cpp__("glUniform1f(glGetUniformLocation({0}, {1}), {2})", programID, name, value);
+	public function setUniformFloat(name:ConstCharStar, value:Float) {
+		RenderingServer.setUniformFloat(shaderData, name, value);
 	}
 
-	public inline function setUniformVec2(name:ConstCharStar, value:Vector2) {
-		untyped __cpp__("glUniform2f(glGetUniformLocation({0}, {1}), {2}, {3})", programID, name, value.x, value.y);
+	public function setUniformVec2(name:ConstCharStar, value:Vector2) {
+		RenderingServer.setUniformVec2(shaderData, name, value);
 	}
 
-	public inline function setUniformVec3(name:ConstCharStar, value:Vector3) {
-		untyped __cpp__("glUniform3f(glGetUniformLocation({0}, {1}), {2}, {3}, {4})", programID, name, value.x, value.y, value.z);
+	public function setUniformVec3(name:ConstCharStar, value:Vector3) {
+		RenderingServer.setUniformVec3(shaderData, name, value);
 	}
 
-	public inline function setUniformVec4(name:ConstCharStar, value:Vector4) {
-		untyped __cpp__("glUniform4f(glGetUniformLocation({0}, {1}), {2}, {3}, {4}, {5})", programID, name, value.x, value.y, value.z, value.w);
+	public function setUniformVec4(name:ConstCharStar, value:Vector4) {
+		RenderingServer.setUniformVec4(shaderData, name, value);
 	}
 
-	public inline function setUniformColor(name:ConstCharStar, value:Color) {
-		untyped __cpp__("glUniform4f(glGetUniformLocation({0}, {1}), {2}, {3}, {4}, {5})", programID, name, value.r, value.g, value.b, value.a);
+	public function setUniformColor(name:ConstCharStar, value:Color) {
+		RenderingServer.setUniformColor(shaderData, name, value);
 	}
 
-	public inline function setUniformMat4x4(name:ConstCharStar, value:Matrix4x4) {
-		untyped __cpp__("
-			float* _star = {0};
-			glUniformMatrix4fv(glGetUniformLocation({1}, {2}), 1, GL_FALSE, _star);
-			free(_star)", value.toStar(), this.programID, name);
+	public function setUniformMat4x4(name:ConstCharStar, value:Matrix4x4) {
+		RenderingServer.setUniformMat4x4(shaderData, name, value);
 	}
 
 	/**
@@ -148,8 +107,10 @@ class Shader extends RefCounted {
 	 * properties from memory.
 	 */
 	override function dispose():Void {
-		if(!disposed)
-			Glad.deleteProgram(programID);
+		trace('Dispose shader #' + shaderData.shader);
+
+		if (!disposed)
+			RenderingServer.disposeShader(shaderData);
 		
 		disposed = true;
 	}

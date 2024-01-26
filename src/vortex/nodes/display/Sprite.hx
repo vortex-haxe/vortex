@@ -1,5 +1,6 @@
 package vortex.nodes.display;
 
+import vortex.servers.RenderingServer;
 import glad.Glad;
 
 import vortex.backend.Application;
@@ -47,15 +48,14 @@ class Sprite extends Node2D {
 		if(texture == null || texture.disposed)
 			return;
 
-		final shader:Shader = this.shader ?? OpenGLBackend.defaultShader;
+		final shader:Shader = this.shader ?? RenderingServer.backend.defaultShader;
+
 		@:privateAccess {
 			shader.useProgram();
-			Glad.activeTexture(Glad.TEXTURE0);
-			Glad.bindTexture(Glad.TEXTURE_2D, texture._glID);
-			Glad.bindVertexArray(OpenGLBackend.curWindow._VAO);
+			RenderingServer.backend.quadRenderer.texture = texture._glID;
 		}
-		prepareShaderVars(shader);
-		Glad.drawElements(Glad.TRIANGLES, 6, Glad.UNSIGNED_INT, 0);
+
+		RenderingServer.backend.quadRenderer.drawTexture(position, size * scale, modulate, _clipRectUVCoords, origin, angle);
 	}
 
 	/**
@@ -70,31 +70,6 @@ class Sprite extends Node2D {
 			_clipRectUVCoords = null;
 		}
 		super.dispose();
-	}
-
-	// -------- //
-	// Privates //
-	// -------- //
-	private static var _trans = new Matrix4x4();
-	private static var _vec2 = new Vector2();
-	private static var _vec3 = new Vector3();
-	
-	private function prepareShaderVars(shader:Shader) {
-		_trans.reset(1.0);
-		
-        _vec2.set((_clipRectUVCoords.z - _clipRectUVCoords.x) * texture.size.x * scale.x, (_clipRectUVCoords.w - _clipRectUVCoords.y) * texture.size.y * scale.y);
-        _trans.scale(_vec3.set(_vec2.x, _vec2.y, 1.0));
-
-        if (angle != 0.0) {
-			_trans.translate(_vec3.set(-origin.x * _vec2.x, -origin.y * _vec2.y, 0.0));
-            _trans.radRotate(angle, _vec3.set(0, 0, 1)); // preventing memory from exploding 
-			_trans.translate(_vec3.set(origin.x * _vec2.x, origin.y * _vec2.y, 0.0));
-        }
-		_trans.translate(_vec3.set(position.x + (-origin.x * _vec2.x), position.y + (-origin.y * _vec2.y), 0.0));
-		
-		shader.setUniformMat4x4("TRANSFORM", _trans);
-		shader.setUniformColor("MODULATE", modulate);
-		shader.setUniformVec4("SOURCE", _clipRectUVCoords);
 	}
 		
 	// -------- //

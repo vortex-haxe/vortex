@@ -93,49 +93,6 @@ class Window extends Node {
 
 		_nativeWindow = DisplayServer.createWindow(title, position, size);
 
-		// TODO: replace this stuff with an abstraction of quad rendering basically
-		// that's what we're gonna do for renderingserver for now i think
-
-		// also need to do shaders and stuff but yeah, we're gonna have a lot of
-		// abstracted and generalized types in the rendering and display servers :)
-		
-		Glad.genVertexArrays(1, Pointer.addressOf(_VAO));
-        Glad.bindVertexArray(_VAO);
-
-        Glad.genBuffers(1, Pointer.addressOf(_VBO));
-        Glad.bindBuffer(Glad.ARRAY_BUFFER, _VBO);
-        Glad.bufferFloatArray(Glad.ARRAY_BUFFER, OpenGLBackend.VERTICES, Glad.STATIC_DRAW, 16);
-
-        Glad.genBuffers(1, Pointer.addressOf(_EBO));
-
-        Glad.bindBuffer(Glad.ELEMENT_ARRAY_BUFFER, _EBO);
-        Glad.bufferIntArray(Glad.ELEMENT_ARRAY_BUFFER, OpenGLBackend.INDICES, Glad.STATIC_DRAW, 6);
-
-		_projection = Matrix4x4.ortho(0, initialSize.x, initialSize.y, 0, -1, 1);
-
-		final _oldWindow = Application.self.window;
-		Application.self.window = this;
-		
-		_defaultShader = new Shader(
-			Shader.FRAGMENT_DEFAULT,
-			Shader.VERTEX_DEFAULT
-		);
-		_colorRectShader = new Shader(
-			"void main() {
-				COLOR = MODULATE;
-			}",
-			Shader.VERTEX_DEFAULT
-		);
-		Application.self.window = _oldWindow;
-
-		_defaultShader.useProgram();
-
-        Glad.vertexFloatAttrib(0, 4, Glad.FALSE, 4, 0);
-        Glad.enableVertexAttribArray(0);
-
-        Glad.enable(Glad.BLEND);
-        Glad.blendFunc(Glad.SRC_ALPHA, Glad.ONE_MINUS_SRC_ALPHA);
-
 		@:privateAccess {
 			this.position._onChange = (x:Int, y:Int) -> {
 				DisplayServer.setWindowPosition(_nativeWindow, new Vector2i(x, y));
@@ -205,11 +162,6 @@ class Window extends Node {
 	override function dispose():Void {
 		if(!disposed) {
 			Application.self.windows.remove(this);
-
-			Glad.deleteVertexArrays(1, Pointer.addressOf(_VAO));
-			Glad.deleteBuffers(1, Pointer.addressOf(_VBO));
-			Glad.deleteBuffers(1, Pointer.addressOf(_EBO));
-
 			DisplayServer.disposeWindow(_nativeWindow);
 		}
 		disposed = true;
@@ -227,15 +179,9 @@ class Window extends Node {
 	// ------------------ //
 	// SDL
 	private static var _ev:Event;
-	private var _nativeWindow:IWindowData;
 
-	// GL
-	private var _VAO:UInt32;
-	private var _VBO:UInt32;
-	private var _EBO:UInt32;
-	private var _projection:Matrix4x4;
-	private var _defaultShader:Shader;
-	private var _colorRectShader:Shader;
+	// rendering
+	private var _nativeWindow:IWindowData;
 
 	// Vortex
 	private static var _recti:Rectanglei = new Rectanglei();

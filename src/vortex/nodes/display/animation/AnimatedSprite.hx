@@ -1,5 +1,6 @@
 package vortex.nodes.display.animation;
 
+import vortex.servers.RenderingServer;
 import glad.Glad;
 
 import vortex.backend.Application;
@@ -72,14 +73,14 @@ class AnimatedSprite extends Node2D {
 	override function draw() {
 		if(animation.curAnim == null)
 			return;
-		
-		final shader:Shader = this.shader ?? OpenGLBackend.defaultShader;
+
+		final shader:Shader = this.shader ?? RenderingServer.backend.defaultShader;
+
 		@:privateAccess {
 			shader.useProgram();
-			Glad.activeTexture(Glad.TEXTURE0);
-			Glad.bindTexture(Glad.TEXTURE_2D, frames.texture._glID);
-			Glad.bindVertexArray(OpenGLBackend.curWindow._VAO);
+			RenderingServer.backend.quadRenderer.texture = frames.texture._glID;
 		}
+
 		// not the cleanest code ever, but it does the job -cube
 		final fram = animation.curAnim.frames[animation.frame];
 		final sourceWidth = (clipRect == null) ? fram.size.x : clipRect.width;
@@ -90,8 +91,8 @@ class AnimatedSprite extends Node2D {
 			(fram.position.x + (clipRect?.x ?? 0) + sourceWidth) / frames.texture.size.x,
 			(fram.position.y + (clipRect?.y ?? 0) + sourceHeight) / frames.texture.size.y, 
 		);
-		prepareShaderVars(shader, fram);
-		Glad.drawElements(Glad.TRIANGLES, 6, Glad.UNSIGNED_INT, 0);
+
+		RenderingServer.backend.quadRenderer.drawFrame(position, fram, frames.texture.size, scale, modulate, _clipRectUVCoords, origin, angle);
 	}
 
 	/**
