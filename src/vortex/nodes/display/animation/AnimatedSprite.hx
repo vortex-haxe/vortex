@@ -78,7 +78,7 @@ class AnimatedSprite extends Node2D {
 
 		@:privateAccess {
 			shader.useProgram();
-			RenderingServer.backend.quadRenderer.texture = frames.texture._glID;
+			RenderingServer.backend.quadRenderer.texture = frames.texture.textureData;
 		}
 
 		// not the cleanest code ever, but it does the job -cube

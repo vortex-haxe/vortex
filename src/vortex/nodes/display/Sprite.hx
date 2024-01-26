@@ -52,7 +52,7 @@ class Sprite extends Node2D {
 
 		@:privateAccess {
 			shader.useProgram();
-			RenderingServer.backend.quadRenderer.texture = texture._glID;
+			RenderingServer.backend.quadRenderer.texture = texture.textureData;
 		}
 
 		RenderingServer.backend.quadRenderer.drawTexture(position, size * scale, modulate, _clipRectUVCoords, origin, angle);

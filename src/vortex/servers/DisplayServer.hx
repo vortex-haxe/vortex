@@ -9,74 +9,64 @@ interface IWindowData {
 	public var context:Any;
 }
 
-enum DisplayBackend {
-    SDL_GL_BACKEND;
+class DisplayBackend {
+    public function new() {}
 
-    // // TODO: Implement this
-    // GLFW_BACKEND;
-
-    // // TODO: Implement this (this would be like, x11 on linux and win32 on windows btw)
-    // NATIVE_BACKEND;
-}
-
-class IDisplayBackendImpl {
 	/**
 	 * Initializes this display backend.
 	 */
-	public static function init():Void {}
+	public function init():Void {}
 
     /**
      * TODO: Add this description lol.
      */
-    public static function createWindow(title:String, position:Vector2i, size:Vector2i):Any {
+    public function createWindow(title:String, position:Vector2i, size:Vector2i):IWindowData {
         return null;
     }
 
     /**
      * TODO: Add this description lol.
      */
-    public static function useWindowContext(window:Any):Void {}
+    public function useWindowContext(window:IWindowData):Void {}
 
 	/**
 	 * Presents/renders whatever is on-screen currently.
 	 */
-	public static function present(window:Any):Void {}
+	public function present(window:IWindowData):Void {}
 
     /**
 	 * TODO: Add this description lol.
 	 */
-	public static function setWindowPosition(window:Any, position:Vector2i):Void {}
+	public function setWindowPosition(window:IWindowData, position:Vector2i):Void {}
 
     /**
 	 * TODO: Add this description lol.
 	 */
-	public static function setWindowSize(window:Any, size:Vector2i):Void {}
+	public function setWindowSize(window:IWindowData, size:Vector2i):Void {}
 
     /**
 	 * TODO: Add this description lol.
 	 */
-	public static function disposeWindow(window:Any):Void {}
+	public function disposeWindow(window:IWindowData):Void {}
 
 	/**
 	 * Disposes of this display backend and removes it's
 	 * objects from memory.
 	 */
-	public static function dispose():Void {}
+	public function dispose():Void {}
 }
 
 class DisplayServer extends IServer {
     /**
      * TODO: Add description.
      */
-    public static var backend:DisplayBackend = SDL_GL_BACKEND;
+    public static var backend:DisplayBackend = new SDLGLBackend();
 
 	/**
 	 * Initializes this display server.
 	 */
 	public static function init():Void {
-        switch (backend) {
-            case SDL_GL_BACKEND: SDLGLBackend.init();
-        }
+        backend.init();
     }
 
     /**
@@ -84,56 +74,42 @@ class DisplayServer extends IServer {
      * TODO: Add flags property and shit for this: EX: uhh resizable idfk
      */
     public static function createWindow(title:String, position:Vector2i, size:Vector2i):IWindowData {
-        switch (backend) {
-            case SDL_GL_BACKEND: return SDLGLBackend.createWindow(title, position, size);
-        }
-
-        return null;
+        return backend.createWindow(title, position, size);
     }
 
     /**
      * TODO: Add this description lol.
      */
-    public static function useWindowContext(window:Any):Void {
-        switch (backend) {
-            case SDL_GL_BACKEND: SDLGLBackend.useWindowContext(cast window);
-        }
+    public static function useWindowContext(window:IWindowData):Void {
+        backend.useWindowContext(window);
     }
 
 	/**
 	 * Presents/renders whatever is on-screen currently.
 	 */
 	public static function present(window:IWindowData):Void {
-        switch (backend) {
-            case SDL_GL_BACKEND: SDLGLBackend.present(cast window);
-        }
+        backend.present(window);
     }
 
     /**
 	 * TODO: Add this description lol.
 	 */
 	public static function setWindowPosition(window:IWindowData, position:Vector2i):Void {
-        switch (backend) {
-            case SDL_GL_BACKEND: SDLGLBackend.setWindowPosition(cast window, position);
-        }
+        backend.setWindowPosition(window, position);
     }
 
     /**
 	 * TODO: Add this description lol.
 	 */
 	public static function setWindowSize(window:IWindowData, size:Vector2i):Void {
-        switch (backend) {
-            case SDL_GL_BACKEND: SDLGLBackend.setWindowPosition(cast window, size);
-        }
+        backend.setWindowSize(window, size);
     }
 
     /**
 	 * TODO: Add this description lol.
 	 */
 	public static function disposeWindow(window:IWindowData):Void {
-        switch (backend) {
-            case SDL_GL_BACKEND: SDLGLBackend.disposeWindow(cast window);
-        }
+        backend.disposeWindow(window);
     }
 
 	/**
@@ -141,8 +117,7 @@ class DisplayServer extends IServer {
 	 * objects from memory.
 	 */
 	public static function dispose():Void {
-        switch (backend) {
-            case SDL_GL_BACKEND: SDLGLBackend.dispose();
-        }
+        backend.dispose();
+        backend = null;
     }
 }

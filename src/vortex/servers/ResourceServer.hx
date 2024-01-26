@@ -14,6 +14,7 @@ import vortex.utils.engine.RefCounted;
 /**
  * A class to easily obtain resources such as textures and sound.
  */
+@:access(vortex.resources.Texture)
 class ResourceServer extends IServer {
 	/**
 	 * Initializes this resource server.
@@ -40,14 +41,7 @@ class ResourceServer extends IServer {
 			tex.size.set(width, height);
 			
 			if (pixels != 0) {
-				var imageFormat = (tex.numChannels == 4) ? Glad.RGBA : Glad.RGB;
-				Glad.texImage2D(Glad.TEXTURE_2D, 0, imageFormat, width, height, 0, imageFormat, Glad.UNSIGNED_BYTE, pixels);
-				Glad.generateMipmap(Glad.TEXTURE_2D);
-
-				Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_WRAP_S, Glad.REPEAT);
-				Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_WRAP_T, Glad.REPEAT);
-				Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_MIN_FILTER, Glad.LINEAR);
-				Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_MAG_FILTER, Glad.LINEAR);
+				tex.textureData = RenderingServer.createTexture(width, height, cast pixels, tex.numChannels);
 			} else
 				Debug.error('Image at ${filePath} failed to load: ${Image.failureReason()}');
 			

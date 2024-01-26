@@ -1,10 +1,14 @@
 package vortex.servers.display;
 
+import vortex.servers.RenderingServer.TextureFilter;
+import vortex.servers.RenderingServer.TextureWrapping;
+import cpp.UInt32;
+import vortex.servers.RenderingServer.ITextureData;
+import vortex.servers.DisplayServer.DisplayBackend;
 import vortex.servers.DisplayServer.IWindowData;
 import glad.Glad;
 import vortex.backend.Application;
 import vortex.utils.math.Vector2i;
-import vortex.servers.DisplayServer.IDisplayBackendImpl;
 
 import sdl.SDL;
 import sdl.Types;
@@ -26,11 +30,11 @@ class SDLGLWindowData implements IWindowData {
 	}
 }
 
-class SDLGLBackend extends IDisplayBackendImpl {
+class SDLGLBackend extends DisplayBackend {
     /**
 	 * Initializes this display backend.
 	 */
-	public static function init():Void {
+	override function init():Void {
         if (SDL.init(VIDEO | EVENTS) < 0) {
 			Debug.error(SDL.getError());
 			return;
@@ -40,7 +44,7 @@ class SDLGLBackend extends IDisplayBackendImpl {
     /**
      * Creates a window with SDL and initializes an OpenGL Core 3.3 context with it.
      */
-    public static function createWindow(title:String, position:Vector2i, size:Vector2i):SDLGLWindowData {
+    override function createWindow(title:String, position:Vector2i, size:Vector2i):IWindowData {
 		var wFlags:WindowInitFlags = OPENGL;
 		if (Application.self.meta.window.resizable)
 			wFlags |= RESIZABLE;
@@ -63,35 +67,35 @@ class SDLGLBackend extends IDisplayBackendImpl {
 	/**
      * TODO: Add this description lol.
      */
-	public static function useWindowContext(window:SDLGLWindowData):Void {
+	override function useWindowContext(window:IWindowData):Void {
 		SDL.glMakeCurrent(window.window, window.context);
 	}
 
 	/**
 	 * Presents/renders whatever is on-screen currently.
 	 */
-	public static function present(window:SDLGLWindowData):Void {
+	override function present(window:IWindowData):Void {
 		SDL.glSwapWindow(window.window);
 	}
 
 	/**
 	 * TODO: Add this description lol.
 	 */
-	public static function setWindowPosition(window:SDLGLWindowData, position:Vector2i):Void {
+	override function setWindowPosition(window:IWindowData, position:Vector2i):Void {
 		SDL.setWindowPosition(window.window, position.x, position.y);
 	}
 
 	/**
 	 * TODO: Add this description lol.
 	 */
-	public static function setWindowSize(window:SDLGLWindowData, size:Vector2i):Void {
+	override function setWindowSize(window:IWindowData, size:Vector2i):Void {
 		SDL.setWindowSize(window.window, size.x, size.y);
 	}
 
 	/**
 	 * TODO: Add this description lol.
 	 */
-	public static function disposeWindow(window:SDLGLWindowData):Void {
+	override function disposeWindow(window:IWindowData):Void {
 		SDL.glDeleteContext(window.context);
 		SDL.destroyWindow(window.window);
 	}
@@ -100,7 +104,7 @@ class SDLGLBackend extends IDisplayBackendImpl {
 	 * Disposes of this display backend and removes it's
 	 * objects from memory.
 	 */
-	public static function dispose():Void {
+	override function dispose():Void {
 		SDL.quit();
 	}
 }

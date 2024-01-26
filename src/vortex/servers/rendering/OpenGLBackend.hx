@@ -1,5 +1,10 @@
 package vortex.servers.rendering;
 
+import cpp.RawPointer;
+import cpp.UInt8;
+import cpp.Star;
+import vortex.servers.RenderingServer.TextureWrapping;
+import vortex.servers.RenderingServer.TextureFilter;
 import cpp.ConstCharStar;
 import vortex.resources.SpriteFrames.AnimationFrame;
 import vortex.utils.math.Vector4;
@@ -8,6 +13,7 @@ import vortex.utils.math.Rectangle;
 import vortex.utils.engine.Color;
 import vortex.utils.math.Vector2i;
 import vortex.servers.RenderingServer.IQuadRenderer;
+import vortex.servers.RenderingServer.ITextureData;
 import cpp.Pointer;
 import cpp.Helpers;
 import vortex.servers.RenderingServer.IShaderData;
@@ -27,6 +33,27 @@ import vortex.resources.Shader;
 import vortex.utils.math.Vector3;
 import vortex.utils.math.Rectanglei;
 import vortex.utils.math.Matrix4x4;
+
+class OpenGLTextureData implements ITextureData {
+	public var texture:Any;
+	
+	public var size:Vector2i;
+	public var channels:Int;
+	public var mipmaps:Bool;
+	public var wrapping:TextureWrapping;
+	public var filter:TextureFilter;
+
+	// boilerplate lol!!!!
+	public function new(texture:UInt32, size:Vector2i, channels:Int, mipmaps:Bool,
+			wrapping:TextureWrapping, filter:TextureFilter) {
+		this.texture = texture;
+		this.size = size;
+		this.channels = channels;
+		this.mipmaps = mipmaps;
+		this.wrapping = wrapping;
+		this.filter = filter;
+	}
+}
 
 class OpenGLShaderData implements IShaderData {
 	public var shader:Any;
@@ -52,7 +79,7 @@ class OpenGLQuadRenderer implements IQuadRenderer {
 		1, 2, 3  // second triangle
 	];
 
-	public var texture:Any;
+	public var texture:ITextureData;
 	public var shader:IShaderData;
 	public var projection:Matrix4x4;
 
@@ -117,7 +144,7 @@ class OpenGLQuadRenderer implements IQuadRenderer {
 
 		// use texture
 		Glad.activeTexture(Glad.TEXTURE0);
-		Glad.bindTexture(Glad.TEXTURE_2D, texture);
+		Glad.bindTexture(Glad.TEXTURE_2D, texture.texture);
 
 		// vao
 		Glad.bindVertexArray(VAO);
@@ -150,7 +177,7 @@ class OpenGLQuadRenderer implements IQuadRenderer {
 
 		// use texture
 		Glad.activeTexture(Glad.TEXTURE0);
-		Glad.bindTexture(Glad.TEXTURE_2D, texture);
+		Glad.bindTexture(Glad.TEXTURE_2D, texture.texture);
 
 		// vao
 		Glad.bindVertexArray(VAO);
@@ -251,6 +278,66 @@ class OpenGLBackend extends RenderingBackend {
 	 */
 	override function present(window:Window):Void {
 		DisplayServer.present(window._nativeWindow);
+	}
+
+	private static function getOpenGLWrap(wrapping:TextureWrapping):Int {
+		switch (wrapping) {
+			case REPEAT:
+				return Glad.REPEAT;
+			case MIRRORED_REPEAT:
+				return Glad.MIRRORED_REPEAT;
+			case CLAMP_EDGE:
+				return Glad.CLAMP_TO_EDGE;
+			case CLAMP_BORDER:
+				return Glad.CLAMP_TO_BORDER;
+		}
+
+		return -1;
+	}
+
+	private static function getOpenGLFilter(filter:TextureFilter):Int {
+		switch (filter) {
+			case LINEAR:
+				return Glad.LINEAR;
+			case NEAREST:
+				return Glad.NEAREST;
+		}
+
+		return -1;
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	override function createTexture(width:Int, height:Int, data:RawPointer<UInt8>, channels:Int = 4, mipmaps:Bool = true,
+			wrapping:TextureWrapping = REPEAT, filter:TextureFilter = LINEAR):ITextureData {
+		var id:UInt32 = 0;
+		Glad.genTextures(1, Pointer.addressOf(id));
+		Glad.bindTexture(Glad.TEXTURE_2D, id);
+
+		var format:Int = (channels == 4) ? Glad.RGBA : Glad.RGB;
+		Glad.texImage2D(Glad.TEXTURE_2D, 0, format, width, height, 0, format, Glad.UNSIGNED_BYTE, data);
+
+		if (mipmaps) {
+			Glad.generateMipmap(Glad.TEXTURE_2D);
+		}
+
+		Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_WRAP_S, getOpenGLWrap(wrapping));
+		Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_WRAP_T, getOpenGLWrap(wrapping));
+		Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_MIN_FILTER, getOpenGLFilter(filter));
+		Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_MAG_FILTER, getOpenGLFilter(filter));
+
+		var textureData:OpenGLTextureData = new OpenGLTextureData(id, new Vector2i(width, height), channels, mipmaps, wrapping, filter);
+		return textureData;
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	override function disposeTexture(texture:ITextureData):Void {
+		// Helpers.tempPointer is used because regular cpp.Pointer just doesn't work
+		// :3
+		Glad.deleteTextures(1, Helpers.tempPointer(texture.texture));
 	}
 
 	/**

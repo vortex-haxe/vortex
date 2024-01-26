@@ -1,5 +1,8 @@
 package vortex.servers;
 
+import cpp.RawPointer;
+import cpp.UInt8;
+import cpp.Star;
 import cpp.ConstCharStar;
 import vortex.resources.SpriteFrames.AnimationFrame;
 import vortex.resources.Shader;
@@ -18,12 +21,37 @@ import vortex.servers.rendering.*;
 import vortex.utils.engine.Color;
 import vortex.utils.math.Rectanglei;
 
+enum TextureWrapping {
+	REPEAT;
+	MIRRORED_REPEAT;
+	CLAMP_EDGE;
+	CLAMP_BORDER;
+}
+
+// maybe add linear mipmap and nearest mipmap and whatever if we need it later
+// :3
+
+enum TextureFilter {
+	LINEAR;
+	NEAREST;
+}
+
+interface ITextureData {
+	public var texture:Any;
+
+	public var size:Vector2i;
+	public var channels:Int;
+	public var mipmaps:Bool;
+	public var wrapping:TextureWrapping;
+	public var filter:TextureFilter;
+}
+
 interface IShaderData {
 	public var shader:Any;
 }
 
 interface IQuadRenderer {
-	public var texture:Any;
+	public var texture:ITextureData;
 	public var shader:IShaderData;
 	public var projection:Matrix4x4;
 
@@ -59,6 +87,19 @@ class RenderingBackend {
 	 * Presents/renders whatever is on-screen currently.
 	 */
 	public function present(window:Window):Void {}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public function createTexture(width:Int, height:Int, data:RawPointer<UInt8>, channels:Int = 4, mipmaps:Bool = true,
+			wrapping:TextureWrapping = REPEAT, filter:TextureFilter = LINEAR):ITextureData {
+		return null;
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public function disposeTexture(texture:ITextureData):Void {}
 
 	/**
 	 * TODO: Implement this!
@@ -176,6 +217,21 @@ class RenderingServer extends IServer {
 	/**
 	 * TODO: Implement this!
 	 */
+	public static function createTexture(width:Int, height:Int, data:RawPointer<UInt8>, channels:Int = 4, mipmaps:Bool = true,
+			wrapping:TextureWrapping = REPEAT, filter:TextureFilter = LINEAR):ITextureData {
+		return backend.createTexture(width, height, data, channels, mipmaps, wrapping, filter);
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
+	public static function disposeTexture(texture:ITextureData):Void {
+		backend.disposeTexture(texture);
+	}
+
+	/**
+	 * TODO: Implement this!
+	 */
 	public static function createShader(fragmentSource:String, vertexSource:String):IShaderData {
 		return backend.createShader(fragmentSource, vertexSource);
 	}
@@ -249,5 +305,6 @@ class RenderingServer extends IServer {
 	 */
 	public static function dispose():Void {
 		backend.dispose();
+		backend = null;
 	}
 }
