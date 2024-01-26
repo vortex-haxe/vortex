@@ -1,5 +1,6 @@
 package vortex.servers;
 
+import cpp.RawPointer;
 import cpp.Star;
 import cpp.UInt8;
 import cpp.Pointer;
@@ -14,6 +15,7 @@ import vortex.utils.engine.RefCounted;
 /**
  * A class to easily obtain resources such as textures and sound.
  */
+@:access(vortex.resources.Texture)
 class ResourceServer extends IServer {
 	/**
 	 * Initializes this resource server.
@@ -34,24 +36,14 @@ class ResourceServer extends IServer {
 			final tex = new Texture();
 			tex.filePath = filePath;
 			
-			var width:Int = 0;
-			var height:Int = 0;
-			var pixels:Star<UInt8> = Image.load(filePath, Pointer.addressOf(width), Pointer.addressOf(height), Pointer.addressOf(tex.numChannels), 0);
-			tex.size.set(width, height);
+			var pixels:Star<UInt8> = Image.load(filePath, Pointer.addressOf(tex.size.x), Pointer.addressOf(tex.size.y), Pointer.addressOf(tex.numChannels), 0);
 			
 			if (pixels != 0) {
-				var imageFormat = (tex.numChannels == 4) ? Glad.RGBA : Glad.RGB;
-				Glad.texImage2D(Glad.TEXTURE_2D, 0, imageFormat, width, height, 0, imageFormat, Glad.UNSIGNED_BYTE, pixels);
-				Glad.generateMipmap(Glad.TEXTURE_2D);
-
-				Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_WRAP_S, Glad.REPEAT);
-				Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_WRAP_T, Glad.REPEAT);
-				Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_MIN_FILTER, Glad.LINEAR);
-				Glad.texParameteri(Glad.TEXTURE_2D, Glad.TEXTURE_MAG_FILTER, Glad.LINEAR);
+				tex.textureData = RenderingServer.createTexture(tex.size.x, tex.size.y, cast pixels, tex.numChannels);
 			} else
 				Debug.error('Image at ${filePath} failed to load: ${Image.failureReason()}');
 			
-			Image.freeImage(pixels);
+			// Image.freeImage(pixels);
 			_cache.set(key, tex);
 		}
 		return cast _cache.get(key);

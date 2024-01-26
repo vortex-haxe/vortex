@@ -1,5 +1,7 @@
 package vortex.backend;
 
+import vortex.servers.DisplayServer;
+import vortex.servers.DisplayServer.IWindowData;
 import vortex.utils.generic.Signal;
 import cpp.Pointer;
 import cpp.UInt32;
@@ -89,64 +91,14 @@ class Window extends Node {
 		@:bypassAccessor this.size = size;
 		initialSize = new Vector2i().copyFrom(size);
 
-		var wFlags:WindowInitFlags = OPENGL;
-		if(Application.self.meta.window.resizable)
-			wFlags |= RESIZABLE;
-
-		if(Application.self.meta.window.borderless)
-			wFlags |= BORDERLESS;
-
-		_nativeWindow = SDL.createWindow(title, position.x, position.y, size.x, size.y, wFlags);
-		_glContext = SDL.glCreateContext(_nativeWindow);
-		
-		SDL.glMakeCurrent(_nativeWindow, _glContext);
-		SDL.glSetSwapInterval(0);
-
-		Glad.loadGLLoader(untyped __cpp__("SDL_GL_GetProcAddress"));
-
-		Glad.genVertexArrays(1, Pointer.addressOf(_VAO));
-        Glad.bindVertexArray(_VAO);
-
-        Glad.genBuffers(1, Pointer.addressOf(_VBO));
-        Glad.bindBuffer(Glad.ARRAY_BUFFER, _VBO);
-        Glad.bufferFloatArray(Glad.ARRAY_BUFFER, OpenGLBackend.VERTICES, Glad.STATIC_DRAW, 16);
-
-        Glad.genBuffers(1, Pointer.addressOf(_EBO));
-
-        Glad.bindBuffer(Glad.ELEMENT_ARRAY_BUFFER, _EBO);
-        Glad.bufferIntArray(Glad.ELEMENT_ARRAY_BUFFER, OpenGLBackend.INDICES, Glad.STATIC_DRAW, 6);
-
-		_projection = Matrix4x4.ortho(0, initialSize.x, initialSize.y, 0, -1, 1);
-
-		final _oldWindow = Application.self.window;
-		Application.self.window = this;
-		
-		_defaultShader = new Shader(
-			Shader.FRAGMENT_DEFAULT,
-			Shader.VERTEX_DEFAULT
-		);
-		_colorRectShader = new Shader(
-			"void main() {
-				COLOR = MODULATE;
-			}",
-			Shader.VERTEX_DEFAULT
-		);
-		Application.self.window = _oldWindow;
-
-		_defaultShader.useProgram();
-
-        Glad.vertexFloatAttrib(0, 4, Glad.FALSE, 4, 0);
-        Glad.enableVertexAttribArray(0);
-
-        Glad.enable(Glad.BLEND);
-        Glad.blendFunc(Glad.SRC_ALPHA, Glad.ONE_MINUS_SRC_ALPHA);
+		_nativeWindow = DisplayServer.createWindow(title, position, size);
 
 		@:privateAccess {
 			this.position._onChange = (x:Int, y:Int) -> {
-				SDL.setWindowPosition(_nativeWindow, x, y);
+				DisplayServer.setWindowPosition(_nativeWindow, new Vector2i(x, y));
 			};
 			this.size._onChange = (x:Int, y:Int) -> {
-				SDL.setWindowSize(_nativeWindow, x, y);
+				DisplayServer.setWindowSize(_nativeWindow, new Vector2i(x, y));
 			};
 		}
 
@@ -210,11 +162,7 @@ class Window extends Node {
 	override function dispose():Void {
 		if(!disposed) {
 			Application.self.windows.remove(this);
-			Glad.deleteVertexArrays(1, Pointer.addressOf(_VAO));
-			Glad.deleteBuffers(1, Pointer.addressOf(_VBO));
-			Glad.genBuffers(1, Pointer.addressOf(_EBO));
-			SDL.glDeleteContext(_glContext);
-			SDL.destroyWindow(_nativeWindow);
+			DisplayServer.disposeWindow(_nativeWindow);
 		}
 		disposed = true;
 	}
@@ -231,16 +179,9 @@ class Window extends Node {
 	// ------------------ //
 	// SDL
 	private static var _ev:Event;
-	private var _nativeWindow:NativeWindow;
 
-	// GL
-	private var _glContext:GlContext;
-	private var _VAO:UInt32;
-	private var _VBO:UInt32;
-	private var _EBO:UInt32;
-	private var _projection:Matrix4x4;
-	private var _defaultShader:Shader;
-	private var _colorRectShader:Shader;
+	// rendering
+	private var _nativeWindow:IWindowData;
 
 	// Vortex
 	private static var _recti:Rectanglei = new Rectanglei();

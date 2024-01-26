@@ -1,5 +1,7 @@
 package vortex.resources;
 
+import vortex.servers.RenderingServer;
+import vortex.servers.RenderingServer.ITextureData;
 import cpp.UInt32;
 import cpp.Pointer;
 
@@ -16,7 +18,7 @@ import vortex.utils.math.Vector2i;
  * width, height, pixels, etc.
  */
 class Texture extends RefCounted {
-	private var _glID:UInt32;
+	private var textureData:ITextureData = null;
 
 	/**
 	 * The file path to the image that this texture used.
@@ -40,14 +42,13 @@ class Texture extends RefCounted {
 	 */
 	public function new() {
 		super();
-		Glad.genTextures(1, Pointer.addressOf(_glID));
-		Glad.bindTexture(Glad.TEXTURE_2D, _glID);
 	}
 
 	override function dispose() {
-		if(!disposed) {
-			Glad.deleteTextures(1, Pointer.addressOf(_glID));
+		if (!disposed && textureData != null) {
+			RenderingServer.disposeTexture(textureData);
 		}
+		
 		disposed = true;
 	}
 }
