@@ -89,6 +89,10 @@ class Engine {
 		if(currentScene != null)
 			currentScene.ready();
 
+		// we switched to the new scene already
+		// so set queued scene to null
+		_queuedScene = null;
+
 		// call garbage collector because fuck you
 		Gc.run(true);
 		Gc.run(false);
