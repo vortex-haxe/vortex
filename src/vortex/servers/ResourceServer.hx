@@ -1,5 +1,6 @@
 package vortex.servers;
 
+import cpp.RawPointer;
 import cpp.Star;
 import cpp.UInt8;
 import cpp.Pointer;
@@ -35,17 +36,14 @@ class ResourceServer extends IServer {
 			final tex = new Texture();
 			tex.filePath = filePath;
 			
-			var width:Int = 0;
-			var height:Int = 0;
-			var pixels:Star<UInt8> = Image.load(filePath, Pointer.addressOf(width), Pointer.addressOf(height), Pointer.addressOf(tex.numChannels), 0);
-			tex.size.set(width, height);
+			var pixels:Star<UInt8> = Image.load(filePath, Pointer.addressOf(tex.size.x), Pointer.addressOf(tex.size.y), Pointer.addressOf(tex.numChannels), 0);
 			
 			if (pixels != 0) {
-				tex.textureData = RenderingServer.createTexture(width, height, cast pixels, tex.numChannels);
+				tex.textureData = RenderingServer.createTexture(tex.size.x, tex.size.y, cast pixels, tex.numChannels);
 			} else
 				Debug.error('Image at ${filePath} failed to load: ${Image.failureReason()}');
 			
-			Image.freeImage(pixels);
+			// Image.freeImage(pixels);
 			_cache.set(key, tex);
 		}
 		return cast _cache.get(key);
