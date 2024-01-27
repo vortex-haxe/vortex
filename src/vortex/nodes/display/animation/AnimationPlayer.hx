@@ -220,8 +220,6 @@ class AnimationPlayer {
 			
 			if(!playing && oldFrame != frame)
 				finished.emit();
-
-			_frameTimer = 0;
 		}
 	}
 
