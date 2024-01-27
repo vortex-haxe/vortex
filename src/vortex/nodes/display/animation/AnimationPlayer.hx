@@ -9,7 +9,7 @@ import vortex.utils.math.MathUtil;
 
 typedef AnimationData = {
 	var frames:Array<AnimationFrame>;
-	var fps:Int;
+	var fps:Float;
 	var loop:Bool;
 	var offset:Vector2;
 }
@@ -55,6 +55,11 @@ class AnimationPlayer {
 	public var frame(default, set):Int = 0;
 
 	/**
+         * Defines how fast the animations are played.
+         */
+	public var rate:Float = 1.0;
+
+	/**
 	 * Makes a new `AnimationPlayer`.
 	 */
 	public function new(parent:AnimatedSprite) {
@@ -70,7 +75,7 @@ class AnimationPlayer {
 	 * @param loop    Whether or not this animation should loop.
 	 * @param offset  The X and Y position offset for this animation. Defaults to `Vector2.ZERO`.
 	 */
-	public function add(name:String, frames:Array<Int>, ?fps:Int = 30, ?loop:Bool = false, ?offset:Vector2) {
+	public function add(name:String, frames:Array<Int>, ?fps:Float = 30, ?loop:Bool = false, ?offset:Vector2) {
 		if(offset == null)
 			offset = Vector2.ZERO;
 		
@@ -93,7 +98,7 @@ class AnimationPlayer {
 	 * @param loop    Whether or not this animation should loop.
 	 * @param offset  The X and Y position offset for this animation. Defaults to `Vector2.ZERO`.
 	 */
-	public function addByPrefix(name:String, prefix:String, ?fps:Int = 30, ?loop:Bool = false, ?offset:Vector2) {
+	public function addByPrefix(name:String, prefix:String, ?fps:Float = 30, ?loop:Bool = false, ?offset:Vector2) {
 		if(offset == null)
 			offset = Vector2.ZERO;
 		
@@ -124,7 +129,7 @@ class AnimationPlayer {
 	 * @param loop     Whether or not this animation should loop.
 	 * @param offset   The X and Y position offset for this animation. Defaults to `Vector2.ZERO`.
 	 */
-	public function addByIndices(name:String, prefix:String, indices:Array<Int>, ?fps:Int = 30, ?loop:Bool = false, ?offset:Vector2) {
+	public function addByIndices(name:String, prefix:String, indices:Array<Int>, ?fps:Float = 30, ?loop:Bool = false, ?offset:Vector2) {
 		if(offset == null)
 			offset = Vector2.ZERO;
 		
@@ -200,9 +205,11 @@ class AnimationPlayer {
 		if(curAnim == null)
 			return;
 		
-		_frameTimer += delta;
+		_frameTimer += delta * rate;
 		if(_frameTimer >= _frameDelay && (playing || curAnim.loop)) {
 			final boundFunc = (curAnim.loop) ? MathUtil.wrap : MathUtil.boundInt;
+			final oldFrame = frame;
+			
 			if(reversed) {
 				frame = boundFunc(frame - 1, 0, curAnim.frames.length - 1);
 				playing = (frame != 0);
@@ -210,10 +217,9 @@ class AnimationPlayer {
 				frame = boundFunc(frame + 1, 0, curAnim.frames.length - 1);
 				playing = (frame < curAnim.frames.length - 1);
 			}
-			if(!playing)
+			
+			if(!playing && oldFrame != frame)
 				finished.emit();
-
-			_frameTimer = 0;
 		}
 	}
 
