@@ -55,6 +55,11 @@ class AnimationPlayer {
 	public var frame(default, set):Int = 0;
 
 	/**
+         * Defines how fast the animations are played.
+         */
+	public var rate:Float = 1.0;
+
+	/**
 	 * Makes a new `AnimationPlayer`.
 	 */
 	public function new(parent:AnimatedSprite) {
@@ -200,9 +205,11 @@ class AnimationPlayer {
 		if(curAnim == null)
 			return;
 		
-		_frameTimer += delta;
+		_frameTimer += delta * rate;
 		if(_frameTimer >= _frameDelay && (playing || curAnim.loop)) {
 			final boundFunc = (curAnim.loop) ? MathUtil.wrap : MathUtil.boundInt;
+			final oldFrame = frame;
+			
 			if(reversed) {
 				frame = boundFunc(frame - 1, 0, curAnim.frames.length - 1);
 				playing = (frame != 0);
@@ -210,7 +217,8 @@ class AnimationPlayer {
 				frame = boundFunc(frame + 1, 0, curAnim.frames.length - 1);
 				playing = (frame < curAnim.frames.length - 1);
 			}
-			if(!playing)
+			
+			if(!playing && oldFrame != frame)
 				finished.emit();
 
 			_frameTimer = 0;
