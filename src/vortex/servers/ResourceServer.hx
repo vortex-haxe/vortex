@@ -8,7 +8,6 @@ import cpp.Pointer;
 import glad.Glad;
 import stb.Image;
 
-import vortex.backend.interfaces.IServer;
 import vortex.resources.Texture;
 import vortex.utils.engine.RefCounted;
 
@@ -16,7 +15,7 @@ import vortex.utils.engine.RefCounted;
  * A class to easily obtain resources such as textures and sound.
  */
 @:access(vortex.resources.Texture)
-class ResourceServer extends IServer {
+class ResourceServer {
 	/**
 	 * Initializes this resource server.
 	 */

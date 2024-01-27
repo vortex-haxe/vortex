@@ -1,7 +1,6 @@
 package vortex.servers;
 
 import vortex.servers.display.SDLGLBackend;
-import vortex.backend.interfaces.IServer;
 import vortex.utils.math.Vector2i;
 
 interface IWindowData {
@@ -56,7 +55,7 @@ class DisplayBackend {
 	public function dispose():Void {}
 }
 
-class DisplayServer extends IServer {
+class DisplayServer {
     /**
      * TODO: Add description.
      */

@@ -2,30 +2,17 @@ package vortex.backend;
 
 import vortex.servers.DisplayServer;
 import vortex.servers.DisplayServer.IWindowData;
-import vortex.utils.generic.Signal;
-import cpp.Pointer;
-import cpp.UInt32;
 
 import sdl.SDL;
 import sdl.Types.Event;
-import sdl.Types.WindowInitFlags;
-import sdl.Types.Window as NativeWindow;
-import sdl.Types.GlContext;
-
-import glad.Glad;
-
-import vortex.backend.interfaces.IDisposable;
 
 import vortex.servers.RenderingServer;
-import vortex.servers.rendering.OpenGLBackend;
 
 import vortex.nodes.Node;
 
-import vortex.resources.Shader;
-
+import vortex.utils.generic.Signal;
 import vortex.utils.math.Vector2i;
 import vortex.utils.math.Rectanglei;
-import vortex.utils.math.Matrix4x4;
 
 @:access(vortex.resources.Shader)
 class Window extends Node {
@@ -79,8 +66,30 @@ class Window extends Node {
 
 	/**
 	 * The signal that gets emitted when the window is resized.
+	 * 
+	 * Parameters are:
+	 * - New Window Width
+	 * - New Window Height
 	 */
 	public var onResize:Signal<Int->Int->Void> = new Signal();
+
+	/**
+	 * The signal that gets emitted when the window recieves a key press.
+	 * 
+	 * Parameters are:
+	 * - Key Code
+	 * - Key Modifier
+	 */
+	public var onKeyPress:Signal<Int->Int->Void> = new Signal();
+
+	/**
+	 * The signal that gets emitted when the window recieves a key release.
+	 * 
+	 * Parameters are:
+	 * - Key Code
+	 * - Key Modifier
+	 */
+	public var onKeyRelease:Signal<Int->Int->Void> = new Signal();
 
 	/**
 	 * Makes a new `Window`.
@@ -150,6 +159,12 @@ class Window extends Node {
 
 					default:
 				}
+
+			case KEYDOWN:
+				onKeyPress.emit(_ev.ref.key.keysym.sym, _ev.ref.key.keysym.mod);
+
+			case KEYUP:
+				onKeyRelease.emit(_ev.ref.key.keysym.sym, _ev.ref.key.keysym.mod);
 
 			default:
 		}

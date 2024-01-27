@@ -14,7 +14,6 @@ import vortex.utils.math.Rectangle;
 import vortex.utils.math.Vector2i;
 import vortex.backend.Application;
 import vortex.backend.Window;
-import vortex.backend.interfaces.IServer;
 
 import vortex.servers.rendering.*;
 
@@ -160,7 +159,7 @@ class RenderingBackend {
 	public function dispose():Void {}
 }
 
-class RenderingServer extends IServer {
+class RenderingServer {
 	/**
 	 * The current rendering backend for every window.
 	 * 
