@@ -9,7 +9,7 @@ import vortex.utils.math.MathUtil;
 
 typedef AnimationData = {
 	var frames:Array<AnimationFrame>;
-	var fps:Int;
+	var fps:Float;
 	var loop:Bool;
 	var offset:Vector2;
 }
@@ -75,7 +75,7 @@ class AnimationPlayer {
 	 * @param loop    Whether or not this animation should loop.
 	 * @param offset  The X and Y position offset for this animation. Defaults to `Vector2.ZERO`.
 	 */
-	public function add(name:String, frames:Array<Int>, ?fps:Int = 30, ?loop:Bool = false, ?offset:Vector2) {
+	public function add(name:String, frames:Array<Int>, ?fps:Float = 30, ?loop:Bool = false, ?offset:Vector2) {
 		if(offset == null)
 			offset = Vector2.ZERO;
 		
@@ -98,7 +98,7 @@ class AnimationPlayer {
 	 * @param loop    Whether or not this animation should loop.
 	 * @param offset  The X and Y position offset for this animation. Defaults to `Vector2.ZERO`.
 	 */
-	public function addByPrefix(name:String, prefix:String, ?fps:Int = 30, ?loop:Bool = false, ?offset:Vector2) {
+	public function addByPrefix(name:String, prefix:String, ?fps:Float = 30, ?loop:Bool = false, ?offset:Vector2) {
 		if(offset == null)
 			offset = Vector2.ZERO;
 		
@@ -129,7 +129,7 @@ class AnimationPlayer {
 	 * @param loop     Whether or not this animation should loop.
 	 * @param offset   The X and Y position offset for this animation. Defaults to `Vector2.ZERO`.
 	 */
-	public function addByIndices(name:String, prefix:String, indices:Array<Int>, ?fps:Int = 30, ?loop:Bool = false, ?offset:Vector2) {
+	public function addByIndices(name:String, prefix:String, indices:Array<Int>, ?fps:Float = 30, ?loop:Bool = false, ?offset:Vector2) {
 		if(offset == null)
 			offset = Vector2.ZERO;
 		
