@@ -12,7 +12,7 @@ class AudioPlayer extends Node {
 	/**
 	 * The audio stream that will be played.
 	 */
-	public var stream:AudioStream;
+	public var stream(default, set):AudioStream;
 
 	/**
 	 * The current time of the audio in seconds.
@@ -168,10 +168,9 @@ class AudioPlayer extends Node {
 		if(newStream != null) {
 			newStream.reference();
 			@:privateAccess
-			AudioServer.backend.sendBufferToSource(source, stream.buffer);
+			AudioServer.backend.sendBufferToSource(source, newStream.buffer);
 		}
 
-		stream = newStream;
-		return newStream;
+		return stream = newStream;
 	}
 }

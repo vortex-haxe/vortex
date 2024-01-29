@@ -1,5 +1,6 @@
 package vortex.servers;
 
+import cpp.RawPointer;
 import cpp.Helpers;
 import cpp.Star;
 import cpp.UInt8;
@@ -74,14 +75,14 @@ class ResourceServer {
 			final ext:String = filePath.substring(filePath.lastIndexOf(".") + 1).toLowerCase();
 			
 			var format:Int = 0;
-			var sampleData:Star<Int16> = null;
+			var sampleData:RawPointer<Int16> = null;
 			
 			switch(ext) {
 				case "wav":
 					var channels:UInt32 = 0;
 					var sampleRate:UInt32 = 0;
 					var totalFrameCount:UInt64 = 0;
-					sampleData = cast WAV.openFileAndReadPCMFramesShort16(filePath, channels, sampleRate, totalFrameCount, null);
+					sampleData = WAV.openFileAndReadPCMFramesShort16(filePath, channels, sampleRate, totalFrameCount, null);
 
 					if(sampleData != null) {
 						format = channels > 1 ? AL.FORMAT_STEREO16 : AL.FORMAT_MONO16;

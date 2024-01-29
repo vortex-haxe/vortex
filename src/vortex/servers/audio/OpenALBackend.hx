@@ -198,7 +198,6 @@ class OpenALBackend extends MixerBackend {
 	 * data to a given buffer.
 	 */
 	override function sendDataToBuffer(buffer:IAudioBufferData, format:Int, sampleData:Pointer<cpp.Void>, totalFrameCount:UInt64, sampleRate:UInt32):Void {
-		// casting to void pointer because i don't trust hxcpp
 		AL.bufferData(buffer.buffer, format, sampleData, untyped __cpp__("{0} * (unsigned long)(4)", totalFrameCount), sampleRate);
 	}
 
@@ -207,7 +206,9 @@ class OpenALBackend extends MixerBackend {
 	 */
 	override function createAudioSource():OpenALAudioSourceData {
 		final alSource = new OpenALAudioSourceData();
-		AL.genSources(1, Helpers.tempPointer(alSource.source));
+		var value:UInt32 = 0;
+		AL.genSources(1, Helpers.tempPointer(value));
+		alSource.source = value;
 		return alSource;
 	}
 
@@ -216,7 +217,9 @@ class OpenALBackend extends MixerBackend {
 	 */
 	override function createAudioBuffer():OpenALAudioBufferData {
 		final alBuffer = new OpenALAudioBufferData();
-		AL.genBuffers(1, Helpers.tempPointer(alBuffer.buffer));
+		var value:UInt32 = 0;
+		AL.genBuffers(1, Helpers.tempPointer(value));
+		alBuffer.buffer = value;
 		return alBuffer;
 	}
 
