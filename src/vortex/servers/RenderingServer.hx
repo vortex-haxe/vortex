@@ -193,117 +193,12 @@ class RenderingServer {
 	}
 
 	/**
-	 * Sets the values of the current viewport rectangle.
-	 */
-	public static function setViewportRect(rect:Rectanglei):Void {
-		backend.setViewportRect(rect);
-	}
-
-	/**
-	 * Clears whatever is on-screen currently.
-	 */
-	public static function clear(window:Window):Void {
-		backend.clear(window);
-	}
- 
-	/**
-	 * Presents/renders whatever is on-screen currently.
-	 */
-	public static function present(window:Window):Void {
-		backend.present(window);
-	}
-
-	/**
-	 * TODO: Implement this!
-	 */
-	public static function createTexture(width:Int, height:Int, data:RawPointer<UInt8>, channels:Int = 4, mipmaps:Bool = true,
-			wrapping:TextureWrapping = REPEAT, filter:TextureFilter = LINEAR):ITextureData {
-		return backend.createTexture(width, height, data, channels, mipmaps, wrapping, filter);
-	}
-
-	/**
-	 * TODO: Implement this!
-	 */
-	public static function disposeTexture(texture:ITextureData):Void {
-		backend.disposeTexture(texture);
-	}
-
-	/**
-	 * TODO: Implement this!
-	 */
-	public static function createShader(fragmentSource:String, vertexSource:String):IShaderData {
-		return backend.createShader(fragmentSource, vertexSource);
-	}
-
-	/**
-	 * TODO: Implement this!
-	 */
-	public static function useShader(shader:IShaderData):Void {
-		backend.useShader(shader);
-	}
-
-	/**
-	 * TODO: Implement this!
-	 */
-	public static function disposeShader(shader:IShaderData):Void {
-		backend.disposeShader(shader);
-	}
-
-	/**
-	 * TODO: Implement this!
-	 */
-	public static function setUniformInt(shader:IShaderData, name:String, value:Int):Void {
-		backend.setUniformInt(shader, name, value);
-	}
-
-	/**
-	 * TODO: Implement this!
-	 */
-	public static function setUniformFloat(shader:IShaderData, name:String, value:Float):Void {
-		backend.setUniformFloat(shader, name, value);
-	}
-
-	/**
-	 * TODO: Implement this!
-	 */
-	public static function setUniformVec2(shader:IShaderData, name:String, value:Vector2):Void {
-		backend.setUniformVec2(shader, name, value);
-	}
-
-	/**
-	 * TODO: Implement this!
-	 */
-	public static function setUniformVec3(shader:IShaderData, name:String, value:Vector3):Void {
-		backend.setUniformVec3(shader, name, value);
-	}
-
-	/**
-	 * TODO: Implement this!
-	 */
-	public static function setUniformVec4(shader:IShaderData, name:String, value:Vector4):Void {
-		backend.setUniformVec4(shader, name, value);
-	}
-
-	/**
-	 * TODO: Implement this!
-	 */
-	public static function setUniformColor(shader:IShaderData, name:String, value:Color):Void {
-		backend.setUniformColor(shader, name, value);
-	}
-
-	/**
-	 * TODO: Implement this!
-	 */
-	public static function setUniformMat4x4(shader:IShaderData, name:String, value:Matrix4x4):Void {
-		backend.setUniformMat4x4(shader, name, value);
-	}
-
-	/**
 	 * Disposes of this rendering server and removes it's
 	 * properties from memory.
 	 */
 	public static function dispose():Void {
 		backend.dispose();
 		backend = null;
+		clearColor = null;
 	}
 }

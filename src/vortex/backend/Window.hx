@@ -100,14 +100,14 @@ class Window extends Node {
 		@:bypassAccessor this.size = size;
 		initialSize = new Vector2i().copyFrom(size);
 
-		_nativeWindow = DisplayServer.createWindow(title, position, size);
+		_nativeWindow = DisplayServer.backend.createWindow(title, position, size);
 
 		@:privateAccess {
 			this.position._onChange = (x:Int, y:Int) -> {
-				DisplayServer.setWindowPosition(_nativeWindow, new Vector2i(x, y));
+				DisplayServer.backend.setWindowPosition(_nativeWindow, new Vector2i(x, y));
 			};
 			this.size._onChange = (x:Int, y:Int) -> {
-				DisplayServer.setWindowSize(_nativeWindow, new Vector2i(x, y));
+				DisplayServer.backend.setWindowSize(_nativeWindow, new Vector2i(x, y));
 			};
 		}
 
@@ -154,7 +154,7 @@ class Window extends Node {
 						_recti.x = Math.floor((size.x - _recti.width) * 0.5);
 						_recti.y = Math.floor((size.y - _recti.height) * 0.5);
 						
-						RenderingServer.setViewportRect(_recti);
+						RenderingServer.backend.setViewportRect(_recti);
 						onResize.emit(_ev.ref.window.data1, _ev.ref.window.data2);
 
 					default:
@@ -177,7 +177,7 @@ class Window extends Node {
 	override function dispose():Void {
 		if(!disposed) {
 			Application.self.windows.remove(this);
-			DisplayServer.disposeWindow(_nativeWindow);
+			DisplayServer.backend.disposeWindow(_nativeWindow);
 		}
 		disposed = true;
 	}

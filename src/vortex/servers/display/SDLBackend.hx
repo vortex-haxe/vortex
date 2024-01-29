@@ -1,15 +1,5 @@
 package vortex.servers.display;
 
-import vortex.servers.RenderingServer.TextureFilter;
-import vortex.servers.RenderingServer.TextureWrapping;
-import cpp.UInt32;
-import vortex.servers.RenderingServer.ITextureData;
-import vortex.servers.DisplayServer.DisplayBackend;
-import vortex.servers.DisplayServer.IWindowData;
-import glad.Glad;
-import vortex.backend.Application;
-import vortex.utils.math.Vector2i;
-
 import sdl.SDL;
 import sdl.Types;
 
@@ -17,6 +7,11 @@ import sdl.SDL;
 import sdl.Types.Event;
 import sdl.Types.WindowInitFlags;
 import sdl.Types.Window;
+
+import vortex.backend.Application;
+import vortex.servers.DisplayServer.DisplayBackend;
+import vortex.servers.DisplayServer.IWindowData;
+import vortex.utils.math.Vector2i;
 
 // this was going to be a typedef but you can't do that cuz weird hxcpp stuff :(
 class SDLWindowData implements IWindowData {

@@ -2,12 +2,7 @@ package vortex.resources;
 
 import vortex.servers.RenderingServer;
 import vortex.servers.RenderingServer.ITextureData;
-import cpp.UInt32;
-import cpp.Pointer;
 
-import glad.Glad;
-
-import vortex.utils.engine.RefCounted;
 import vortex.utils.math.Vector2i;
 
 // ! TODO: stb_image is slow at loading images, replace with
@@ -17,7 +12,7 @@ import vortex.utils.math.Vector2i;
  * A simple texture class including basic data such as
  * width, height, pixels, etc.
  */
-class Texture extends RefCounted {
+class Texture extends Resource {
 	private var textureData:ITextureData = null;
 
 	/**
@@ -45,10 +40,9 @@ class Texture extends RefCounted {
 	}
 
 	override function dispose() {
-		if (!disposed && textureData != null) {
-			RenderingServer.disposeTexture(textureData);
+		if(!disposed && textureData != null) {
+			RenderingServer.backend.disposeTexture(textureData);
 		}
-		
 		disposed = true;
 	}
 }

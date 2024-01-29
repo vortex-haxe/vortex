@@ -1,20 +1,20 @@
 package vortex.servers;
 
-import cpp.RawPointer;
 import cpp.Star;
 import cpp.UInt8;
 import cpp.Pointer;
 
-import glad.Glad;
 import stb.Image;
 
 import vortex.resources.Texture;
+import vortex.resources.AudioStream;
 import vortex.utils.engine.RefCounted;
 
 /**
  * A class to easily obtain resources such as textures and sound.
  */
 @:access(vortex.resources.Texture)
+@:access(vortex.resources.AudioStream)
 class ResourceServer {
 	/**
 	 * Initializes this resource server.
@@ -37,13 +37,31 @@ class ResourceServer {
 			
 			var pixels:Star<UInt8> = Image.load(filePath, Pointer.addressOf(tex.size.x), Pointer.addressOf(tex.size.y), Pointer.addressOf(tex.numChannels), 0);
 			
-			if (pixels != 0) {
-				tex.textureData = RenderingServer.createTexture(tex.size.x, tex.size.y, cast pixels, tex.numChannels);
-			} else
+			if (pixels != 0)
+				tex.textureData = RenderingServer.backend.createTexture(tex.size.x, tex.size.y, cast pixels, tex.numChannels);
+			else
 				Debug.error('Image at ${filePath} failed to load: ${Image.failureReason()}');
 			
-			// Image.freeImage(pixels);
+			Image.freeImage(pixels);
 			_cache.set(key, tex);
+		}
+		return cast _cache.get(key);
+	}
+
+	/**
+	 * Makes a new `AudioStream` and loads data from an audio file
+	 * located at the specified file path.
+	 * 
+	 * @param filePath  The path to the audio file to load.
+	 */
+	public static function loadAudioStream(filePath:String):AudioStream {
+		final key:String = '#_AUDIO_STREAM_${filePath}';
+		if(_cache.get(key) == null) {
+			final aud = new AudioStream();
+			aud.filePath = filePath;
+			aud.buffer = AudioServer.backend.createAudioBuffer();
+
+			_cache.set(key, aud);
 		}
 		return cast _cache.get(key);
 	}

@@ -15,7 +15,6 @@ import glad.Glad;
 import vortex.backend.Application;
 
 import vortex.utils.engine.Color;
-import vortex.utils.engine.RefCounted;
 
 import vortex.utils.math.Vector2;
 import vortex.utils.math.Vector3;
@@ -23,7 +22,7 @@ import vortex.utils.math.Vector4;
 import vortex.utils.math.Matrix4x4;
 
 @:access(vortex.backend.Window)
-class Shader extends RefCounted {
+class Shader extends Resource {
 	public static final VERTEX_PREFIX:String = "
 		#version 330 core
 		layout (location = 0) in vec4 data;
@@ -66,40 +65,40 @@ class Shader extends RefCounted {
 		var fragContent = ConstCharStar.fromString(FRAGMENT_PREFIX + ((frag != null && FileSystem.exists(frag)) ? File.getContent(frag) : (frag != null && frag.trim().length > 0) ? frag : FRAGMENT_DEFAULT));
 		var vertContent = ConstCharStar.fromString(VERTEX_PREFIX + ((vert != null && FileSystem.exists(vert)) ? File.getContent(vert) : (vert != null && vert.trim().length > 0) ? vert : VERTEX_DEFAULT));
 		
-		shaderData = RenderingServer.createShader(fragContent, vertContent);
+		shaderData = RenderingServer.backend.createShader(fragContent, vertContent);
 		useProgram();
 	}
 
 	private function useProgram():Void {
-		RenderingServer.useShader(shaderData);
+		RenderingServer.backend.useShader(shaderData);
 	}
 
 	public function setUniformInt(name:ConstCharStar, value:Int):Void {
-		RenderingServer.setUniformInt(shaderData, name, value);
+		RenderingServer.backend.setUniformInt(shaderData, name, value);
 	}
 
 	public function setUniformFloat(name:ConstCharStar, value:Float) {
-		RenderingServer.setUniformFloat(shaderData, name, value);
+		RenderingServer.backend.setUniformFloat(shaderData, name, value);
 	}
 
 	public function setUniformVec2(name:ConstCharStar, value:Vector2) {
-		RenderingServer.setUniformVec2(shaderData, name, value);
+		RenderingServer.backend.setUniformVec2(shaderData, name, value);
 	}
 
 	public function setUniformVec3(name:ConstCharStar, value:Vector3) {
-		RenderingServer.setUniformVec3(shaderData, name, value);
+		RenderingServer.backend.setUniformVec3(shaderData, name, value);
 	}
 
 	public function setUniformVec4(name:ConstCharStar, value:Vector4) {
-		RenderingServer.setUniformVec4(shaderData, name, value);
+		RenderingServer.backend.setUniformVec4(shaderData, name, value);
 	}
 
 	public function setUniformColor(name:ConstCharStar, value:Color) {
-		RenderingServer.setUniformColor(shaderData, name, value);
+		RenderingServer.backend.setUniformColor(shaderData, name, value);
 	}
 
 	public function setUniformMat4x4(name:ConstCharStar, value:Matrix4x4) {
-		RenderingServer.setUniformMat4x4(shaderData, name, value);
+		RenderingServer.backend.setUniformMat4x4(shaderData, name, value);
 	}
 
 	/**
@@ -110,7 +109,7 @@ class Shader extends RefCounted {
 		trace('Dispose shader #' + shaderData.shader);
 
 		if (!disposed)
-			RenderingServer.disposeShader(shaderData);
+			RenderingServer.backend.disposeShader(shaderData);
 		
 		disposed = true;
 	}

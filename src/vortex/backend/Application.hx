@@ -9,6 +9,8 @@ import vortex.backend.Window;
 
 import vortex.servers.DisplayServer;
 import vortex.servers.RenderingServer;
+import vortex.servers.AudioServer;
+import vortex.servers.ResourceServer;
 
 import vortex.utils.generic.CFGParser;
 import vortex.utils.engine.Project.ProjectInfo;
@@ -55,7 +57,8 @@ class Application {
 		meta = CFGParser.parse(ProjectMacro.getConfig());
 
 		DisplayServer.init();
-
+		AudioServer.init();
+		
 		window = new Window(meta.window.title, new Vector2i(WindowPos.CENTERED, WindowPos.CENTERED), new Vector2i().copyFrom(meta.window.size));
 		
 		RenderingServer.init();
@@ -83,17 +86,18 @@ class Application {
 			while(i < windows.length) {
 				final window:Window = windows[i++];
 				if(window != null) {
-					RenderingServer.clear(window);
+					RenderingServer.backend.clear(window);
 
 					window.tickAll(Engine.deltaTime);
 					window.drawAll();
 					
-					RenderingServer.present(window);
+					RenderingServer.backend.present(window);
 				}
 			}
 
 			// past cube: hxcpp is coded weirdly enough to where
 			// this might prevent gc blowups while keeping decent fps
+
 			// future cube: yeah the memory usage stays good while
 			// fps stays at like over 1000 on my pc i think we good
 			// this is stupid but it works for some reason
@@ -101,9 +105,11 @@ class Application {
 			Gc.run(false);
 		}
 		
+		ResourceServer.removeDisposed();
 		RenderingServer.dispose();
 		window.dispose();
 		DisplayServer.dispose();
+		AudioServer.dispose();
 	}
 }
 #else

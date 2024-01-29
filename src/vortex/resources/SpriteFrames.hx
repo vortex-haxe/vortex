@@ -1,6 +1,5 @@
 package vortex.resources;
 
-import vortex.utils.engine.RefCounted;
 import vortex.utils.math.Vector2;
 
 typedef AnimationFrame = {
@@ -16,7 +15,7 @@ typedef AnimationFrame = {
  * A simple container resource for a texture and
  * animation frame data.
  */
-class SpriteFrames extends RefCounted {
+class SpriteFrames extends Resource {
 	/**
 	 * The texture attached to this resource.
 	 */

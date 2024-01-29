@@ -149,7 +149,7 @@ class SDLBackend extends RenderingBackend {
 	 * Presents/renders whatever is on-screen currently.
 	 */
 	override function present(window:Window):Void {
-		DisplayServer.present(window._nativeWindow);
+		DisplayServer.backend.present(window._nativeWindow);
 	}
 
 	/**

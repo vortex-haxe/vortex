@@ -124,7 +124,7 @@ class OpenGLQuadRenderer implements IQuadRenderer {
 	}
 
 	public function drawColor(position:Vector2, size:Vector2, color:Color):Void {
-		RenderingServer.useShader(shader);
+		RenderingServer.backend.useShader(shader);
 
 		Glad.bindVertexArray(VAO);
 
@@ -132,15 +132,15 @@ class OpenGLQuadRenderer implements IQuadRenderer {
 		_trans.scale(_vec3.set(size.x, size.y, 1.0));
 		_trans.translate(_vec3.set(position.x, position.y, 0.0));
 
-		RenderingServer.setUniformMat4x4(shader, "TRANSFORM", _trans);
-		RenderingServer.setUniformColor(shader, "MODULATE", color);
+		RenderingServer.backend.setUniformMat4x4(shader, "TRANSFORM", _trans);
+		RenderingServer.backend.setUniformColor(shader, "MODULATE", color);
 
 		Glad.drawElements(Glad.TRIANGLES, 6, Glad.UNSIGNED_INT, 0);
 	}
 
 	public function drawTexture(position:Vector2, size:Vector2, modulate:Color, sourceRect:Vector4, origin:Vector2, angle:Float):Void {
 		// use shader
-		RenderingServer.useShader(shader);
+		RenderingServer.backend.useShader(shader);
 
 		// use texture
 		Glad.activeTexture(Glad.TEXTURE0);
@@ -163,9 +163,9 @@ class OpenGLQuadRenderer implements IQuadRenderer {
 
 		_trans.translate(_vec3.set(position.x + (-origin.x * _vec2.x), position.y + (-origin.y * _vec2.y), 0.0));
 		
-		RenderingServer.setUniformMat4x4(shader, "TRANSFORM", _trans);
-		RenderingServer.setUniformColor(shader, "MODULATE", modulate);
-		RenderingServer.setUniformVec4(shader, "SOURCE", sourceRect);
+		RenderingServer.backend.setUniformMat4x4(shader, "TRANSFORM", _trans);
+		RenderingServer.backend.setUniformColor(shader, "MODULATE", modulate);
+		RenderingServer.backend.setUniformVec4(shader, "SOURCE", sourceRect);
 
 		// draw
 		Glad.drawElements(Glad.TRIANGLES, 6, Glad.UNSIGNED_INT, 0);
@@ -173,7 +173,7 @@ class OpenGLQuadRenderer implements IQuadRenderer {
 
 	public function drawFrame(position:Vector2, frame:AnimationFrame, size:Vector2, scale:Vector2, modulate:Color, sourceRect:Vector4, origin:Vector2, angle:Float):Void {
 		// use shader
-		RenderingServer.useShader(shader);
+		RenderingServer.backend.useShader(shader);
 
 		// use texture
 		Glad.activeTexture(Glad.TEXTURE0);
@@ -207,9 +207,9 @@ class OpenGLQuadRenderer implements IQuadRenderer {
         _trans.translate(_vec3.set(position.x, position.y, 0.0));
         _trans.translate(_vec3.set(-origin.x * _vec2.x, -origin.y * _vec2.y, 0.0));
 		
-		RenderingServer.setUniformMat4x4(shader, "TRANSFORM", _trans);
-		RenderingServer.setUniformColor(shader, "MODULATE", modulate);
-		RenderingServer.setUniformVec4(shader, "SOURCE", sourceRect);
+		RenderingServer.backend.setUniformMat4x4(shader, "TRANSFORM", _trans);
+		RenderingServer.backend.setUniformColor(shader, "MODULATE", modulate);
+		RenderingServer.backend.setUniformVec4(shader, "SOURCE", sourceRect);
 
 		// draw
 		Glad.drawElements(Glad.TRIANGLES, 6, Glad.UNSIGNED_INT, 0);
@@ -266,7 +266,7 @@ class OpenGLBackend extends RenderingBackend {
 	 * Clears whatever is on-screen currently.
 	 */
 	override function clear(window:Window):Void {
-		DisplayServer.useWindowContext(window._nativeWindow);
+		DisplayServer.backend.useWindowContext(window._nativeWindow);
 		Glad.clear(Glad.COLOR_BUFFER_BIT);
 
 		colorRectShader.useProgram();
@@ -277,7 +277,7 @@ class OpenGLBackend extends RenderingBackend {
 	 * Presents/renders whatever is on-screen currently.
 	 */
 	override function present(window:Window):Void {
-		DisplayServer.present(window._nativeWindow);
+		DisplayServer.backend.present(window._nativeWindow);
 	}
 
 	private static function getOpenGLWrap(wrapping:TextureWrapping):Int {
@@ -336,7 +336,7 @@ class OpenGLBackend extends RenderingBackend {
 	 */
 	override function disposeTexture(texture:ITextureData):Void {
 		// Helpers.tempPointer is used because regular cpp.Pointer just doesn't work
-		// :3
+		// :3   - what-is-a-git
 		Glad.deleteTextures(1, Helpers.tempPointer(texture.texture));
 	}
 
