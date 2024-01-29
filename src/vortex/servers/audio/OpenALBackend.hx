@@ -1,8 +1,9 @@
 package vortex.servers.audio;
 
+import cpp.UInt32;
+import cpp.UInt64;
 import cpp.Helpers;
 import cpp.Pointer;
-import cpp.UInt32;
 
 import al.AL;
 import al.ALC;
@@ -40,13 +41,13 @@ class OpenALBackend extends MixerBackend {
 	 */
 	override function init():Void {
 		final defaultDevice:String = ALC.getString(null, ALC.DEFAULT_DEVICE_SPECIFIER);
-		var device:Device = ALC.openDevice(defaultDevice);
+		final device:Device = ALC.openDevice(defaultDevice);
 
 		if(device == null) {
 			Debug.error('Failed to open an OpenAL device.');
 			return;
 		}
-		var context:Context = ALC.createContext(device, null);
+		final context:Context = ALC.createContext(device, null);
 		if(!ALC.makeContextCurrent(context)) {
 			Debug.error('Failed to create OpenAL context.');
 			return;
@@ -67,6 +68,138 @@ class OpenALBackend extends MixerBackend {
 		gain = 1.0;
 
 		data = new OpenALMixerData(device, context);
+	}
+
+	/**
+	 * Gets the current time of a given audio source in seconds.
+	 */
+	override function getSourceTime(source:IAudioSourceData):Float {
+		var _time:Single = 0;
+
+		if(source.source != 0) 
+			AL.getSourcef(source.source, AL.SEC_OFFSET, Pointer.addressOf(_time));
+
+		return _time;
+	}
+
+	/**
+	 * Sets the current time of an audio source to a given value.
+	 */
+	override function setSourceTime(source:IAudioSourceData, newTime:Float):Void {
+		if(source.source != 0) 
+			AL.sourcef(source.source, AL.SEC_OFFSET, newTime);
+	}
+
+	/**
+	 * Gets the current gain/volume of a given audio source.
+	 * 
+	 * This will return a float value from 0 to 1.
+	 */
+	override function getSourceGain(source:IAudioSourceData):Float {
+		var _gain:Single = 0;
+
+		if(source.source != 0) 
+			AL.getSourcef(source.source, AL.GAIN, Pointer.addressOf(_gain));
+
+		return _gain;
+	}
+
+	/**
+	 * Sets the current gain of an audio source to a given value.
+	 */
+	override function setSourceGain(source:IAudioSourceData, newGain:Float):Void {
+		if(source.source != 0) 
+			AL.sourcef(source.source, AL.SEC_OFFSET, newGain);
+	}
+
+	/**
+	 * Gets the current pitch of a given audio source.
+	 * 
+	 * This will return a float value from 0 to 1.
+	 */
+	override function getSourcePitch(source:IAudioSourceData):Float {
+		var _pitch:Single = 0;
+
+		if(source.source != 0) 
+			AL.getSourcef(source.source, AL.PITCH, Pointer.addressOf(_pitch));
+
+		return _pitch;
+	}
+
+	/**
+	 * Sets the current pitch of an audio source to a given value.
+	 */
+	override function setSourcePitch(source:IAudioSourceData, newPitch:Float):Void {
+		if(source.source != 0) 
+			AL.sourcef(source.source, AL.PITCH, newPitch);
+	}
+
+	/**
+	 * Returns whether or not a given audio source is set to loop.
+	 */
+	override function getSourceLooping(source:IAudioSourceData):Bool {
+		var state:Int = 0;
+
+		if (source.source != 0) 
+			AL.getSourcei(source.source, AL.LOOPING, Pointer.addressOf(state));
+
+		return state == AL.TRUE;
+	}
+
+	/**
+	 * Toggles looping of an audio source with a given boolean value.
+	 */
+	override function setSourceLooping(source:IAudioSourceData, newLooping:Bool):Void {
+		if (source.source != 0) 
+			AL.sourcei(source.source, AL.LOOPING, newLooping ? AL.TRUE : AL.FALSE);
+	}
+
+	/**
+	 * Returns whether or not a given audio source is playing.
+	 */
+	override function getSourcePlaying(source:IAudioSourceData):Bool {
+		var state:Int = 0;
+
+		if (source.source != 0) 
+			AL.getSourcei(source.source, AL.PLAYING, Pointer.addressOf(state));
+
+		return state == AL.TRUE;
+	}
+
+	/**
+	 * Pauses/unpauses an audio source with a given boolean value.
+	 */
+	override function setSourcePlaying(source:IAudioSourceData, newPlaying:Bool):Void {
+		if (source.source != 0) {
+			if (newPlaying)
+				AL.sourcePlay(source.source);
+			else
+				AL.sourcePause(source.source);
+		}
+	}
+
+	/**
+	 * Stops an audio source from playing.
+	 */
+	override function stopSourcePlaying(source:IAudioSourceData) {
+		if (source.source != 0)
+			AL.sourceStop(source.source);
+	}
+
+	/**
+	 * Sends buffer data to a given audio source.
+	 */
+	override function sendBufferToSource(source:IAudioSourceData, buffer:IAudioBufferData):Void {
+		AL.sourcei(source.source, AL.BUFFER, buffer.buffer);
+	}
+
+	/**
+	 * Sends sample data, total frame count, and sample rate
+	 * data to a given buffer.
+	 */
+	override function sendDataToBuffer(buffer:IAudioBufferData, format:Int, sampleData:Pointer<cpp.Void>, totalFrameCount:UInt64, sampleRate:UInt32):Void {
+		// casting to void pointer because i don't trust hxcpp
+		AL.bufferData(buffer.buffer, format, sampleData, untyped __cpp__("{0} * (unsigned long)(4)", totalFrameCount), sampleRate);
 	}
 
 	/**

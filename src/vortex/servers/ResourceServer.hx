@@ -1,10 +1,20 @@
 package vortex.servers;
 
+import cpp.Helpers;
 import cpp.Star;
 import cpp.UInt8;
+import cpp.UInt32;
+import cpp.UInt64;
+import cpp.Int16;
 import cpp.Pointer;
 
 import stb.Image;
+
+import dr.MP3;
+import dr.WAV;
+import stb.Vorbis;
+
+import al.AL;
 
 import vortex.resources.Texture;
 import vortex.resources.AudioStream;
@@ -61,6 +71,56 @@ class ResourceServer {
 			aud.filePath = filePath;
 			aud.buffer = AudioServer.backend.createAudioBuffer();
 
+			final ext:String = filePath.substring(filePath.lastIndexOf(".") + 1).toLowerCase();
+			
+			var format:Int = 0;
+			var sampleData:Star<Int16> = null;
+			
+			switch(ext) {
+				case "wav":
+					var channels:UInt32 = 0;
+					var sampleRate:UInt32 = 0;
+					var totalFrameCount:UInt64 = 0;
+					sampleData = cast WAV.openFileAndReadPCMFramesShort16(filePath, channels, sampleRate, totalFrameCount, null);
+
+					if(sampleData != null) {
+						format = channels > 1 ? AL.FORMAT_STEREO16 : AL.FORMAT_MONO16;
+						AudioServer.backend.sendDataToBuffer(aud.buffer, format, cast sampleData, totalFrameCount, sampleRate);
+					
+						if(sampleData != null)
+							WAV.free(cast sampleData, null);
+					} else
+						Debug.error('Audio file at ${filePath} failed to load: Sample data is null');
+			
+				case "ogg":
+					var channels:Int = 0;
+					var sampleRate:Int = 0;
+					var totalFrameCount:Int = Vorbis.decodeFileName(filePath, channels, sampleRate, cast sampleData);		
+					
+					if(sampleData != null) {
+						format = channels > 1 ? AL.FORMAT_STEREO16 : AL.FORMAT_MONO16;
+						AudioServer.backend.sendDataToBuffer(aud.buffer, format, cast sampleData, totalFrameCount, sampleRate);
+						Helpers.free(sampleData);
+					} else
+						Debug.error('Audio file at ${filePath} failed to load: Sample data is null');
+						
+				case "mp3":
+					var config:cpp.Pointer<DrMP3Config> = null;
+					untyped __cpp__('
+						drmp3_config config_but_good;
+						{0} = &config_but_good;
+					', config);
+
+					var totalFrameCount:DrMP3UInt64 = 0;
+					sampleData = MP3.openFileAndReadPCMFramesShort16(filePath, config, totalFrameCount, null);
+			
+					if(sampleData != null) {
+						format = config.ref.channels > 1 ? AL.FORMAT_STEREO16 : AL.FORMAT_MONO16;
+						AudioServer.backend.sendDataToBuffer(aud.buffer, format, cast sampleData, totalFrameCount, config.ref.sampleRate);
+						MP3.free(sampleData, null);
+					} else
+						Debug.error('Audio file at ${filePath} failed to load: Sample data is null');
+			}
 			_cache.set(key, aud);
 		}
 		return cast _cache.get(key);

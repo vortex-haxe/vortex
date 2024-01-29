@@ -3,7 +3,7 @@ package vortex.resources;
 import vortex.servers.AudioServer.IAudioBufferData;
 import vortex.servers.AudioServer;
 
-// TODO: Add length
+// TODO: Add length field and audio streaming capabilities
 
 /**
  * A simple audio stream class including

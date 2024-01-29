@@ -1,6 +1,8 @@
 package vortex.servers;
 
+import cpp.Pointer;
 import cpp.UInt32;
+import cpp.UInt64;
 
 import vortex.servers.audio.OpenALBackend;
 import vortex.utils.math.Vector3;
@@ -62,6 +64,86 @@ class MixerBackend {
 	 * Initializes this mixer.
 	 */
 	public function init():Void {}
+
+	/**
+	 * Gets the current time of a given audio source in seconds.
+	 */
+	public function getSourceTime(source:IAudioSourceData):Float {
+		return 0;
+	}
+
+	/**
+	 * Sets the current time of an audio source to a given value.
+	 */
+	public function setSourceTime(source:IAudioSourceData, newTime:Float):Void {}
+
+	/**
+	 * Gets the current gain/volume of a given audio source.
+	 * 
+	 * This will return a float value from 0 to 1.
+	 */
+	public function getSourceGain(source:IAudioSourceData):Float {
+		return 0;
+	}
+
+	/**
+	 * Sets the current gain of an audio source to a given value.
+	 */
+	public function setSourceGain(source:IAudioSourceData, newGain:Float):Void {}
+
+	/**
+	 * Gets the current pitch of a given audio source.
+	 * 
+	 * This will return a float value from 0 to 1.
+	 */
+	public function getSourcePitch(source:IAudioSourceData):Float {
+		return 0;
+	}
+
+	/**
+	 * Sets the current pitch of an audio source to a given value.
+	 */
+	public function setSourcePitch(source:IAudioSourceData, newPitch:Float):Void {}
+
+	/**
+	 * Returns whether or not a given audio source is set to loop.
+	 */
+	public function getSourceLooping(source:IAudioSourceData):Bool {
+		return false;
+	}
+
+	/**
+	 * Toggles looping of an audio source with a given boolean value.
+	 */
+	public function setSourceLooping(source:IAudioSourceData, newLooping:Bool):Void {}
+
+	/**
+	 * Returns whether or not a given audio source is playing.
+	 */
+	public function getSourcePlaying(source:IAudioSourceData):Bool {
+		return false;
+	}
+
+	/**
+	 * Pauses/unpauses an audio source with a given boolean value.
+	 */
+	public function setSourcePlaying(source:IAudioSourceData, newPlaying:Bool):Void {}
+
+	/**
+	 * Stops an audio source from playing.
+	 */
+	public function stopSourcePlaying(source:IAudioSourceData):Void {}
+
+	/**
+	 * Sends buffer data to a given audio source.
+	 */
+	public function sendBufferToSource(source:IAudioSourceData, buffer:IAudioBufferData):Void {}
+
+	/**
+	 * Sends sample data, total frame count, and sample rate
+	 * data to a given buffer.
+	 */
+	public function sendDataToBuffer(buffer:IAudioBufferData, format:Int, sampleData:Pointer<cpp.Void>, totalFrameCount:UInt64, sampleRate:UInt32):Void {}
 
 	/**
 	 * Creates a new audio source.
