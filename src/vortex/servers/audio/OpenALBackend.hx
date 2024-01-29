@@ -39,17 +39,15 @@ class OpenALBackend extends MixerBackend {
 	 * Initializes this mixer.
 	 */
 	override function init():Void {
-		data = new OpenALMixerData(null, null);
-
 		final defaultDevice:String = ALC.getString(null, ALC.DEFAULT_DEVICE_SPECIFIER);
-		data.device = ALC.openDevice(defaultDevice);
+		var device:Device = ALC.openDevice(defaultDevice);
 
-		if(data.device == null) {
+		if(device == null) {
 			Debug.error('Failed to open an OpenAL device.');
 			return;
 		}
-		data.context = ALC.createContext(data.device, null);
-		if(!ALC.makeContextCurrent(data.context)) {
+		var context:Context = ALC.createContext(device, null);
+		if(!ALC.makeContextCurrent(context)) {
 			Debug.error('Failed to create OpenAL context.');
 			return;
 		}
@@ -67,6 +65,8 @@ class OpenALBackend extends MixerBackend {
 			0, 1, 0,
 		];
 		gain = 1.0;
+
+		data = new OpenALMixerData(device, context);
 	}
 
 	/**
