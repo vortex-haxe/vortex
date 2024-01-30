@@ -123,6 +123,10 @@ class AudioPlayer extends Node {
 
 	@:noCompletion
 	private function set_playing(newPlaying:Bool):Bool {
+		if(parent == null) {
+			Debug.error("Please add this AudioPlayer to a parent node before playing it.");
+			return false;
+		}
 		AudioServer.backend.setSourcePlaying(source, newPlaying);
 		return newPlaying;
 	}

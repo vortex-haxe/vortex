@@ -208,22 +208,22 @@ class AudioServer {
 	/**
 	 * The 3D position of all audio.
 	 */
-	public static var position(default, set):Vector3;
+	public static var position(get, set):Vector3;
 
 	/**
 	 * TODO: Document me!
 	 */
-	public static var velocity(default, set):Vector3;
+	public static var velocity(get, set):Vector3;
 
 	/**
 	 * TODO: Document me!
 	 */
-	public static var orientation(default, set):Array<Single>;
+	public static var orientation(get, set):Array<Single>;
 
 	/**
 	 * A value from 0 to 1 determining how loud all audio can be.
 	 */
-	public static var gain(default, set):Single;
+	public static var gain(get, set):Single;
 
 	/**
 	 * The current audio mixer backend.
@@ -250,8 +250,18 @@ class AudioServer {
 	// Getters & Setters //
 	// ----------------- //
 	@:noCompletion
+	private static function get_position():Vector3 {
+		return backend.position;
+	}
+
+	@:noCompletion
 	private static function set_position(newPos:Vector3):Vector3 {
 		return backend.position = newPos;
+	}
+
+	@:noCompletion
+	private static function get_velocity():Vector3 {
+		return backend.velocity;
 	}
 
 	@:noCompletion
@@ -260,8 +270,18 @@ class AudioServer {
 	}
 
 	@:noCompletion
+	private static function get_orientation():Array<Single> {
+		return backend.orientation;
+	}
+
+	@:noCompletion
 	private static function set_orientation(newOri:Array<Single>):Array<Single> {
 		return backend.orientation = newOri;
+	}
+
+	@:noCompletion
+	private static function get_gain():Single {
+		return backend.gain;
 	}
 
 	@:noCompletion
