@@ -55,7 +55,7 @@ class Sprite extends Node2D {
 			RenderingServer.backend.quadRenderer.texture = texture.textureData;
 		}
 
-		RenderingServer.backend.quadRenderer.drawTexture(position, size * scale, modulate, _clipRectUVCoords, origin, angle);
+		RenderingServer.backend.quadRenderer.drawTexture(position, scale * size, modulate, _clipRectUVCoords, origin, angle);
 	}
 
 	/**
