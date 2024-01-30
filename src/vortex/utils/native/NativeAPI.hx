@@ -7,31 +7,41 @@ import sys.io.Process;
  * @see https://github.com/FNF-CNE-Devs/CodenameEngine/blob/main/source/funkin/backend/utils/NativeAPI.hx
  */
  class NativeAPI {
-	private static var colorSupported:Null<Bool> = null;
+	public static var colorSupported:Null<Bool> = null;
+
+	public static function checkConsoleColorSupport() {
+		if(colorSupported != null)
+			return;
+		
+		if(Sys.systemName() == "Windows") {
+			if (~/cygwin|xterm|vt100/.match(Sys.getEnv("TERM") ?? "") || Sys.getEnv("ANSICON") != null)
+				colorSupported = true;
+
+			if(Sys.command(Path.normalize(Path.join([Sys.getCwd(), "helpers", "windows", "HasConsoleColors.exe"]))) == 0)
+				colorSupported = true;
+
+			// make sure utf-8 chars are used in console
+			// the >nul part is so it doesn't output a success message
+			// after the command is ran
+			Sys.command("chcp 65001 >nul");
+		} else {
+			var result = -1;
+			try {
+				var process = new Process("tput", ["colors"]);
+				result = process.exitCode();
+				process.close();
+			}
+			catch (e:Dynamic) {}
+			colorSupported = (result == 0);
+		}
+	}
 
 	/**
 	 * Sets the console colors
 	 */
 	public static function setConsoleColors(foregroundColor:ConsoleColor = NONE, ?backgroundColor:ConsoleColor = NONE) {
 		#if sys
-		if(colorSupported == null) {
-			if(Sys.systemName() == "Windows") {
-				if (~/cygwin|xterm|vt100/.match(Sys.getEnv("TERM") ?? "") || Sys.getEnv("ANSICON") != null)
-					colorSupported = true;
-
-				if(Sys.command(Path.normalize(Path.join([Sys.getCwd(), "helpers", "windows", "HasConsoleColors.exe"]))) == 0)
-					colorSupported = true;
-			} else {
-				var result = -1;
-				try {
-					var process = new Process("tput", ["colors"]);
-					result = process.exitCode();
-					process.close();
-				}
-				catch (e:Dynamic) {}
-				colorSupported = (result == 0);
-			}
-		}
+		checkConsoleColorSupport();
 		if(!colorSupported)
 			return;
 

@@ -10,6 +10,7 @@ import vortex.backend.Window;
 import vortex.servers.DisplayServer;
 import vortex.servers.RenderingServer;
 import vortex.servers.AudioServer;
+import vortex.servers.InputServer;
 import vortex.servers.ResourceServer;
 
 import vortex.utils.generic.CFGParser;
@@ -60,6 +61,7 @@ class Application {
 		AudioServer.init();
 		
 		window = new Window(meta.window.title, new Vector2i(WindowPos.CENTERED, WindowPos.CENTERED), new Vector2i().copyFrom(meta.window.size));
+		InputServer.init();
 		
 		RenderingServer.init();
 		Engine.init();
@@ -88,12 +90,14 @@ class Application {
 				if(window != null) {
 					RenderingServer.backend.clear(window);
 
+					window.pollEvents();
 					window.tickAll(Engine.deltaTime);
 					window.drawAll();
 					
 					RenderingServer.backend.present(window);
 				}
 			}
+			InputServer.updateStates();
 
 			// past cube: hxcpp is coded weirdly enough to where
 			// this might prevent gc blowups while keeping decent fps

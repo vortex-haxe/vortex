@@ -76,6 +76,8 @@ class Run {
 	];
 
 	static function main() {
+		NativeAPI.checkConsoleColorSupport();
+		
 		var isValidCMD:Bool = false;
 		final args:Array<String> = Sys.args() ?? [];
 		for (cmd in cmds) {

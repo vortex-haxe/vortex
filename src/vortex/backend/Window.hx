@@ -5,6 +5,7 @@ import vortex.servers.DisplayServer.IWindowData;
 
 import sdl.SDL;
 import sdl.Types.Event;
+import sdl.Types.MouseButton;
 
 import vortex.servers.RenderingServer;
 
@@ -92,6 +93,34 @@ class Window extends Node {
 	public var onKeyRelease:Signal<Int->Int->Void> = new Signal();
 
 	/**
+	 * The signal that gets emitted when the window recieves a mouse click.
+	 * 
+	 * Parameters are:
+	 * - Mouse Button
+	 */
+	public var onMouseClick:Signal<MouseButton->Void> = new Signal();
+
+	/**
+	 * The signal that gets emitted when the window recieves a mouse release.
+	 * 
+	 * Parameters are:
+	 * - Mouse Button
+	 */
+	public var onMouseRelease:Signal<MouseButton->Void> = new Signal();
+
+	/**
+	 * The signal that gets emitted when the window recieves a mouse movement.
+	 * 
+	 * Parameters are:
+	 * - Mouse Button
+	 * - Mouse X
+	 * - Mouse Y
+	 * - Mouse X (Relative)
+	 * - Mouse Y (Relative)
+	 */
+	public var onMouseMove:Signal<MouseButton->Int->Int->Int->Int->Void> = new Signal();
+
+	/**
 	 * Makes a new `Window`.
 	 */
 	public function new(title:String, position:Vector2i, size:Vector2i) {
@@ -115,58 +144,68 @@ class Window extends Node {
 		Application.self.windows.push(this);
 	}
 
-	override function tick(delta:Float) {
-		SDL.pollEvent(_ev);
-		switch(_ev.ref.type) {
-			case WINDOWEVENT:
-				switch(_ev.ref.window.event) {
-					case CLOSE:
-						onClose.emit();
-						dispose();
-					
-					case MINIMIZED:
-						onMinimize.emit();
+	private function pollEvents() {
+		while(SDL.pollEvent(_ev) != 0) {
+			switch(_ev.ref.type) {
+				case WINDOWEVENT:
+					switch(_ev.ref.window.event) {
+						case CLOSE:
+							onClose.emit();
+							dispose();
 						
-					case MAXIMIZED:
-						onMaximize.emit();
-
-					case RESTORED:
-						onRestore.emit();
-
-					case FOCUS_GAINED:
-						onFocusGain.emit();
-
-					case FOCUS_LOST:
-						onFocusLost.emit();
-
-					case RESIZED:
-						@:privateAccess {
-							final _ooc = size._onChange;
-							size._onChange = null;
-							size.set(_ev.ref.window.data1, _ev.ref.window.data2);
-							size._onChange = _ooc;
-						}
-						final initialRatio:Float = initialSize.x / initialSize.y;
-						final windowRatio:Float = size.x / size.y;
-
-						_recti.width = (windowRatio > initialRatio) ? Math.floor(size.y * initialRatio) : size.x;
-						_recti.height = (windowRatio < initialRatio) ? Math.floor(size.x / initialRatio) : size.y;
-						_recti.x = Math.floor((size.x - _recti.width) * 0.5);
-						_recti.y = Math.floor((size.y - _recti.height) * 0.5);
-						
-						RenderingServer.backend.setViewportRect(_recti);
-						onResize.emit(_ev.ref.window.data1, _ev.ref.window.data2);
-
-					default:
-				}
-
-			case KEYDOWN:
-				onKeyPress.emit(_ev.ref.key.keysym.sym, _ev.ref.key.keysym.mod);
-
-			case KEYUP:
-				onKeyRelease.emit(_ev.ref.key.keysym.sym, _ev.ref.key.keysym.mod);
-
-			default:
+						case MINIMIZED:
+							onMinimize.emit();
+							
+						case MAXIMIZED:
+							onMaximize.emit();
+	
+						case RESTORED:
+							onRestore.emit();
+	
+						case FOCUS_GAINED:
+							onFocusGain.emit();
+	
+						case FOCUS_LOST:
+							onFocusLost.emit();
+	
+						case RESIZED:
+							@:privateAccess {
+								final _ooc = size._onChange;
+								size._onChange = null;
+								size.set(_ev.ref.window.data1, _ev.ref.window.data2);
+								size._onChange = _ooc;
+							}
+							final initialRatio:Float = initialSize.x / initialSize.y;
+							final windowRatio:Float = size.x / size.y;
+	
+							_recti.width = (windowRatio > initialRatio) ? Math.floor(size.y * initialRatio) : size.x;
+							_recti.height = (windowRatio < initialRatio) ? Math.floor(size.x / initialRatio) : size.y;
+							_recti.x = Math.floor((size.x - _recti.width) * 0.5);
+							_recti.y = Math.floor((size.y - _recti.height) * 0.5);
+							
+							RenderingServer.backend.setViewportRect(_recti);
+							onResize.emit(_ev.ref.window.data1, _ev.ref.window.data2);
+	
+						default:
+					}
+	
+				case KEYDOWN:
+					onKeyPress.emit(_ev.ref.key.keysym.sym, _ev.ref.key.keysym.mod);
+	
+				case KEYUP:
+					onKeyRelease.emit(_ev.ref.key.keysym.sym, _ev.ref.key.keysym.mod);
+	
+				case MOUSEMOTION:
+					onMouseMove.emit(_ev.ref.motion.state, _ev.ref.motion.x, _ev.ref.motion.y, _ev.ref.motion.xRel, _ev.ref.motion.yRel);
+	
+				case MOUSEBUTTONDOWN:
+					onMouseClick.emit(_ev.ref.button.button);
+	
+				case MOUSEBUTTONUP:
+					onMouseRelease.emit(_ev.ref.button.button);
+	
+				default:
+			}
 		}
 	}
 

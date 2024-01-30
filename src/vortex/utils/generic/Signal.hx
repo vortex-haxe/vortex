@@ -66,6 +66,11 @@ abstract Signal<T>(ISignal<T>) {
 	static inline function toSignal4<T1, T2, T3, T4>(signal:ISignal<T1->T2->T3->T4->Void>):Signal4<T1, T2, T3, T4> {
 		return new Signal4();
 	}
+
+	@:to
+	static inline function toSignal5<T1, T2, T3, T4, T5>(signal:ISignal<T1->T2->T3->T4->T5->Void>):Signal5<T1, T2, T3, T4, T5> {
+		return new Signal5();
+	}
 }
 
 private class SignalHandler<T> implements IDisposable {
@@ -225,6 +230,17 @@ private class Signal4<T1, T2, T3, T4> extends BaseSignal<T1->T2->T3->T4->Void> {
 
 	public function emit4(value1:T1, value2:T2, value3:T3, value4:T4):Void {
 		Macro.buildEmit(value1, value2, value3, value4);
+	}
+}
+
+private class Signal5<T1, T2, T3, T4, T5> extends BaseSignal<T1->T2->T3->T4->T5->Void> {
+	public function new() {
+		super();
+		this.emit = emit4;
+	}
+
+	public function emit4(value1:T1, value2:T2, value3:T3, value4:T4, value5:T5):Void {
+		Macro.buildEmit(value1, value2, value3, value4, value5);
 	}
 }
 
