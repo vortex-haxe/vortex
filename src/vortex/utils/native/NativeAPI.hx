@@ -15,7 +15,7 @@ import sys.io.Process;
 		#if sys
 		if(colorSupported == null) {
 			if(Sys.systemName() == "Windows") {
-				if (Sys.getEnv("TERM") == "xterm" || Sys.getEnv("ANSICON") != null)
+				if (~/cygwin|xterm|vt100/.match(Sys.getEnv("TERM") ?? "") || Sys.getEnv("ANSICON") != null)
 					colorSupported = true;
 			} else {
 				var result = -1;
