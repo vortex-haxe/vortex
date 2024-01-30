@@ -51,12 +51,16 @@ class InputServer {
 			onInput.emit(MOUSE_MOVE(toVortexMouseButton(button), x, y, xRel, yRel));
 		});
 		window.onMouseClick.connect((button:NativeMouseButton) -> {
-			if(mouseStates.get(button) != JUST_PRESSED && mouseStates.get(button) != PRESSED)
+			if(mouseStates.get(button) != JUST_PRESSED && mouseStates.get(button) != PRESSED) {
 				mouseStates.set(button, JUST_PRESSED);
+				onInput.emit(MOUSE_PRESS(toVortexMouseButton(button)));
+			}
 		});
 		window.onMouseRelease.connect((button:NativeMouseButton) -> {
-			if(mouseStates.get(button) != JUST_RELEASED && mouseStates.get(button) != RELEASED)
+			if(mouseStates.get(button) != JUST_RELEASED && mouseStates.get(button) != RELEASED) {
 				mouseStates.set(button, JUST_RELEASED);
+				onInput.emit(MOUSE_RELEASE(toVortexMouseButton(button)));
+			}
 		});
 	}
 
