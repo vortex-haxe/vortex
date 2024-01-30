@@ -33,23 +33,30 @@ class InputServer {
 
 		// Keyboard
 		window.onKeyPress.connect((key:KeyCode, mod:KeyMod) -> {
-			if(keyStates.get(key) != JUST_PRESSED && keyStates.get(key) != PRESSED)
+			if(keyStates.get(key) != JUST_PRESSED && keyStates.get(key) != PRESSED) {
 				keyStates.set(key, JUST_PRESSED);
+				onInput.emit(KEYBOARD_PRESS(key));
+			}
 		});
 		window.onKeyRelease.connect((key:KeyCode, mod:KeyMod) -> {
-			if(keyStates.get(key) != JUST_RELEASED && keyStates.get(key) != RELEASED)
+			if(keyStates.get(key) != JUST_RELEASED && keyStates.get(key) != RELEASED) {
 				keyStates.set(key, JUST_RELEASED);
+				onInput.emit(KEYBOARD_RELEASE(key));
+			}
 		});
-
+		
 		// Mouse
 		window.onMouseMove.connect((button:NativeMouseButton, x:Int, y:Int, xRel:Int, yRel:Int) -> {
 			mouseMovements.set(button, JUST_PRESSED);
+			onInput.emit(MOUSE_MOVE(toVortexMouseButton(button), x, y, xRel, yRel));
 		});
 		window.onMouseClick.connect((button:NativeMouseButton) -> {
-			mouseStates.set(button, JUST_PRESSED);
+			if(mouseStates.get(button) != JUST_PRESSED && mouseStates.get(button) != PRESSED)
+				mouseStates.set(button, JUST_PRESSED);
 		});
 		window.onMouseRelease.connect((button:NativeMouseButton) -> {
-			mouseStates.set(button, JUST_RELEASED);
+			if(mouseStates.get(button) != JUST_RELEASED && mouseStates.get(button) != RELEASED)
+				mouseStates.set(button, JUST_RELEASED);
 		});
 	}
 
@@ -194,6 +201,15 @@ class InputServer {
 			case MouseButton.MIDDLE: MIDDLE;
 			case MouseButton.RIGHT: RIGHT;
 			default: 0;
+		}
+	}
+
+	private static function toVortexMouseButton(nButton:NativeMouseButton):MouseButton {
+		return switch(nButton) {
+			case NativeMouseButton.LEFT: LEFT;
+			case NativeMouseButton.MIDDLE: MIDDLE;
+			case NativeMouseButton.RIGHT: RIGHT;
+			default: NONE;
 		}
 	}
 }
