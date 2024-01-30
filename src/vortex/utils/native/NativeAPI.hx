@@ -1,5 +1,6 @@
 package vortex.utils.native;
 
+import haxe.io.Path;
 import sys.io.Process;
 
 /**
@@ -16,6 +17,9 @@ import sys.io.Process;
 		if(colorSupported == null) {
 			if(Sys.systemName() == "Windows") {
 				if (~/cygwin|xterm|vt100/.match(Sys.getEnv("TERM") ?? "") || Sys.getEnv("ANSICON") != null)
+					colorSupported = true;
+
+				if(Sys.command(Path.normalize(Path.join([Sys.getCwd(), "helpers", "windows", "HasConsoleColors.exe"]))) == 0)
 					colorSupported = true;
 			} else {
 				var result = -1;

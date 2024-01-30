@@ -8,9 +8,11 @@ import sys.FileSystem;
 
 import vortex.debug.Debug;
 import vortex.macros.ProjectMacro;
-import vortex.utils.generic.CFGParser;
+
 import vortex.utils.engine.Project.ProjectInfo;
+import vortex.utils.generic.CFGParser;
 import vortex.utils.generic.FileUtil;
+import vortex.utils.native.NativeAPI;
 
 using StringTools;
 
@@ -85,7 +87,7 @@ class Run {
 			}
 		}
 		if (!isValidCMD) {
-			final asciiArt:String = "
+			final oldConsoleAsciiArt:String = "
                     __                 
 ___  ______________/  |_  ____ ___  ___
 \\  \\/ /  _ \\_  __ \\   __\\/ __ \\\\  \\/  /
@@ -93,10 +95,25 @@ ___  ______________/  |_  ____ ___  ___
   \\_/ \\____/|__|   |__|  \\___  >__/\\_ \\
                              \\/      \\/
             \r\n";
-			Debug._coloredPrint(MAGENTA, asciiArt);
+			final newConsoleAsciiArt:String = "
+┌──┐┌──┐
+│  └┘  │
+└┐ ╱╲ ┌┘ ┌─┬─┐┌───┐┌───┐┌───┐┌───┐┌─┬─┐
+┌┘ ╲╱ └┐ │ │ ││ │ ││ │ │└┐ ┌┘│ ╶─┤├   ┤
+│  ┌┐  │ │ ╵ ││ │ ││ ╷ ┤ │ │ │ ╶─┤│   │
+└──┘└──┘ └───┘└───┘└─┴─┘ └─┘ └───┘└─┴─┘
+			\r\n";
+			NativeAPI.setConsoleColors(MAGENTA);
+			@:privateAccess
+			if(NativeAPI.colorSupported)
+				Sys.print(newConsoleAsciiArt);
+			else // If we don't have colors we're very likely on an older terminal/console
+				Sys.print(oldConsoleAsciiArt);
+
+			NativeAPI.setConsoleColors();
 			
 			Sys.print("Welcome to Vortex, an easy and performant 2D game framework built for Haxe.\r\n\r\n");
-			Sys.print("Type in \"haxelib run vortex help\" for a list of every available command!\r\n\r\n");
+			Sys.print("Type in \"haxelib run vortex help\" for a list of every available command!\r\n");
 		}
 	}
 
