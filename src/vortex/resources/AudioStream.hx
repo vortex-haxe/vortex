@@ -13,6 +13,11 @@ class AudioStream extends Resource {
 	private var buffer:IAudioBufferData = null;
 
 	/**
+	 * The length of this audio stream in seconds.
+	 */
+	public var length:Float = 0;
+
+	/**
 	 * The file path to the audio that this stream uses.
 	 * 
 	 * Blank if this stream wasn't loaded from a file.

@@ -85,6 +85,7 @@ class ResourceServer {
 					sampleData = WAV.openFileAndReadPCMFramesShort16(filePath, channels, sampleRate, totalFrameCount, null);
 
 					if(sampleData != null) {
+						aud.length = untyped __cpp__("(double)({0} / {1})", totalFrameCount, sampleRate);
 						format = channels > 1 ? AL.FORMAT_STEREO16 : AL.FORMAT_MONO16;
 						AudioServer.backend.sendDataToBuffer(aud.buffer, format, cast sampleData, totalFrameCount, sampleRate);
 					
@@ -99,6 +100,7 @@ class ResourceServer {
 					var totalFrameCount:Int = Vorbis.decodeFileName(filePath, channels, sampleRate, cast sampleData);		
 					
 					if(sampleData != null) {
+						aud.length = untyped __cpp__("(double)({0} / {1})", totalFrameCount, sampleRate);
 						format = channels > 1 ? AL.FORMAT_STEREO16 : AL.FORMAT_MONO16;
 						AudioServer.backend.sendDataToBuffer(aud.buffer, format, cast sampleData, totalFrameCount, sampleRate);
 						Helpers.free(sampleData);
@@ -106,7 +108,7 @@ class ResourceServer {
 						Debug.error('Audio file at ${filePath} failed to load: Sample data is null');
 						
 				case "mp3":
-					var config:cpp.Pointer<DrMP3Config> = null;
+					var config:Pointer<DrMP3Config> = null;
 					untyped __cpp__('
 						drmp3_config config_but_good;
 						{0} = &config_but_good;
@@ -116,6 +118,7 @@ class ResourceServer {
 					sampleData = MP3.openFileAndReadPCMFramesShort16(filePath, config, totalFrameCount, null);
 			
 					if(sampleData != null) {
+						aud.length = untyped __cpp__("(double)({0} / {1})", totalFrameCount, config.ref.sampleRate);
 						format = config.ref.channels > 1 ? AL.FORMAT_STEREO16 : AL.FORMAT_MONO16;
 						AudioServer.backend.sendDataToBuffer(aud.buffer, format, cast sampleData, totalFrameCount, config.ref.sampleRate);
 						MP3.free(sampleData, null);

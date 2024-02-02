@@ -32,7 +32,7 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A += B)
 	private static inline function addEqualFloatOp(a:Rectanglei, b:Float) {
-		return a.add(Math.floor(b), Math.floor(b), Math.floor(b), Math.floor(b));
+		return a.set(Math.floor(a.x + b), Math.floor(a.y + b), Math.floor(a.width + b), Math.floor(a.height + b));
 	}
 
 	@:noCompletion
@@ -62,7 +62,7 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A -= B)
 	private static inline function subtractEqualFloatOp(a:Rectanglei, b:Float) {
-		return a.subtract(Math.floor(b), Math.floor(b), Math.floor(b), Math.floor(b));
+		return a.set(Math.floor(a.x - b), Math.floor(a.y - b), Math.floor(a.width - b), Math.floor(a.height - b));
 	}
 
 	@:noCompletion
@@ -98,7 +98,7 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A *= B)
 	private static inline function multiplyEqualFloatOp(a:Rectanglei, b:Float) {
-		return a.multiply(Math.floor(b), Math.floor(b), Math.floor(b), Math.floor(b));
+		return a.set(Math.floor(a.x * b), Math.floor(a.y * b), Math.floor(a.width * b), Math.floor(a.height * b));
 	}
 
 	@:noCompletion
@@ -134,7 +134,7 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A /= B)
 	private static inline function divideEqualFloatOp(a:Rectanglei, b:Float) {
-		return a.subtract(Math.floor(b), Math.floor(b), Math.floor(b), Math.floor(b));
+		return a.set(Math.floor(a.x / b), Math.floor(a.y / b), Math.floor(a.width / b), Math.floor(a.height / b));
 	}
 
 	@:from

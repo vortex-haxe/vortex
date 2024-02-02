@@ -49,7 +49,7 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A += B)
 	private static inline function addEqualFloatOp(a:Vector2i, b:Float) {
-		return a.add(Math.floor(b), Math.floor(b));
+		return a.set(Math.floor(a.x + b), Math.floor(a.y + b));
 	}
 
 	@:noCompletion
@@ -79,7 +79,7 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A -= B)
 	private static inline function subtractEqualFloatOp(a:Vector2i, b:Float) {
-		return a.subtract(Math.floor(b), Math.floor(b));
+		return a.set(Math.floor(a.x - b), Math.floor(a.y - b));
 	}
 
 	@:noCompletion
@@ -115,7 +115,7 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A *= B)
 	private static inline function multiplyEqualFloatOp(a:Vector2i, b:Float) {
-		return a.multiply(Math.floor(b), Math.floor(b));
+		return a.set(Math.floor(a.x * b), Math.floor(a.y * b));
 	}
 
 	@:noCompletion
@@ -151,7 +151,7 @@ package vortex.utils.math;
 	@:noCompletion
 	@:op(A /= B)
 	private static inline function divideEqualFloatOp(a:Vector2i, b:Float) {
-		return a.divide(Math.floor(b), Math.floor(b));
+		return a.set(Math.floor(a.x / b), Math.floor(a.y / b));
 	}
 
 	@:from
