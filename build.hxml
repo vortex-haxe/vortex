@@ -5,6 +5,7 @@
 --library hxdr_wav
 --library hxstb_vorbis
 --library hxal
+--library hxfreetype
 
 --class-path src
 --define analyzer-optimize
