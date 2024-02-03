@@ -163,7 +163,7 @@ ___  ______________/  |_  ____ ___  ___
 			if(Sys.systemName() == "Windows") { // Windows
 				final exePath:String = Path.normalize(Path.join([binFolder, '${cfg.export.executable_name}.exe']));
 				File.copy(
-					Path.normalize(Path.join([Sys.getCwd(), '${cfg.source.main}.exe'])),
+					Path.normalize(Path.join([Sys.getCwd(), '${cfg.source.main.substring(cfg.source.main.lastIndexOf(".") + 1)}.exe'])),
 					exePath
 				);
 				for(file in FileSystem.readDirectory(Sys.getCwd())) {
@@ -191,7 +191,7 @@ ___  ______________/  |_  ____ ___  ___
 				}
 			} else { // Linux/MacOS (Maybe BSD too, I forgot how BSD works)
 				File.copy(
-					Path.normalize(Path.join([Sys.getCwd(), '${cfg.source.main}'])),
+					Path.normalize(Path.join([Sys.getCwd(), '${cfg.source.main.substring(cfg.source.main.lastIndexOf(".") + 1)}'])),
 					Path.normalize(Path.join([binFolder, '${cfg.export.executable_name}']))
 				);
 				Sys.setCwd(binFolder);
