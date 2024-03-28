@@ -1,4 +1,4 @@
-package vortex.macros;
+package vortex.backend.macros;
 
 // Thanks Ne_Eo for this macro code
 // I'm not good at macros so you are helping a lot 🙏

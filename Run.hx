@@ -7,7 +7,7 @@ import sys.io.File;
 import sys.FileSystem;
 
 import vortex.debug.Debug;
-import vortex.macros.ProjectMacro;
+import vortex.backend.macros.ProjectMacro;
 
 import vortex.utils.engine.Project.ProjectInfo;
 import vortex.utils.generic.CFGParser;

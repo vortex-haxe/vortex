@@ -4,7 +4,7 @@ package vortex.backend;
 import cpp.UInt64;
 import cpp.vm.Gc;
 
-import vortex.macros.ProjectMacro;
+import vortex.backend.macros.ProjectMacro;
 import vortex.backend.Window;
 
 import vortex.servers.DisplayServer;
@@ -26,7 +26,7 @@ import sdl.Types.WindowPos;
 @:access(vortex.nodes.Node)
 @:access(vortex.backend.Engine)
 @:access(vortex.backend.Window)
-@:autoBuild(vortex.macros.ApplicationMacro.build())
+@:autoBuild(vortex.backend.macros.ApplicationMacro.build())
 class Application {
 	/**
 	 * The current application instance.
