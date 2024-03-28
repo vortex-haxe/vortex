@@ -1,0 +1,14 @@
+<xml>
+	<!-- WINDOWS LINKER -->
+	<target id="haxe" tool="linker" toolid="exe" if="windows">
+		<flag value="-libpath:${haxelib:vortex}/vendor/lib" />
+		<lib name="freetype.lib" />
+	</target>
+
+	<!-- LINUX LINKER -->
+	<target id="haxe" if="linux">
+		<flag value="-lfreetype" />
+	</target>
+
+	<copyFile name="freetype.dll" from="${haxelib:vortex}/vendor/lib" toolId="exe" overwrite="true" if="windows" />
+</xml>
