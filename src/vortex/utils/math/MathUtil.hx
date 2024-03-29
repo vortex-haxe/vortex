@@ -272,7 +272,7 @@ class MathUtil {
 	}
 
 	/**
-	 * Checks if two numbers have the same sign (using `DropletMath.signOf()`).
+	 * Checks if two numbers have the same sign (using `MathUtil.signOf()`).
 	 */
 	public static inline function sameSign(a:Float, b:Float):Bool {
 		return signOf(a) == signOf(b);
