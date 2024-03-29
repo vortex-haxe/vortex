@@ -19,20 +19,38 @@ class Debug {
 		};
 	}
 
+	/**
+	 * Outputs the given content to the debugger
+	 * and console as an information log.
+	 * 
+	 * @param contents  The contents to output.
+	 */
 	public static function log(contents:Dynamic, ?pos:PosInfos) {
-		_coloredPrint(CYAN, "[  TRACE  ]");
+		_coloredPrint(CYAN, "[ INFO ]");
 		_printPosInfos(pos);
 		Sys.print('${Std.string(contents)}\r\n');
 	}
-
+	
+	/**
+	 * Outputs the given content to the debugger
+	 * and console as an warning log.
+	 * 
+	 * @param contents  The contents to output.
+	 */
 	public static function warn(contents:Dynamic, ?pos:PosInfos) {
 		_coloredPrint(YELLOW, "[ WARNING ]");
 		_printPosInfos(pos);
 		Sys.print('${Std.string(contents)}\r\n');
 	}
-
+	
+	/**
+	 * Outputs the given content to the debugger
+	 * and console as an error log.
+	 * 
+	 * @param contents  The contents to output.
+	 */
 	public static function error(contents:Dynamic, ?pos:PosInfos) {
-		_coloredPrint(RED, "[  ERROR  ]");
+		_coloredPrint(RED, "[ ERROR ]");
 		_printPosInfos(pos);
 		Sys.print('${Std.string(contents)}\r\n');
 	}
