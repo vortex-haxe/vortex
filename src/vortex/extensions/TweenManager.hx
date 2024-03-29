@@ -1,6 +1,6 @@
 package vortex.extensions;
 
-import vortex.nodes.Tween;
+import vortex.nodes.tween.Tween;
 import vortex.utils.engine.Color;
 import vortex.utils.math.MathUtil;
 import vortex.utils.math.Rectangle.BaseRectangle;
@@ -15,7 +15,7 @@ import vortex.utils.math.Vector4i.BaseVector4i;
 /**
  * Handles every tween you make in the background.
  */
-@:access(vortex.nodes.Tween)
+@:access(vortex.nodes.tween.Tween)
 class TweenManager extends Extension {
 	/**
 	 * Returns whether or not a specified tween

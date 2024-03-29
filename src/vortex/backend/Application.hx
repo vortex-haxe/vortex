@@ -13,7 +13,7 @@ import vortex.servers.AudioServer;
 import vortex.servers.InputServer;
 import vortex.servers.ResourceServer;
 
-import vortex.utils.generic.CFGParser;
+import vortex.utils.generic.ConfigFile;
 import vortex.utils.engine.Project.ProjectInfo;
 import vortex.utils.math.Vector2i;
 import vortex.utils.native.NativeAPI;
@@ -56,7 +56,7 @@ class Application {
 		if(self == null)
 			self = this;
 		
-		meta = CFGParser.parse(ProjectMacro.getConfig());
+		meta = ConfigFile.parse(ProjectMacro.getConfig());
 
 		NativeAPI.init();
 		Debug.init();

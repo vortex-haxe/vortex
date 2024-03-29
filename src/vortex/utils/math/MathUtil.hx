@@ -1,7 +1,5 @@
 package vortex.utils.math;
 
-import vortex.utils.math.Rectangle;
-
 /**
  * A class containing a set of math-related functions
  * that Haxe doesn't already have.

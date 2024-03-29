@@ -1,4 +1,4 @@
-package vortex.utils.engine;
+package vortex.nodes.tween;
 
 /**
  * A collection of eases used for tweening.

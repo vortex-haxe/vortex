@@ -1,7 +1,5 @@
 package vortex.utils.generic;
 
-import sys.io.File;
-
 import vortex.utils.engine.Color;
 import vortex.utils.math.Vector2;
 import vortex.utils.math.Vector2i;
@@ -14,12 +12,12 @@ typedef CFGSection = Dynamic;
 typedef CFGData = Dynamic;
 
 /**
- * A basic parser for `cfg` files.
+ * A basic parser for Config/INI (`cfg` and `ini`) files.
  * 
  * Similarly to the Haxe `Json` class, it returns
  * a structure filled with the data of the config file.
  */
-class CFGParser {
+class ConfigFile {
 	public static function parse(contents:String):CFGData {
 		var curSection:String = "global";
 		var sections:CFGData = {curSection: {}};

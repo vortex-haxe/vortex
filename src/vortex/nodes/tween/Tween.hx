@@ -1,11 +1,10 @@
-package vortex.nodes;
+package vortex.nodes.tween;
 
 import vortex.utils.generic.Signal;
 import vortex.backend.Engine;
 import vortex.extensions.TweenManager;
 import vortex.utils.generic.HaxeUtil;
 import vortex.utils.engine.Color;
-import vortex.utils.engine.Ease;
 
 typedef EaseCallback = Float->Float;
 
