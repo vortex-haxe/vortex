@@ -76,7 +76,6 @@ using haxe.macro.PositionTools;
 			catch (e:Dynamic) {}
 			return result == 0;
 		}
-		Sys.println("PHUCK");
 		return false;
 	}
 
