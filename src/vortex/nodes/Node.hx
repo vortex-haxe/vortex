@@ -135,9 +135,7 @@ class Node extends Object {
 	 * @param delta  The time between the last frame in seconds.
 	 */
 	public function tickAll(delta:Float):Void {
-		var i:Int = 0;
-		while(i < _children.length) {
-			final child:Node = _children[i++];
+		for(child in _children) {
 			if(child != null && !child.disposed) {
 				final canChildUpdate:Bool = child.tickMode != NEVER && (child.tickMode == ALWAYS || (child.tickMode == PAUSABLE && !Engine.paused));
 				final canParentUpdate:Bool = (child.tickMode == INHERIT && tickMode != NEVER && (tickMode == ALWAYS || (tickMode == PAUSABLE && !Engine.paused)));
@@ -156,9 +154,7 @@ class Node extends Object {
 		if(!visible)
 			return;
 		
-		var i:Int = 0;
-		while(i < _children.length) {
-			final child:Node = _children[i++];
+		for(child in _children) {
 			if(child != null && child.visible && !child.disposed)
 				child.drawAll();
 		}
@@ -189,9 +185,7 @@ class Node extends Object {
 	 */
 	override function dispose():Void {
 		if(!disposed) {
-			var i:Int = 0;
-			while(i < _children.length) {
-				final child:Node = _children[i++];
+			for(child in _children) {
 				if(child != null)
 					child.dispose();
 			}

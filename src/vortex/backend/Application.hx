@@ -87,10 +87,8 @@ class Application {
 
 			Engine.deltaTime = untyped __cpp__("(double)({0} - {1}) / (double){2}", curTime, oldTime, SDL.getPerformanceFrequency());
 			Engine.tick(Engine.deltaTime);
-
-			var i:Int = 0;
-			while(i < windows.length) {
-				final window:Window = windows[i++];
+			
+			for(window in windows) {
 				if(window != null) {
 					RenderingServer.backend.clear(window);
 
