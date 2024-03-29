@@ -6,10 +6,10 @@ import sdl.SDL;
 import sdl.Types;
 
 import sdl.SDL;
-import sdl.Types.Event;
-import sdl.Types.WindowInitFlags;
-import sdl.Types.Window;
-import sdl.Types.GlContext;
+import sdl.Types.SDLEvent;
+import sdl.Types.SDLWindowInitFlags;
+import sdl.Types.SDLWindow;
+import sdl.Types.SDLGlContext;
 
 import vortex.backend.Application;
 import vortex.servers.DisplayServer.DisplayBackend;
@@ -21,7 +21,7 @@ class SDLGLWindowData implements IWindowData {
 	public var window:Any;
 	public var context:Any;
 
-	public function new(nativeWindow:Window, glContext:GlContext) {
+	public function new(nativeWindow:SDLWindow, glContext:SDLGlContext) {
 		this.window = nativeWindow;
 		this.context = glContext;
 	}
@@ -42,15 +42,15 @@ class SDLGLBackend extends DisplayBackend {
      * Creates a window with SDL and initializes an OpenGL Core 3.3 context with it.
      */
     override function createWindow(title:String, position:Vector2i, size:Vector2i):IWindowData {
-		var wFlags:WindowInitFlags = OPENGL;
+		var wFlags:SDLWindowInitFlags = OPENGL;
 		if (Application.self.meta.window.resizable)
 			wFlags |= RESIZABLE;
 
 		if (Application.self.meta.window.borderless)
 			wFlags |= BORDERLESS;
 
-		var nativeWindow:Window = SDL.createWindow(title, position.x, position.y, size.x, size.y, wFlags);
-		var glContext:GlContext = SDL.glCreateContext(nativeWindow);
+		var nativeWindow:SDLWindow = SDL.createWindow(title, position.x, position.y, size.x, size.y, wFlags);
+		var glContext:SDLGlContext = SDL.glCreateContext(nativeWindow);
 		var returnData:SDLGLWindowData = new SDLGLWindowData(nativeWindow, glContext);
 		
 		SDL.glMakeCurrent(nativeWindow, glContext);

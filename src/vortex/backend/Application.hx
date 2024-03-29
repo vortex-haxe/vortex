@@ -18,7 +18,7 @@ import vortex.utils.engine.Project.ProjectInfo;
 import vortex.utils.math.Vector2i;
 
 import sdl.SDL;
-import sdl.Types.WindowPos;
+import sdl.Types.SDLWindowPos;
 
 /**
  * The very base of your games!
@@ -60,7 +60,7 @@ class Application {
 		DisplayServer.init();
 		AudioServer.init();
 		
-		window = new Window(meta.window.title, new Vector2i(WindowPos.CENTERED, WindowPos.CENTERED), new Vector2i().copyFrom(meta.window.size));
+		window = new Window(meta.window.title, new Vector2i(SDLWindowPos.CENTERED, SDLWindowPos.CENTERED), new Vector2i().copyFrom(meta.window.size));
 		InputServer.init();
 		
 		RenderingServer.init();

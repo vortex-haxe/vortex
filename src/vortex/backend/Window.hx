@@ -4,8 +4,8 @@ import vortex.servers.DisplayServer;
 import vortex.servers.DisplayServer.IWindowData;
 
 import sdl.SDL;
-import sdl.Types.Event;
-import sdl.Types.MouseButton;
+import sdl.Types.SDLEvent;
+import sdl.Types.SDLMouseButton;
 
 import vortex.servers.RenderingServer;
 
@@ -98,7 +98,7 @@ class Window extends Node {
 	 * Parameters are:
 	 * - Mouse Button
 	 */
-	public var onMouseClick:Signal<MouseButton->Void> = new Signal();
+	public var onMouseClick:Signal<SDLMouseButton->Void> = new Signal();
 
 	/**
 	 * The signal that gets emitted when the window recieves a mouse release.
@@ -106,7 +106,7 @@ class Window extends Node {
 	 * Parameters are:
 	 * - Mouse Button
 	 */
-	public var onMouseRelease:Signal<MouseButton->Void> = new Signal();
+	public var onMouseRelease:Signal<SDLMouseButton->Void> = new Signal();
 
 	/**
 	 * The signal that gets emitted when the window recieves a mouse movement.
@@ -118,7 +118,7 @@ class Window extends Node {
 	 * - Mouse X (Relative)
 	 * - Mouse Y (Relative)
 	 */
-	public var onMouseMove:Signal<MouseButton->Int->Int->Int->Int->Void> = new Signal();
+	public var onMouseMove:Signal<SDLMouseButton->Int->Int->Int->Int->Void> = new Signal();
 
 	/**
 	 * Makes a new `Window`.
@@ -232,7 +232,7 @@ class Window extends Node {
 	// Internal Variables //
 	// ------------------ //
 	// SDL
-	private static var _ev:Event;
+	private static var _ev:SDLEvent;
 
 	// rendering
 	private var _nativeWindow:IWindowData;
