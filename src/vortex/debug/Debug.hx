@@ -2,9 +2,17 @@ package vortex.debug;
 
 import haxe.Log;
 import haxe.PosInfos;
+
 import vortex.utils.native.NativeAPI;
 
+/**
+ * A utility class to log to the debug menu and the console.
+ */
 class Debug {
+	/**
+	 * Redirects built-in `trace()` function to
+	 * our custom `log()` function.
+	 */
 	public static function init() {
 		Log.trace = function(v, ?pos) {
 			Debug.log(v, pos);
@@ -29,18 +37,14 @@ class Debug {
 		Sys.print('${Std.string(contents)}\r\n');
 	}
 
-	// ##==--------------------------------------------------==##//
+	// --------------- //
+	// [ Private API ] //
+	// --------------- //
 
 	private static inline function _coloredPrint(color:ConsoleColor, text:String) {
 		NativeAPI.setConsoleColors(color);
 		Sys.print(text);
 		NativeAPI.setConsoleColors();
-	}
-
-	private static inline function _addZeros(str:String, num:Int) {
-		while (str.length < num)
-			str = '0${str}';
-		return str;
 	}
 
 	private static inline function _printPosInfos(pos:PosInfos) {

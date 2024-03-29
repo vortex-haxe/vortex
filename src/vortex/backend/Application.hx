@@ -16,6 +16,7 @@ import vortex.servers.ResourceServer;
 import vortex.utils.generic.CFGParser;
 import vortex.utils.engine.Project.ProjectInfo;
 import vortex.utils.math.Vector2i;
+import vortex.utils.native.NativeAPI;
 
 import sdl.SDL;
 import sdl.Types.SDLWindowPos;
@@ -56,6 +57,9 @@ class Application {
 			self = this;
 		
 		meta = CFGParser.parse(ProjectMacro.getConfig());
+
+		NativeAPI.init();
+		Debug.init();
 
 		DisplayServer.init();
 		AudioServer.init();
