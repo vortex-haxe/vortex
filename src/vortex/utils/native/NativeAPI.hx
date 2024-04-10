@@ -62,8 +62,12 @@ using haxe.macro.PositionTools;
 
 			if (~/cygwin|xterm|vt100/.match(Sys.getEnv("TERM") ?? "") || Sys.getEnv("ANSICON") != null)
 				return true;
+
+			var path:String = Path.normalize(Path.join([haxelibPath, "helpers", "windows", "HasConsoleColors.exe"]));
+			if(path.contains(" "))
+				path = '"${path}"';
 			
-			if(Sys.command(Path.normalize(Path.join([haxelibPath, "helpers", "windows", "HasConsoleColors.exe"]))) == 0)
+			if(Sys.command(path)) == 0)
 				return true;
 
 		} else {
