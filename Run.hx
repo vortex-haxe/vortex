@@ -10,7 +10,7 @@ import vortex.debug.Debug;
 import vortex.backend.macros.ProjectMacro;
 
 import vortex.utils.engine.Project.ProjectInfo;
-import vortex.utils.generic.CFGParser;
+import vortex.utils.generic.ConfigFile;
 import vortex.utils.generic.FileUtil;
 import vortex.utils.native.NativeAPI;
 
@@ -76,7 +76,7 @@ class Run {
 	];
 
 	static function main() {
-		NativeAPI.checkConsoleColorSupport();
+		NativeAPI.init();
 		
 		var isValidCMD:Bool = false;
 		final args:Array<String> = Sys.args() ?? [];
@@ -131,7 +131,7 @@ ___  ______________/  |_  ____ ___  ___
 			return;
 		}
 		final args:Array<String> = [];
-		final cfg:ProjectInfo = CFGParser.parse(File.getContent('${curDir}project.cfg'));
+		final cfg:ProjectInfo = ConfigFile.parse(File.getContent('${curDir}project.cfg'));
 
         args.push('--class-path ${cfg.source.name}');
 
@@ -147,7 +147,7 @@ ___  ______________/  |_  ____ ___  ___
 		final platform:String = Sys.systemName().toLowerCase();
 		args.push('--cpp ${cfg.export.build_dir}/${platform}/obj');
 		
-		if(args[1] == "-debug" || args[1] == "--debug")
+		if(args[1] == "-debug" || args[1] == "--debug" || cfg.export.debug_build)
 			args.push("--debug");
 		
 		Sys.setCwd(curDir);
@@ -161,7 +161,7 @@ ___  ______________/  |_  ____ ___  ___
 			Sys.setCwd(Path.normalize(Path.join([curDir, cfg.export.build_dir, platform, "obj"])));
 			
 			if(Sys.systemName() == "Windows") { // Windows
-				final exePath:String = Path.normalize(Path.join([binFolder, '${cfg.export.executable_name}.exe']));
+				final exePath:String = Path.normalize(Path.join([binFolder, '${cfg.export.executable_name}${(cfg.export.debug_build ? "-debug" : "")}.exe']));
 				File.copy(
 					Path.normalize(Path.join([Sys.getCwd(), '${cfg.source.main.substring(cfg.source.main.lastIndexOf(".") + 1)}.exe'])),
 					exePath
@@ -191,7 +191,7 @@ ___  ______________/  |_  ____ ___  ___
 				}
 			} else { // Linux/MacOS (Maybe BSD too, I forgot how BSD works)
 				File.copy(
-					Path.normalize(Path.join([Sys.getCwd(), '${cfg.source.main.substring(cfg.source.main.lastIndexOf(".") + 1)}'])),
+					Path.normalize(Path.join([Sys.getCwd(), '${cfg.source.main.substring(cfg.source.main.lastIndexOf(".") + 1)}${(cfg.export.debug_build ? "-debug" : "")}'])),
 					Path.normalize(Path.join([binFolder, '${cfg.export.executable_name}']))
 				);
 				Sys.setCwd(binFolder);
@@ -211,7 +211,7 @@ ___  ______________/  |_  ____ ___  ___
 			Sys.print(" A project.cfg file couldn't be found in the current directory.\r\n");
 			return;
 		}
-		final cfg:ProjectInfo = CFGParser.parse(File.getContent('${curDir}project.cfg'));
+		final cfg:ProjectInfo = ConfigFile.parse(File.getContent('${curDir}project.cfg'));
 		final platform:String = Sys.systemName().toLowerCase();
 
 		Sys.setCwd(curDir);

@@ -1,29 +1,75 @@
 package vortex.utils.native;
 
 import haxe.io.Path;
+import haxe.macro.Expr;
+import haxe.macro.Context;
+
 import sys.io.Process;
 
+using StringTools;
+using haxe.macro.PositionTools;
+
 /**
+ * A utility class for interfacing with 
+ * native system calls easier.
+ * 
  * @see https://github.com/FNF-CNE-Devs/CodenameEngine/blob/main/source/funkin/backend/utils/NativeAPI.hx
  */
  class NativeAPI {
+	/**
+	 * Whether or not the current console
+	 * has the ability to output colored text.
+	 * 
+	 * **WARNING**: Could be `null`, use `checkConsoleColorSupport()` to avoid null errors instead!
+	 */
 	public static var colorSupported:Null<Bool> = null;
 
-	public static function checkConsoleColorSupport() {
-		if(colorSupported != null)
-			return;
-		
+	/**
+	 * The path to the haxelib folder for Vortex.
+	 */
+	public static var haxelibPath:String;
+
+	/**
+	 * Initializes stuff like the `colorSupported` variable.
+	 */
+	public static function init() {
+		haxelibPath = getHaxelibPath();
+		colorSupported = checkConsoleColorSupport();
+	}
+
+	/**
+	 * Returns the haxelib path for Vortex itself.
+	 */
+	public static macro function getHaxelibPath():Expr {
+		final pos = Context.currentPos();
+		final posInfo = pos.getInfos();
+
+		var path = Path.directory(Path.directory(Path.directory(Path.directory(Path.directory(posInfo.file))))); // very messy but works
+		return macro $v{path};
+	}
+
+	/**
+	 * Returns whether or not the current console
+	 * has the ability to output colored text.
+	 */
+	public static function checkConsoleColorSupport():Bool {
 		if(Sys.systemName() == "Windows") {
-			if (~/cygwin|xterm|vt100/.match(Sys.getEnv("TERM") ?? "") || Sys.getEnv("ANSICON") != null)
-				colorSupported = true;
-
-			if(Sys.command(Path.normalize(Path.join([Sys.getCwd(), "helpers", "windows", "HasConsoleColors.exe"]))) == 0)
-				colorSupported = true;
-
 			// make sure utf-8 chars are used in console
+			// otherwise color characters won't work
 			// the >nul part is so it doesn't output a success message
 			// after the command is ran
 			Sys.command("chcp 65001 >nul");
+
+			if (~/cygwin|xterm|vt100/.match(Sys.getEnv("TERM") ?? "") || Sys.getEnv("ANSICON") != null)
+				return true;
+
+			var path:String = Path.normalize(Path.join([haxelibPath, "helpers", "windows", "HasConsoleColors.exe"]));
+			if(path.contains(" "))
+				path = '"${path}"';
+			
+			if(Sys.command(path)) == 0)
+				return true;
+
 		} else {
 			var result = -1;
 			try {
@@ -32,16 +78,15 @@ import sys.io.Process;
 				process.close();
 			}
 			catch (e:Dynamic) {}
-			colorSupported = (result == 0);
+			return result == 0;
 		}
+		return false;
 	}
 
 	/**
 	 * Sets the console colors
 	 */
 	public static function setConsoleColors(foregroundColor:ConsoleColor = NONE, ?backgroundColor:ConsoleColor = NONE) {
-		#if sys
-		checkConsoleColorSupport();
 		if(!colorSupported)
 			return;
 
@@ -50,7 +95,6 @@ import sys.io.Process;
 			Sys.print("\x1b[" + Std.int(consoleColorToANSI(foregroundColor)) + "m");
 		if (backgroundColor != NONE)
 			Sys.print("\x1b[" + Std.int(consoleColorToANSI(backgroundColor) + 10) + "m");
-		#end
 	}
 
 	public static function consoleColorToANSI(color:ConsoleColor) {

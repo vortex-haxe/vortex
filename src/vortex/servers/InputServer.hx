@@ -1,6 +1,6 @@
 package vortex.servers;
 
-import sdl.Types.MouseButton as NativeMouseButton;
+import sdl.Types.SDLMouseButton as NativeMouseButton;
 
 import vortex.backend.Application;
 

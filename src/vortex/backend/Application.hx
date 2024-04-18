@@ -13,12 +13,13 @@ import vortex.servers.AudioServer;
 import vortex.servers.InputServer;
 import vortex.servers.ResourceServer;
 
-import vortex.utils.generic.CFGParser;
+import vortex.utils.generic.ConfigFile;
 import vortex.utils.engine.Project.ProjectInfo;
 import vortex.utils.math.Vector2i;
+import vortex.utils.native.NativeAPI;
 
 import sdl.SDL;
-import sdl.Types.WindowPos;
+import sdl.Types.SDLWindowPos;
 
 /**
  * The very base of your games!
@@ -55,12 +56,15 @@ class Application {
 		if(self == null)
 			self = this;
 		
-		meta = CFGParser.parse(ProjectMacro.getConfig());
+		meta = ConfigFile.parse(ProjectMacro.getConfig());
+
+		NativeAPI.init();
+		Debug.init();
 
 		DisplayServer.init();
 		AudioServer.init();
 		
-		window = new Window(meta.window.title, new Vector2i(WindowPos.CENTERED, WindowPos.CENTERED), new Vector2i().copyFrom(meta.window.size));
+		window = new Window(meta.window.title, new Vector2i(SDLWindowPos.CENTERED, SDLWindowPos.CENTERED), new Vector2i().copyFrom(meta.window.size));
 		InputServer.init();
 		
 		RenderingServer.init();
@@ -83,10 +87,8 @@ class Application {
 
 			Engine.deltaTime = untyped __cpp__("(double)({0} - {1}) / (double){2}", curTime, oldTime, SDL.getPerformanceFrequency());
 			Engine.tick(Engine.deltaTime);
-
-			var i:Int = 0;
-			while(i < windows.length) {
-				final window:Window = windows[i++];
+			
+			for(window in windows) {
 				if(window != null) {
 					RenderingServer.backend.clear(window);
 

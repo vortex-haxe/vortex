@@ -1,6 +1,6 @@
 package vortex.utils.engine;
 
-import sdl.Types.KeyMod as NativeMod;
+import sdl.Types.SDLKeyMod as NativeMod;
 import vortex.utils.generic.MacroUtil;
 
 enum abstract KeyMod(Int) from Int to Int {

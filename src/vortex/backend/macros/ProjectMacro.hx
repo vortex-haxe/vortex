@@ -12,7 +12,7 @@ import haxe.macro.Expr;
 #end
 #if (macro || !eval)
 import vortex.utils.generic.FileUtil;
-import vortex.utils.generic.CFGParser;
+import vortex.utils.generic.ConfigFile;
 import vortex.utils.engine.Project.ProjectInfo;
 #end
 
@@ -38,7 +38,7 @@ class ProjectMacro {
 		if (!FileSystem.exists(cfgPath))
 			Context.fatalError('Couldn\'t find a valid "project.cfg" file!', pos);
 
-		final cfg:ProjectInfo = CFGParser.parse(File.getContent(cfgPath));
+		final cfg:ProjectInfo = ConfigFile.parse(File.getContent(cfgPath));
 		final platform:String = Sys.systemName().toLowerCase();
 
 		// Copy specified asset folders to export folder
