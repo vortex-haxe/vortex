@@ -102,8 +102,10 @@ class Camera extends Entity {
      * Draws this camera to the screen.
      */
     override function draw() {
-        _canvas.x = globalPosition.x;
-        _canvas.y = globalPosition.y;
+        final sm = GlobalCtx.scaleMode;
+        _canvas.x = globalPosition.x + sm.offset.x;
+        _canvas.y = globalPosition.y + sm.offset.y;
+        _canvas.scale.set(sm.scale.x, sm.scale.y);
         _canvas.draw();
     }
 

@@ -1,8 +1,10 @@
 package vortex;
 
-import vortex.display.Camera;
 import canvas.app.Application;
+
+import vortex.display.Camera;
 import vortex.system.frontend.*;
+import vortex.system.scalemodes.*;
 
 /**
  * A helper class for easily accessing values
@@ -23,7 +25,7 @@ class GlobalCtx {
     /**
      * The framerate the game will draw at.
      */
-    public static var drawFramerate:Int = 0;
+    public static var drawFramerate(default, set):Int = 0;
 
     /**
      * The width of the game area, in pixels.
@@ -45,6 +47,12 @@ class GlobalCtx {
      * The first camera in the global camera list.
      */
     public static var camera:Camera;
+
+    /**
+     * The object responsible for handling how the
+     * game scales according to the window.
+     */
+    public static var scaleMode(default, set):BaseScaleMode = new RatioScaleMode();
 
     /**
      * Helper for easily logging to the debugger
@@ -71,6 +79,7 @@ class GlobalCtx {
     public static function resizeGame(width:Int, height:Int):Void {
         GlobalCtx.width = width;
         GlobalCtx.height = height;
+        scaleMode.onMeasure(width, height);
     }
 
     /**
@@ -96,5 +105,24 @@ class GlobalCtx {
         log = new LogFrontEnd();
         bitmap = new BitmapFrontEnd();
         cameras = new CameraFrontEnd();
+
+        Application.current.window.onResize.add((width:Int, height:Int) -> {
+            scaleMode.onMeasure(width, height);
+        });
+        scaleMode.onMeasure(width, height);
+    }
+
+    @:noCompletion
+    private static function set_scaleMode(newScaleMode:BaseScaleMode):BaseScaleMode {
+        if(scaleMode != null)
+            scaleMode.destroy();
+        
+        return scaleMode = newScaleMode;
+    }
+
+    @:noCompletion
+    private static function set_drawFramerate(newFramerate:Int):Int {
+        Application.current.window.frameRate = newFramerate;
+        return drawFramerate = newFramerate;
     }
 }
