@@ -1,9 +1,0 @@
---define analyzer-optimize
-
---define HXCPP_CHECK_POINTER
---define HXCPP_STACK_LINE
-
---define SDL_PREFIX
-
---macro vortex.backend.macros.OSDefineMacro.build()
---macro vortex.backend.macros.ProjectMacro.build()

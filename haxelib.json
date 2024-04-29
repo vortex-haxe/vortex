@@ -2,20 +2,13 @@
     "name": "vortex",
     "url" : "https://github.com/vortex-haxe/vortex",
     "license": "MIT",
-    "tags": ["haxe", "vortex", "2d", "2d-game", "2d-framework", "2d-game-framework", "cpp", "sdl", "stb_vorbis", "vorbis", "dr_wav", "wav", "ogg"],
-    "description": "A 2D Game Framework made in Haxe & SDL, built for simplicity and performance.",
+    "tags": ["haxe", "hxcpp", "vortex", "2d", "2d-game", "2d-framework", "2d-game-framework", "cpp", "sdl", "opengl", "gl"],
+    "description": "A 2D Game Framework made in Haxe, built for simplicity and performance.",
     "version": "0.1.0",
     "classPath": "src/",
-    "releasenote": "The initial release of Vortex. Please report issues/bugs over on Github!",
+    "releasenote": "The initial release of Vortex. Please report issues or bugs over on Github!",
     "contributors": ["swordcube"],
     "dependencies": {
-        "hxcpp": "",
-        "hxsdl": "",
-        "hxstb_image": "",
-        "hxglad": "",
-        "hxdr_mp3": "",
-        "hxdr_wav": "",
-        "hxstb_vorbis": "",
-        "hxal": ""
+        "canvas2d": ""
     }
 }

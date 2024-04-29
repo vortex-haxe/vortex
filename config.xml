@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<!-- _________________________ Application Settings _________________________ -->
+
+	<app title="Template" file="Template" main="Main" version="0.0.1" company="swordcube" />
+
+	<!-- ____________________________ Window Settings ___________________________ -->
+
+	<!--These window settings apply to all targets-->
+	<window width="640" height="480" fps="60" background="#000000" vsync="false" />
+
+	<!--Desktop-specific-->
+	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" />
+
+	<!-- _____________________________ Path Settings ____________________________ -->
+
+	<set name="BUILD_DIR" value="export" />
+
+	<source path="src" />
+
+	<!-- _______________________________ Libraries ______________________________ -->
+    
+	<haxelib name="vortex" />
+
+</config>

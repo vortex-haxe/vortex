@@ -1,18 +1,12 @@
 package;
 
 import haxe.io.Path;
-import haxe.io.Bytes;
-
-import sys.io.File;
 import sys.FileSystem;
 
-import vortex.debug.Debug;
-import vortex.backend.macros.ProjectMacro;
+import canvas._backend.macros.ProjectMacro;
+import canvas._backend.native.NativeAPI;
 
-import vortex.utils.engine.Project.ProjectInfo;
-import vortex.utils.generic.ConfigFile;
-import vortex.utils.generic.FileUtil;
-import vortex.utils.native.NativeAPI;
+import canvas.tools.FileUtil;
 
 using StringTools;
 
@@ -22,7 +16,6 @@ typedef Command = {
 	var method:Void->Void;
 }
 
-@:access(vortex.debug.Debug)
 class Run {
 	static final cmds:Array<Command> = [
 		{
@@ -61,17 +54,17 @@ class Run {
 		{
 			name: "build",
 			description: "Build a Vortex project.",
-			method: buildProj.bind(false)
+			method: () -> buildProj(false)
 		},
 		{
 			name: "test",
 			description: "Build and run a Vortex project.",
-			method: buildProj.bind(true)
+			method: () -> buildProj(true)
 		},
 		{
 			name: "run",
 			description: "Run a Vortex project.",
-			method: runProj
+			method: () -> runProj()
 		}
 	];
 
@@ -112,7 +105,9 @@ ___  ______________/  |_  ____ ___  ___
 			else // If we don't have colors we're very likely on an older terminal/console
 				Sys.print(oldConsoleAsciiArt);
 
+			Sys.sleep(0.001);
 			NativeAPI.setConsoleColors();
+			Sys.sleep(0.001);
 			
 			Sys.print("Welcome to Vortex, an easy and performant 2D game framework built for Haxe.\r\n\r\n");
 			Sys.print("Type in \"haxelib run vortex help\" for a list of every available command!\r\n");
@@ -120,113 +115,18 @@ ___  ______________/  |_  ____ ___  ___
 	}
 
 	static function buildProj(?runAfterBuild:Bool = false) {
-		final libDir:String = Sys.getCwd();
+		final sysArgs:Array<String> = Sys.args();
+		Sys.setCwd(sysArgs[sysArgs.length - 1]);
 
-        final sysArgs:Array<String> = Sys.args();
-        final curDir:String = sysArgs[sysArgs.length - 1];
-
-		if (!FileSystem.exists('${curDir}project.cfg')) {
-			Debug._coloredPrint(RED, "[ ERROR ]");
-			Sys.print(" A project.cfg file couldn't be found in the current directory.\r\n");
-			return;
-		}
-		final args:Array<String> = [];
-		final cfg:ProjectInfo = ConfigFile.parse(File.getContent('${curDir}project.cfg'));
-
-        args.push('--class-path ${cfg.source.name}');
-
-        args.push('--library vortex');
-		for (lib in cfg.source.libraries)
-			args.push('--library ${lib}');
-
-        if (cfg.export.x32_build)
-            args.push('--define HXCPP_M32');
-
-		args.push('--main ${cfg.source.main}');
-
-		final platform:String = Sys.systemName().toLowerCase();
-		args.push('--cpp ${cfg.export.build_dir}/${platform}/obj');
-		
-		if(args[1] == "-debug" || args[1] == "--debug" || cfg.export.debug_build)
-			args.push("--debug");
-		
-		Sys.setCwd(curDir);
-
-		final binFolder:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, platform, "bin"]));
-		if(!FileSystem.exists(binFolder))
-			FileSystem.createDirectory(binFolder);
-			
-		final compileError:Int = Sys.command('haxe ${args.join(" ")}');
-		if(compileError == 0) {
-			Sys.setCwd(Path.normalize(Path.join([curDir, cfg.export.build_dir, platform, "obj"])));
-			
-			if(Sys.systemName() == "Windows") { // Windows
-				final exePath:String = Path.normalize(Path.join([binFolder, '${cfg.export.executable_name}${(cfg.export.debug_build ? "-debug" : "")}.exe']));
-				File.copy(
-					Path.normalize(Path.join([Sys.getCwd(), '${cfg.source.main.substring(cfg.source.main.lastIndexOf(".") + 1)}.exe'])),
-					exePath
-				);
-				for(file in FileSystem.readDirectory(Sys.getCwd())) {
-					if(Path.extension(file) == "dll") {
-						File.copy(
-							Path.normalize(Path.join([Sys.getCwd(), file])),
-							Path.normalize(Path.join([binFolder, file]))
-						);
-					}
-				}
-				final projIconDir:String = Path.normalize(Path.join([curDir, cfg.window.icon]));
-				final outputIconDir:String = Path.normalize(Path.join([binFolder, "icon.ico"]));
-				
-				if(FileSystem.exists(projIconDir)) {
-					// Generate ico file
-					Sys.setCwd(Path.normalize(Path.join([libDir, "helpers", "windows", "magick"])));
-					Sys.command("convert.exe", ["-resize", "256x256", projIconDir, outputIconDir]);
-					
-					// Apply icon to exe file
-					Sys.setCwd(Path.normalize(Path.join([libDir, "helpers", "windows"])));
-					Sys.command("ReplaceVistaIcon.exe", [exePath, outputIconDir]);
-				} else {
-					Debug._coloredPrint(RED, "[ WARNING ]");
-					Sys.print(' Icon file "${cfg.window.icon}" doesn\'t exist in the project directory!.\r\n');
-				}
-			} else { // Linux/MacOS (Maybe BSD too, I forgot how BSD works)
-				File.copy(
-					Path.normalize(Path.join([Sys.getCwd(), '${cfg.source.main.substring(cfg.source.main.lastIndexOf(".") + 1)}${(cfg.export.debug_build ? "-debug" : "")}'])),
-					Path.normalize(Path.join([binFolder, '${cfg.export.executable_name}']))
-				);
-				Sys.setCwd(binFolder);
-				Sys.command('chmod +x "${cfg.export.executable_name}"');
-			}
-			if(runAfterBuild)
-				runProj();
-		}
+		if(runAfterBuild)
+			Sys.command("haxelib", ["run", "canvas2d", "test"]);
+		else
+			Sys.command("haxelib", ["run", "canvas2d", "build"]);
 	}
 
 	static function runProj() {
-        final sysArgs:Array<String> = Sys.args();
-        final curDir:String = sysArgs[sysArgs.length - 1];
-
-		if (!FileSystem.exists('${curDir}project.cfg')) {
-			Debug._coloredPrint(RED, "[ ERROR ]");
-			Sys.print(" A project.cfg file couldn't be found in the current directory.\r\n");
-			return;
-		}
-		final cfg:ProjectInfo = ConfigFile.parse(File.getContent('${curDir}project.cfg'));
-		final platform:String = Sys.systemName().toLowerCase();
-
-		Sys.setCwd(curDir);
-		if(Sys.systemName() == "Windows") { // Windows
-			final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, platform, "bin"]));
-			if(FileSystem.exists(exec)) {
-				Sys.setCwd(exec);
-				Sys.command('"${cfg.export.executable_name}.exe"');
-			}
-		} else { // Linux/MacOS (Maybe BSD too, I forgot how BSD works)
-			final exec:String = Path.normalize(Path.join([curDir, cfg.export.build_dir, platform, "bin"]));
-			if(FileSystem.exists(exec)) {
-				Sys.setCwd(exec);
-				Sys.command('"./${cfg.export.executable_name}"');
-			}
-		}
+		final sysArgs:Array<String> = Sys.args();
+		Sys.setCwd(sysArgs[sysArgs.length - 1]);
+        Sys.command("haxelib", ["run", "canvas2d", "run"]);
 	}
 }

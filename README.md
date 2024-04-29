@@ -4,8 +4,11 @@
 A 2D Game Framework made in Haxe built for simplicity and performance.
 
 ## 🖥️ Platforms
-Vortex natively can run on Windows, MacOS and Linux systems via `hxcpp`.
-MacOS support is currently untested.
+Vortex can natively compile to the following platforms via `hxcpp`:
+
+- <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg" width="14" height="14" /> **Windows 8.0+**
+- <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Apple_logo_grey.svg" width="12" height="14" /> **macOS Ventura+**
+- <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" width="14" height="14" /> **Linux** (Ubuntu, Debian, Fedora, openSUSE, Arch)
 
 ## 💡 Getting Started
 In order to start using Vortex, start by installing the haxelib:
@@ -44,33 +47,10 @@ sudo pacman -S mesa
 sudo pacman -S openal
 ```
 
-## 📔 Libraries
-Here are the puzzle pieces that are put together to make Vortex possible!
+## 🖌 And finally...
+What is Vortex powered by?
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Simple_DirectMedia_Layer%2C_Logo.svg/1280px-Simple_DirectMedia_Layer%2C_Logo.svg.png" alt="SDL Logo" align="right" width="62" height="32" />
 
-### [hxsdl](https://github.com/swordcube/hxsdl)
-
-SDL Bindings for Haxe, used for making a window and having window events.
-
-### [hxstb_image](https://github.com/swordcube/hxstb_image)
-STB Image Bindings for Haxe, used for loading image files.
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Opengl-logo.svg" alt="OpenGL Logo" align="right" width="62" height="32" />
-
-### [hxglad](https://github.com/swordcube/hxglad)
-GLAD Bindings for Haxe, used for rendering to the window with OpenGL.
-
-### [hxdr_mp3](https://github.com/swordcube/hxdr_mp3)
-Dr MP3 Bindings for Haxe, used for loading MP3 files.
-
-### [hxdr_wav](https://github.com/swordcube/hxdr_wav)
-Dr WAV Bindings for Haxe, used for loading WAV files.
-
-### [hxstb_vorbis](https://github.com/swordcube/hxstb_vorbis)
-STB Vorbis Bindings for Haxe, used for loading OGG files.
-
-<img src="https://upload.wikimedia.org/wikipedia/en/thumb/1/1f/OpenAL_logo.svg/1280px-OpenAL_logo.svg.png" alt="OpenAL Logo" align="right" width="70" height="32" />
-
-### [hxal](https://github.com/swordcube/hxal)
-OpenAL Soft Bindings for Haxe, used for playing audio.
+- <img src="https://upload.wikimedia.org/wikipedia/commons/1/16/Simple_DirectMedia_Layer%2C_Logo.svg" width="14" height="14" /> **[Canvas2D](https://github.com/vortex-haxe/canvas2d)**
+  - 🖥 The official core backend for Vortex, used to abstract lower level calls into easier classes/functions and provide an `OpenFL`-esk interface.
+  - 🔆 It can also be used on it's own, completely separated from Vortex!
