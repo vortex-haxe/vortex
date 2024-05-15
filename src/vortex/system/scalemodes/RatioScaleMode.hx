@@ -5,7 +5,7 @@ package vortex.system.scalemodes;
  * When you shrink or grow the window, the width and height of the game will adjust,
  * either scaling the game or adding black bars as needed.
  *
- * This is the default scaling mode used by HaxeFlixel.
+ * This is the default scaling mode used by Vortex.
  */
 class RatioScaleMode extends BaseScaleMode {
 	var fillScreen:Bool;
