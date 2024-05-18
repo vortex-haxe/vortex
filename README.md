@@ -3,6 +3,16 @@
 # Vortex
 A 2D Game Framework made in Haxe built for simplicity and performance.
 
+> [!NOTE]
+> The frequency of updates to Vortex may vary a lot, since this is
+a project made mainly by a single person!
+> 
+> Vortex is a passion project made out of a desire for more options
+for making games within Haxe.
+> 
+> Feel free to report or fix any issues you may find!
+> It would help a lot <3
+
 ## 🖥️ Platforms
 Vortex can natively compile to the following platforms via `hxcpp`:
 
@@ -53,4 +63,4 @@ What is Vortex powered by?
 
 - <img src="https://upload.wikimedia.org/wikipedia/commons/1/16/Simple_DirectMedia_Layer%2C_Logo.svg" width="14" height="14" /> **[Canvas2D](https://github.com/vortex-haxe/canvas2d)**
   - 🖥 The official core backend for Vortex, used to abstract lower level calls into easier classes/functions and provide an `OpenFL`-esk interface.
-  - 🔆 It can also be used on it's own, completely separated from Vortex!
+  - 🔆 It can also be used on it's own, completely separated from Vortex! You probably shouldn't though as Canvas2D only has the essentials.

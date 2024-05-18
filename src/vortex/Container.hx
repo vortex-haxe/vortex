@@ -1,7 +1,7 @@
 package vortex;
 
 /**
- * A container/group of several entity objects.
+ * A container/group of several entities.
  */
 typedef Container = TypedContainer<Entity>;
 

@@ -89,6 +89,13 @@ class Sprite extends Entity {
     }
 
     /**
+     * Sets the rotation origin to the center of this sprite.
+     */
+    public function centerOrigin():Void {
+        origin.set(size.x * 0.5, size.y * 0.5);
+    }
+
+    /**
      * Draws this sprite onto the screen.
      */
     override function draw() {
@@ -120,7 +127,8 @@ class Sprite extends Entity {
     // [ Private API ] //
     // --------------- //
 
-    private var _pos:Point = new Point();
+    private static var _pos:Point = new Point();
+    private static var _orig:Point = new Point();
 
     private function drawComplex(camera:Camera) {
         if(frame == null || frame.graphic == null)
@@ -128,8 +136,9 @@ class Sprite extends Entity {
 
         camera.drawPixels(
             frame, frame.graphic.bitmap, color,
-            _pos.set(globalPosition.x + offset.x, globalPosition.y + offset.y),
-            scale, origin, angle, shader
+            _pos.set((globalPosition.x + offset.x) + origin.x, (globalPosition.y + offset.y) + origin.y),
+            scale, _orig.set(origin.x / size.x, origin.y / size.y),
+            angle, shader
         );
     }
 
@@ -140,6 +149,8 @@ class Sprite extends Entity {
 
         if(newFrames != null) {
             frame = newFrames.frames[0];
+            size.copyFrom(frame.sourceSize);
+            centerOrigin();
         }
         return frames = newFrames;
     }

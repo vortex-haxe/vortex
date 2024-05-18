@@ -1,5 +1,6 @@
 package vortex.system.frontend;
 
+import canvas.graphics.Color;
 import vortex.display.Camera;
 
 /**
@@ -11,7 +12,13 @@ class CameraFrontEnd {
      */
     public var list(default, null):Array<Camera> = [];
 
+    /**
+     * The background color of any new default camera.
+     */
+    public var bgColor(default, set):Color = Color.WHITE;
+
     public function new() {
+        @:bypassAccessor bgColor = new Color().copyFrom(bgColor);
         reset();
     }
 
@@ -27,6 +34,7 @@ class CameraFrontEnd {
                 camera.destroy();
         }
         GlobalCtx.camera = newCamera ?? new Camera();
+        GlobalCtx.camera.bgColor = bgColor;
 
         list = [GlobalCtx.camera];
         return list[0];
@@ -94,5 +102,16 @@ class CameraFrontEnd {
             if(camera != null)
                 camera.draw();
         }
+    }
+
+    // --------------- //
+    // [ Private API ] //
+    // --------------- //
+
+    @:noCompletion
+    private function set_bgColor(newColor:Color):Color {
+        bgColor.copyFrom(newColor);
+        newColor = null;
+        return bgColor;
     }
 }

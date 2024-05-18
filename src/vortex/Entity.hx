@@ -1,9 +1,9 @@
 package vortex;
 
-import canvas.graphics.Color;
-
 import vortex.math.Point;
 import vortex.display.Camera;
+
+import vortex.utilities.Axes;
 import vortex.utilities.DestroyUtil;
 
 /**
@@ -98,6 +98,21 @@ class Entity implements IDestroyable {
      * Draws this entity onto the screen.
      */
     public function draw():Void {}
+
+    /**
+	 * Centers this `Entity` to the screen, either by the x axis, y axis, or both.
+	 *
+	 * @param  axes  On what axes to center the object (e.g. `X`, `Y`, `XY`) - default is both. 
+	 */
+	public function screenCenter(axes:Axes = XY):Entity {
+		if(axes.x)
+			position.x = (GlobalCtx.width - size.x) * 0.5;
+
+		if(axes.y)
+			position.y = (GlobalCtx.height - size.y) * 0.5;
+
+		return this;
+	}
 
     /**
      * Destroys this entity and all

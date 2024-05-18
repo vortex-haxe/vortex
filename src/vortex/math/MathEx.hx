@@ -38,6 +38,22 @@ class MathEx {
 	public static inline var EPSILON:Float = 0.0000001;
 
 	/**
+	 * Represents the ratio of the circumference of a circle to its diameter,
+	 * specified by the constant, π. `PI` is approximately `3.141592653589793`.
+	 */
+	public static inline var PI:Float = 3.141592653589793;
+
+	/**
+	 * Convert radians to degrees by multiplying it with this value.
+	 */
+	public static inline var TO_DEG:Float = 180 / PI;
+
+	/**
+	 * Convert degrees to radians by multiplying it with this value.
+	 */
+	public static inline var TO_RAD:Float = PI / 180;
+
+	/**
 	 * Round a decimal number to have reduced precision (less decimal numbers).
 	 *
 	 * ```haxe

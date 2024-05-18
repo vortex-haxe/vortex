@@ -33,14 +33,16 @@ class GlobalCtx {
      * NOTE: This value is read-only, use `resizeGame()`
      * to change this value!
      */
+    @:allow(vortex.system.scalemodes)
     public static var width(default, null):Int = 0;
-
+     
     /**
      * The height of the game area, in pixels.
      * 
      * NOTE: This value is read-only, use `resizeGame()`
      * to change this value!
      */
+    @:allow(vortex.system.scalemodes)
     public static var height(default, null):Int = 0;
 
     /**
@@ -117,6 +119,9 @@ class GlobalCtx {
         if(scaleMode != null)
             scaleMode.destroy();
         
+        final window = Application.current.window;
+        newScaleMode.onMeasure(window.size.x, window.size.y);
+
         return scaleMode = newScaleMode;
     }
 

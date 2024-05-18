@@ -1,6 +1,5 @@
 package vortex.display;
 
-import glad.Glad;
 import canvas.app.Application;
 
 import canvas.graphics.Color;
@@ -14,6 +13,7 @@ import canvas.display.Bitmap;
 import canvas.servers.RenderingServer;
 
 import vortex.math.Point;
+import vortex.math.MathEx;
 import vortex.graphics.frames.Frame;
 
 /**
@@ -43,6 +43,11 @@ class Camera extends Entity {
     public var zoom:Float;
 
     /**
+     * The background color of this camera.
+     */
+    public var bgColor(default, set):Color;
+
+    /**
      * Makes a new `Camera` instance.
      * 
      * @param  x       The X coordinate of this camera on-screen (unaffected by zoom, uses native 1:1 resolution).
@@ -53,6 +58,7 @@ class Camera extends Entity {
      */
     public function new(x:Float = 0, y:Float = 0, width:Int = 0, height:Int = 0, ?zoom:Float = 0) {
         super(x, y);
+        @:bypassAccessor bgColor = new Color().copyFrom(GlobalCtx.cameras?.bgColor ?? Color.BLACK);
 
         if(width <= 0) width = GlobalCtx.width;
         if(height <= 0) height = GlobalCtx.height;
@@ -68,15 +74,34 @@ class Camera extends Entity {
     }
 
     /**
+     * Sets the width and height of this camera to
+     * any given values.
+     * 
+     * NOTE: This should be used instead of setting the `size` property
+     * when resizing a camera, as setting size on it's own will
+     * not update all of the camera's properties, which this function does.
+     * 
+     * @param  width   The new width of this camera, in pixels.
+     * @param  height  The new height of this camera, in pixels.
+     */
+    public function setSize(width:Int, height:Int):Void {
+        size.set(width, height);
+
+        _buffer.dispose();
+        _buffer = new BitmapData(width, height, null, RENDER);
+
+        _canvas.bitmapData = _buffer;
+    }
+
+    /**
      * Clears the contents of this camera.
      */
     public function clear():Void {
-        // TODO: implement bg color
         _buffer.activate();
         RenderingServer.backend.clear(Application.current.window);
         @:privateAccess {
             RenderingServer.backend.colorRectShader.useProgram();
-            RenderingServer.backend.quadRenderer.drawColor(_vec.set(), _vec2.set(size.x, size.y), Color.RED);
+            RenderingServer.backend.quadRenderer.drawColor(_vec.set(), _vec2.set(size.x, size.y), bgColor);
         }
         _buffer.deactivate();
     }
@@ -92,7 +117,7 @@ class Camera extends Entity {
                 _vec.set(position.x, position.y),
                 _vec2.set(pixels.size.x * scale.x, pixels.size.y * scale.y), color,
                 _uv.set(frame.uv.x, frame.uv.y, frame.uv.width, frame.uv.height),
-                _vec3.set(origin.x, origin.y), angle
+                _vec3.set(origin.x, origin.y), angle * MathEx.TO_RAD
             );
         }
         _buffer.deactivate();
@@ -134,4 +159,11 @@ class Camera extends Entity {
 
     private var _buffer:BitmapData;
     private var _canvas:Bitmap;
+
+    @:noCompletion
+    private function set_bgColor(newColor:Color):Color {
+        bgColor.copyFrom(newColor);
+        newColor = null;
+        return bgColor;
+    }
 }
