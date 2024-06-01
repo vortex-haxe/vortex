@@ -105,6 +105,17 @@ class BitmapFrontEnd {
         return graphic;
     }
 
+    /**
+     * Destroys all of the graphics in cache.
+     */
+    public function destroy():Void {
+        for(graphic in _cache) {
+            if(graphic != null)
+                graphic.destroy();
+        }
+        _cache.clear();
+    }
+
     // --------------- //
     // [ Private API ] //
     // --------------- //

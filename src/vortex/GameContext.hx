@@ -79,6 +79,7 @@ class GameContext extends Canvas {
     private var _nextState:NextState;
     private var _timeElapsed:Float;
     private var _updateFpsFract:Float;
+    private var _destroyed:Bool = false;
 
     private function create(_):Void {
         addedToParent.remove(create);
@@ -87,13 +88,17 @@ class GameContext extends Canvas {
     }
 
     override function update(delta:Float):Void {
+        if(_destroyed)
+            return;
+
         _timeElapsed += delta;
         if(_timeElapsed >= GlobalCtx._updateFramerateFract) {
             // Update some global vars
             GlobalCtx.deltaTime = _timeElapsed;
 
-            // Update all cameras
+            // Update all singletons
             GlobalCtx.cameras.update(_timeElapsed);
+            GlobalCtx.sound.update(_timeElapsed);
     
             // Update the current state if possible
             if(_state != null)
@@ -105,6 +110,9 @@ class GameContext extends Canvas {
     }
 
     override function draw():Void {
+        if(_destroyed)
+            return;
+
         // Clear all cameras
         GlobalCtx.cameras.clear();
 
@@ -118,6 +126,21 @@ class GameContext extends Canvas {
         super.draw();
     }
 
+    override function dispose() {
+        _destroyed = true;
+
+        // Destroy current state
+        if(_state != null)
+            _state.destroy();
+
+        // Destroy all singletons
+        GlobalCtx.cameras.destroy();
+        GlobalCtx.bitmap.destroy();
+        GlobalCtx.sound.destroy();
+
+        super.dispose();
+    }
+
     private function switchState():Void {
         // Stop if there is no state to switch to
         if(_nextState == null)
@@ -126,7 +149,6 @@ class GameContext extends Canvas {
         // Clear any cached assets before switching
         // to this new state
         GlobalCtx.bitmap.clear();
-        // GlobalCtx.sound.clear(); // TODO: implement sound frontend
 
         // Destroy the old state (if possible)
         if(_state != null)

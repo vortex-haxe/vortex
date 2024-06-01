@@ -7,29 +7,12 @@ import vortex.utilities.Axes;
 import vortex.utilities.DestroyUtil;
 
 /**
- * Your simple generic game object.
+ * A simple and basic 2D game object.
  * Can be used for several things such as players, enemies, UI, etc.
  * 
  * Includes 2D positional, sizing, and rendering data.
  */
-class Object implements IDestroyable {
-    /**
-     * The container that this object resides within.
-     */
-    public var container:Container;
-
-    /**
-     * Controls whether or not this object
-     * can call `update()` in it's container.
-     */
-    public var active:Bool = true;
-
-    /**
-     * Controls whether or not this object
-     * can call `draw()` in it's container.
-     */
-    public var visible:Bool = true;
-
+class Object extends Basic {
     /**
      * The X and Y coordinates of this object, in pixels
      * starting from the X coord of it's container (Usually top left).
@@ -62,44 +45,12 @@ class Object implements IDestroyable {
      * Makes a new `Object` instance.
      * 
      * @param  x  The X coordinate of this object on-screen.
+     * @param  y  The Y coordinate of this object on-screen.
      */
     public function new(x:Float = 0, y:Float = 0) {
+        super();
         position.set(x, y);
     }
-
-    /**
-     * Makes this object inactive and invisible.
-     * 
-     * Useful if you want to remove an object and
-     * reuse it later.
-     */
-    public function kill():Void {
-        active = false;
-        visible = false;
-    }
-
-    /**
-     * Makes this object active and visible.
-     * 
-     * Useful if you want to reuse a previously
-     * removed object.
-     */
-    public function revive():Void {
-        active = true;
-        visible = true;
-    }
-
-    /**
-     * Updates this object and all of it's properties.
-     * 
-     * @param  delta  The time since the last frame in seconds.
-     */
-    public function update(delta:Float):Void {}
-
-    /**
-     * Draws this object onto the screen.
-     */
-    public function draw():Void {}
 
     /**
 	 * Centers this `Object` to the screen, either by the x axis, y axis, or both.
@@ -117,13 +68,13 @@ class Object implements IDestroyable {
 	}
 
     /**
-     * Destroys this object and all
-     * of it's values with it.
+     * Destroys this object and all of it's values with it.
      * 
      * WARNING: Trying to use a destroyed object could
      * cause an unwanted crash!
      */
-    public function destroy():Void {
+    override function destroy():Void {
+        super.destroy();
         position = DestroyUtil.put(position);
         globalPosition = DestroyUtil.put(@:bypassAccessor globalPosition);
         size = DestroyUtil.put(size);
@@ -142,7 +93,7 @@ class Object implements IDestroyable {
 
         var parent:Object = this;
         while(parent != null && parent.container != null) {
-            parent = parent.container;
+            parent = cast parent.container;
             containerOffX += parent.position.x;
             containerOffY += parent.position.y;
         }

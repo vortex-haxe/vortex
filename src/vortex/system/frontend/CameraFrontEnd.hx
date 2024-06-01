@@ -83,6 +83,17 @@ class CameraFrontEnd {
     }
 
     /**
+     * Destroys all of the cameras in the list.
+     */
+    public function destroy():Void {
+        for(camera in list) {
+            if(camera != null)
+                camera.destroy();
+        }
+        list.resize(0);
+    }
+
+    /**
      * Updates all of the cameras in the list.
      * 
      * @param  delta  The time since the last frame in seconds.

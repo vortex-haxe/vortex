@@ -1,5 +1,6 @@
 package vortex;
 
+import canvas.ui.Window;
 import canvas.app.Application;
 
 import vortex.display.Camera;
@@ -73,6 +74,11 @@ class GlobalCtx {
     public static var bitmap(default, null):BitmapFrontEnd;
 
     /**
+     * Helper for easily accessing and caching sounds.
+     */
+    public static var sound(default, null):SoundFrontEnd;
+
+    /**
      * Helper for easily accessing and adding cameras.
      */
     public static var cameras(default, null):CameraFrontEnd;
@@ -113,12 +119,14 @@ class GlobalCtx {
 
         log = new LogFrontEnd();
         bitmap = new BitmapFrontEnd();
+        sound = new SoundFrontEnd();
         cameras = new CameraFrontEnd();
 
-        Application.current.window.onResize.add((width:Int, height:Int) -> {
+        final window:Window = Application.current.window;
+        window.onResize.add((width:Int, height:Int) -> {
             scaleMode.onMeasure(width, height);
         });
-        scaleMode.onMeasure(width, height);
+        scaleMode.onMeasure(window.size.x, window.size.y);
     }
 
     @:noCompletion
