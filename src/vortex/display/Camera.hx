@@ -23,7 +23,7 @@ import vortex.graphics.frames.Frame;
  * You can add more cameras or even replace the main camera using utilities
  * in `GlobalCtx.cameras`.
  */
-class Camera extends Entity {
+class Camera extends Object {
     /**
 	 * Any `Camera` with a zoom of 0 (the default value) will have this zoom value.
 	 */
@@ -135,10 +135,10 @@ class Camera extends Entity {
     }
 
     /**
-     * Destroys this entity and all
+     * Destroys this camera and all
      * of it's values with it.
      * 
-     * WARNING: Trying to use a destroyed entity could
+     * WARNING: Trying to use a destroyed camera could
      * cause an unwanted crash!
      */
     override function destroy() {

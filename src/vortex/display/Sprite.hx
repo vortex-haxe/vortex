@@ -19,9 +19,9 @@ import vortex.utilities.DestroyUtil;
  * For example: one could make a `Bullet` class that extends
  * a `Sprite` while also adding their own values like `strength` and `speed`.
  */
-class Sprite extends Entity {
+class Sprite extends Object {
     /**
-     * The X and Y offsets of this entity, in pixels.
+     * The X and Y offsets of this sprite, in pixels.
      */
     public var offset:Point = Point.get();
 

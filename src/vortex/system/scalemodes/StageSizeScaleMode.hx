@@ -2,7 +2,7 @@ package vortex.system.scalemodes;
 
 /**
  * `StageSizeScaleMode` is a scaling mode which extends the game's
- * size to match that of the window, this means entities further away
+ * size to match that of the window, this means objects further away
  * will get cut-off on smaller window sizes, and that their scale and position
  * will always remain the same.
  */

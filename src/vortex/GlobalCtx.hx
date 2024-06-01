@@ -20,7 +20,7 @@ class GlobalCtx {
     /**
      * The framerate the game will update at.
      */
-    public static var updateFramerate:Int = 0;
+    public static var updateFramerate(default, set):Int = 0;
 
     /**
      * The framerate the game will draw at.
@@ -99,6 +99,8 @@ class GlobalCtx {
     // [ Private API ] //
     // --------------- //
 
+    private static var _updateFramerateFract:Float = 0;
+
     private static function _init(game:GameContext, width:Int, height:Int):Void {
         GlobalCtx.game = game;
         GlobalCtx.width = width;
@@ -123,6 +125,12 @@ class GlobalCtx {
         newScaleMode.onMeasure(window.size.x, window.size.y);
 
         return scaleMode = newScaleMode;
+    }
+
+    @:noCompletion
+    private static function set_updateFramerate(newFramerate:Int):Int {
+        _updateFramerateFract = 1 / newFramerate;
+        return updateFramerate = newFramerate;
     }
 
     @:noCompletion

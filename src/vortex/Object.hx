@@ -12,63 +12,65 @@ import vortex.utilities.DestroyUtil;
  * 
  * Includes 2D positional, sizing, and rendering data.
  */
-class Entity implements IDestroyable {
+class Object implements IDestroyable {
     /**
-     * The container that this entity resides within.
+     * The container that this object resides within.
      */
     public var container:Container;
 
     /**
-     * Controls whether or not this entity
+     * Controls whether or not this object
      * can call `update()` in it's container.
      */
     public var active:Bool = true;
 
     /**
-     * Controls whether or not this entity
+     * Controls whether or not this object
      * can call `draw()` in it's container.
      */
     public var visible:Bool = true;
 
     /**
-     * The X and Y coordinates of this entity, in pixels
+     * The X and Y coordinates of this object, in pixels
      * starting from the X coord of it's container (Usually top left).
      */
     public var position:Point = Point.get();
 
     /**
-     * The X and Y coordinates of this entity when rendered
+     * The X and Y coordinates of this object when rendered
      * onto the screen, in pixels.
      */
     @:isVar
     public var globalPosition(get, null):Point = Point.get();
 
     /**
-     * The width and height of this entity, in pixels.
+     * The width and height of this object, in pixels.
      */
     public var size:Point = Point.get();
 
     /**
-     * The first camera in this entity's camera list.
+     * The first camera in this object's camera list.
      */
     public var camera(get, set):Camera;
 
     /**
-     * A list of cameras that this entity will render to.
+     * A list of cameras that this object will render to.
      */
     public var cameras(get, set):Array<Camera>;
 
     /**
-     * Makes a new `Entity` instance.
+     * Makes a new `Object` instance.
+     * 
+     * @param  x  The X coordinate of this object on-screen.
      */
     public function new(x:Float = 0, y:Float = 0) {
         position.set(x, y);
     }
 
     /**
-     * Makes this entity inactive and invisible.
+     * Makes this object inactive and invisible.
      * 
-     * Useful if you want to remove an entity and
+     * Useful if you want to remove an object and
      * reuse it later.
      */
     public function kill():Void {
@@ -77,10 +79,10 @@ class Entity implements IDestroyable {
     }
 
     /**
-     * Makes this entity active and visible.
+     * Makes this object active and visible.
      * 
      * Useful if you want to reuse a previously
-     * removed entity.
+     * removed object.
      */
     public function revive():Void {
         active = true;
@@ -88,23 +90,23 @@ class Entity implements IDestroyable {
     }
 
     /**
-     * Updates this entity and all of it's properties.
+     * Updates this object and all of it's properties.
      * 
      * @param  delta  The time since the last frame in seconds.
      */
     public function update(delta:Float):Void {}
 
     /**
-     * Draws this entity onto the screen.
+     * Draws this object onto the screen.
      */
     public function draw():Void {}
 
     /**
-	 * Centers this `Entity` to the screen, either by the x axis, y axis, or both.
+	 * Centers this `Object` to the screen, either by the x axis, y axis, or both.
 	 *
 	 * @param  axes  On what axes to center the object (e.g. `X`, `Y`, `XY`) - default is both. 
 	 */
-	public function screenCenter(axes:Axes = XY):Entity {
+	public function screenCenter(axes:Axes = XY):Object {
 		if(axes.x)
 			position.x = (GlobalCtx.width - size.x) * 0.5;
 
@@ -115,10 +117,10 @@ class Entity implements IDestroyable {
 	}
 
     /**
-     * Destroys this entity and all
+     * Destroys this object and all
      * of it's values with it.
      * 
-     * WARNING: Trying to use a destroyed entity could
+     * WARNING: Trying to use a destroyed object could
      * cause an unwanted crash!
      */
     public function destroy():Void {
@@ -138,7 +140,7 @@ class Entity implements IDestroyable {
         var containerOffX:Float = 0;
         var containerOffY:Float = 0;
 
-        var parent:Entity = this;
+        var parent:Object = this;
         while(parent != null && parent.container != null) {
             parent = parent.container;
             containerOffX += parent.position.x;

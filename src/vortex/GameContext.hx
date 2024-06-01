@@ -76,6 +76,8 @@ class GameContext extends Canvas {
 
     private var _state:State;
     private var _nextState:NextState;
+    private var _timeElapsed:Float;
+    private var _updateFpsFract:Float;
 
     private function create(_):Void {
         addedToParent.remove(create);
@@ -84,13 +86,17 @@ class GameContext extends Canvas {
     }
 
     override function update(delta:Float):Void {
-        // Update all cameras
-        GlobalCtx.cameras.update(delta);
+        _timeElapsed += delta;
+        if(_timeElapsed > GlobalCtx._updateFramerateFract) {
+            // Update all cameras
+            GlobalCtx.cameras.update(_timeElapsed);
+    
+            // Update the current state if possible
+            if(_state != null)
+                _state.update(_timeElapsed);
 
-        // Update the current state if possible
-        if(_state != null)
-            _state.update(delta);
-
+            _timeElapsed %= delta;
+        }
         super.update(delta);
     }
 
