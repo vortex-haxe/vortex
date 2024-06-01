@@ -7,6 +7,7 @@ import vortex.graphics.Graphic;
 import vortex.graphics.frames.*;
 
 import vortex.math.Point;
+import vortex.utilities.Axes;
 import vortex.utilities.DestroyUtil;
 
 /**
@@ -96,6 +97,21 @@ class Sprite extends Object {
     }
 
     /**
+	 * Centers this `Object` to the screen, either by the x axis, y axis, or both.
+	 *
+	 * @param  axes  On what axes to center the object (e.g. `X`, `Y`, `XY`) - default is both. 
+	 */
+	override function screenCenter(axes:Axes = XY):Sprite {
+		if(axes.x)
+			position.x = ((GlobalCtx.width - size.x) * 0.5) + origin.x;
+
+		if(axes.y)
+			position.y = ((GlobalCtx.height - size.y) * 0.5) + origin.y;
+
+		return this;
+	}
+
+    /**
      * Draws this sprite onto the screen.
      */
     override function draw() {
@@ -104,7 +120,7 @@ class Sprite extends Object {
 
         for(camera in cameras) {
             if(camera != null)
-                drawComplex(camera);
+                drawPixels(camera);
         }
     }
 
@@ -130,13 +146,13 @@ class Sprite extends Object {
     private static var _pos:Point = new Point();
     private static var _orig:Point = new Point();
 
-    private function drawComplex(camera:Camera) {
+    private function drawPixels(camera:Camera) {
         if(frame == null || frame.graphic == null)
             return;
 
         camera.drawPixels(
             frame, frame.graphic.bitmap, color,
-            _pos.set((globalPosition.x + offset.x) + origin.x, (globalPosition.y + offset.y) + origin.y),
+            _pos.set(globalPosition.x + offset.x, globalPosition.y + offset.y),
             scale, _orig.set(origin.x / size.x, origin.y / size.y),
             angle, shader
         );
