@@ -66,6 +66,7 @@ class GameContext extends Canvas {
         GlobalCtx.updateFramerate = settings.updateFramerate;
         GlobalCtx.drawFramerate = settings.drawFramerate;
 
+        _timeElapsed = _updateFpsFract;
         _nextState = settings.initialState ?? cast State.new;
         addedToParent.add(create);
     }
@@ -87,7 +88,10 @@ class GameContext extends Canvas {
 
     override function update(delta:Float):Void {
         _timeElapsed += delta;
-        if(_timeElapsed > GlobalCtx._updateFramerateFract) {
+        if(_timeElapsed >= GlobalCtx._updateFramerateFract) {
+            // Update some global vars
+            GlobalCtx.deltaTime = _timeElapsed;
+
             // Update all cameras
             GlobalCtx.cameras.update(_timeElapsed);
     

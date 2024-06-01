@@ -18,6 +18,11 @@ class GlobalCtx {
     public static var game(default, null):GameContext;
 
     /**
+     * The time since the last frame, in seconds.
+     */
+    public static var deltaTime(default, null):Float = 0;
+
+    /**
      * The framerate the game will update at.
      */
     public static var updateFramerate(default, set):Int = 0;
