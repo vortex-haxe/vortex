@@ -16,7 +16,7 @@ for making games within Haxe.
 ## 🖥️ Platforms
 Vortex can natively compile to the following platforms via `hxcpp`:
 
-- <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg" width="14" height="14" /> **Windows 8.0+**
+- <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg" width="14" height="14" /> **Windows 7+** (Only 8.0+ has been tested!)
 - <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Apple_logo_grey.svg" width="12" height="14" /> **macOS Ventura+**
 - <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" width="14" height="14" /> **Linux** (Ubuntu, Debian, Fedora, openSUSE, Arch)
 
@@ -32,7 +32,7 @@ haxelib install vortex
 ### ⚡ Development Installation
 This will install the very latest, potentially unstable version of Vortex.
 ```sh
-haxelib git vortex https://github.com/vortex-haxe/vortex
+haxelib git vortex https://github.com/vortex-haxe/vortex --branch unstable
 ```
 
 On Linux, you will need to run some commands for Vortex to run correctly.
